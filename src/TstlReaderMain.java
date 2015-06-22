@@ -15,7 +15,6 @@ public class TstlReaderMain implements Runnable
 	private HashMap<String, String> args;
 	private String[] tstl;
 	private FlushWriter writer;
-	private int lineCount;
 	private String className;
 
 	public TstlReaderMain(HashMap<String, String> arguments)
@@ -41,7 +40,7 @@ public class TstlReaderMain implements Runnable
 	{
 		readTstl();
 		createOutWriter();
-		lineCount = 0;
+		int lineCount = 0;
 		//imports
 		while(true)
 		{
@@ -59,14 +58,53 @@ public class TstlReaderMain implements Runnable
 		writer.println("public class " + className);
 		writer.println("{");
 
+		//main method
 		constructMainMethod();
-		
-		
 
+
+
+
+	}
+	private void constructBodyMethod(int num, int tstlLineAfterImport)
+	{
+		writer.println("private void body" + num + "() throws TstlException {");
+		HashMap<String,String> poolNames = new HashMap<String,String>();
+		for(int i =0 ; i < tstl.length; i++)
+		{
+			String s = tstl[i];
+			if(s.startsWith("pool:"))
+			{				
+				String type = "";
+				String name = "";
+				s= s.substring(5);
+				int count = 0;
+				while(true)
+				{
+					char c =  s.charAt(count);
+					if(c=='%')					
+						break;					
+					type = type + c;
+					count++;
+				}
+				while(true)
+				{
+					char c =  s.charAt(count);
+					if(c=='%')
+						break;
+					name = name + c;
+					count++;
+				}
+				String parenName = "%"+ name+"%";
+				poolNames.put(parenName, "p_" + name);
+				writer.println(type + " " + poolNames.get(parenName) + ";");
+			}
+		}
+		//need to implement body
+		
 	}
 	private void constructMainMethod() 
 	{
-		//main method
+
 		writer.println("public static void main (String[] args)");
 		writer.println("{");
 		writer.println(className + " x = new " + className + "();");
