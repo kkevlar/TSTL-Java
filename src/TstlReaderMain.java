@@ -68,7 +68,8 @@ public class TstlReaderMain implements Runnable
 	private void constructBodyMethod(int num, int tstlLineAfterImport)
 	{
 		writer.println("private void body" + num + "() throws TstlException {");
-		HashMap<String,String> poolNames = new HashMap<String,String>();
+		//pool creation
+		HashMap<String,String> poolNames = new HashMap<String,String>(); //allows variables like %VAR% to be replaced with p_VAR
 		for(int i =0 ; i < tstl.length; i++)
 		{
 			String s = tstl[i];
@@ -99,8 +100,76 @@ public class TstlReaderMain implements Runnable
 				writer.println(type + " " + poolNames.get(parenName) + ";");
 			}
 		}
-		//need to implement body
-		
+		//defining start and end lines
+		int bodyStartLine = -1;
+		int bodyEndLine = -1;
+		for(int i =0 ; i < tstl.length; i++)
+		{
+			String s = tstl[i];
+			if(s.startsWith("body:"))
+			{				
+				bodyStartLine = i+1;
+			}
+			;
+			if(s.startsWith("ENDBODY"))
+				bodyEndLine = i;
+		}
+		//writing method body
+		for(int x = bodyStartLine; x < bodyEndLine; x++)
+		{
+			String line = tstl[x];
+			String[] varNames = poolNames.keySet().toArray(new String[poolNames.size()]);
+			for (int y = 0; y < varNames.length; y++)
+			{
+				line = line.replace(varNames[y], poolNames.get(varNames[y]));
+			}
+			line = line.replace("%[", "~");
+			line = line.replace("%]", "~");
+			String[] pieces = line.split("~");
+			ArrayList<Integer> numPiecesNums = new ArrayList<Integer>();
+			for(int y = 0; y < pieces.length; y++)
+			{
+				String piece = pieces[y];
+				if(piece.contains(".."))
+				{
+					String[] numPieces = piece.split("..");
+					int low = Integer.parseInt(numPieces[0]);
+					int hi = Integer.parseInt(numPieces[1]);
+					numPiecesNums.add(this.randFrom(low, hi));
+				}
+			}
+			String newLine = "";
+			boolean copyMode = true;
+			int numPieceIndex = 0;
+			for(int y = 0; y < line.length(); y++)
+			{
+				char c = line.charAt(y);
+				boolean isBreakChar = c=='~';
+				//if there is no random number generation, copyMode will always be true, while isBreakChar will always be false: the next expression will always evaluate true
+				if(copyMode != isBreakChar)
+				{newLine = newLine + c;
+				}
+				else
+				{
+					if(copyMode)
+					{
+						copyMode = false;
+						newLine = newLine + numPiecesNums.get(numPieceIndex);
+						numPieceIndex++;
+					}
+					else
+					{
+						copyMode = true;
+					}
+				}
+			}
+			writer.println(newLine);
+		}		
+		writer.println("}"); //body method end brace		
+	}
+	private int randFrom(int low, int hi)
+	{
+		return (int) ((Math.random() * (hi - low)) - low);
 	}
 	private void constructMainMethod() 
 	{
