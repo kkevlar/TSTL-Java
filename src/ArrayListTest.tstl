@@ -1,3 +1,4 @@
+import:java.util.ArrayList
 pool:int %LISTSIZE% 
 pool:int %ADDVAL%
 pool:int %REMVAL%
