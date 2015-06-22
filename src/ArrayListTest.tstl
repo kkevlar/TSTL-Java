@@ -1,0 +1,34 @@
+pool:int %LISTSIZE% 
+pool:int %ADDVAL%
+pool:int %REMVAL%
+pool:int %COUNT%
+pool:ArrayList<Integer> %ARRLIST%
+ 
+body:
+%LISTSIZE% = %[1..75]%;
+%ARRLIST% = new ArrayList<Integer>();
+for(%COUNT% = 0; %COUNT% < %LISTSIZE%; %COUNT%++)
+{
+	%ADDVAL% = (int) (Math.random()*123);
+	%ARRLIST%.%ADD%(%ADDVAL%);
+}
+%REMVAL% = %[-125..125]%;
+%ARRLIST%.%REMOVE%(%REMVAL%);
+ENDBODY
+
+%ADD%(%VAL%):
+int size = %OBJECT%.size();
+%OBJECT%.add(%VAL%);
+%assert%(size==%OBJECT%.size()-1)
+ENDADD
+
+%REMOVE%(%VAL%):
+int size = %OBJECT%.size();
+%OBJECT%.remove(%VAL%);
+%assert%(size==%OBJECT%.size()+1)
+ENDREMOVE
+
+
+
+
+
