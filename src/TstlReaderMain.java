@@ -16,6 +16,7 @@ public class TstlReaderMain implements Runnable
 	private String[] tstl;
 	private FlushWriter writer;
 	private String className;
+	private int bodyEndLine;
 
 	public TstlReaderMain(HashMap<String, String> arguments)
 	{		
@@ -61,10 +62,19 @@ public class TstlReaderMain implements Runnable
 		//main method
 		constructMainMethod();
 
-
-
+		//need to make helper methods
+		
+		//body methods
+		for(int i = 0; i < getTestCount(); i++)
+		{
+			this.constructBodyMethod(i, lineCount);
+		}
+		
+		
+		
 
 	}
+
 	private void constructBodyMethod(int num, int tstlLineAfterImport)
 	{
 		writer.println("private void body" + num + "() throws TstlException {");
@@ -102,7 +112,7 @@ public class TstlReaderMain implements Runnable
 		}
 		//defining start and end lines
 		int bodyStartLine = -1;
-		int bodyEndLine = -1;
+		bodyEndLine = -1;
 		for(int i =0 ; i < tstl.length; i++)
 		{
 			String s = tstl[i];
@@ -178,15 +188,7 @@ public class TstlReaderMain implements Runnable
 		writer.println("{");
 		writer.println(className + " x = new " + className + "();");
 
-		int testCount;
-		try
-		{
-			testCount = Integer.parseInt(getArg(TstlReaderMain.ARGLABEL_TESTCOUNT));
-		}
-		catch(Exception ex)
-		{
-			throw new BadArgumentsException(TstlReaderMain.ARGLABEL_TESTCOUNT,"not an integer");
-		}
+		int testCount = getTestCount();
 		for(int i = 0; i < testCount; i++)
 		{
 			writer.println("try{");
@@ -199,7 +201,17 @@ public class TstlReaderMain implements Runnable
 		writer.println("}"); //mainmethod close brace
 
 	}
-
+	private int getTestCount()
+	{
+		try
+		{
+			return Integer.parseInt(getArg(TstlReaderMain.ARGLABEL_TESTCOUNT));
+		}
+		catch(Exception ex)
+		{
+			throw new BadArgumentsException(TstlReaderMain.ARGLABEL_TESTCOUNT,"not an integer");
+		}
+	}
 	private void createOutWriter() 
 	{
 		String outPath = getOutPath();
@@ -209,7 +221,6 @@ public class TstlReaderMain implements Runnable
 			e.printStackTrace();
 		}
 	}
-
 	private String getOutPath()
 	{
 		String outPath = getArg(ARGLABEL_OUTPUT_FILEPATH,false);
@@ -217,7 +228,6 @@ public class TstlReaderMain implements Runnable
 			outPath = getArg(ARGLABEL_INPUT_FILEPATH).replace(".tstl", ".java");
 		return outPath;
 	}
-
 	private void readTstl()
 	{
 		String filePath = getArg(ARGLABEL_INPUT_FILEPATH);

@@ -4,32 +4,27 @@ pool:int %ADDVAL%
 pool:int %REMVAL%
 pool:int %COUNT%
 pool:ArrayList<Integer> %ARRLIST%
- 
+
+ADD(int %VAL%, ArrayList<Ineteger> %OBJECT%):
+int size = %OBJECT%.size();
+%OBJECT%.add(%VAL%);
+%assert%(size==%OBJECT%.size()-1)
+ENDADD
+
+REMOVE(%VAL%, ArrayList<Ineteger> %OBJECT%):
+int size = %OBJECT%.size();
+%OBJECT%.remove(%VAL%);
+%assert%(size==%OBJECT%.size()+1)
+ENDREMOVE
+
 body:
 %LISTSIZE% = %[1..75]%;
 %ARRLIST% = new ArrayList<Integer>();
 for(%COUNT% = 0; %COUNT% < %LISTSIZE%; %COUNT%++)
 {
 	%ADDVAL% = (int) (Math.random()*123);
-	%ARRLIST%.%ADD%(%ADDVAL%);
+	%ADD%(%ADDVAL%,%ARRLIST%);
 }
 %REMVAL% = %[-125..125]%;
-%ARRLIST%.%REMOVE%(%REMVAL%);
+%REMOVE%(%REMVAL%, %ARRLIST%);
 ENDBODY
-
-%ADD%(%VAL%):
-int size = %OBJECT%.size();
-%OBJECT%.add(%VAL%);
-%assert%(size==%OBJECT%.size()-1)
-ENDADD
-
-%REMOVE%(%VAL%):
-int size = %OBJECT%.size();
-%OBJECT%.remove(%VAL%);
-%assert%(size==%OBJECT%.size()+1)
-ENDREMOVE
-
-
-
-
-
