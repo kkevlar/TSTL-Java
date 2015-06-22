@@ -20,8 +20,9 @@ public class TstlReaderMain implements Runnable
 
 	public TstlReaderMain(HashMap<String, String> arguments)
 	{		
-		this.args = arguments;
 
+		this.args = arguments;
+		
 	}
 
 	public static void main(String[] args)
@@ -32,6 +33,11 @@ public class TstlReaderMain implements Runnable
 			String[] pieces = args[i].replace(":", "~").replace(",", "~").split("~");
 			if(pieces.length == 2)
 				arguments.put(pieces[0], pieces[1]);
+		}
+		if(arguments.isEmpty())
+		{
+			System.out.println("Please provide arguments: infile:<filepath> outfile:<filepath> count:<number>");
+			System.out.println("The count is the number of tests that will be generated.");
 		}
 		new Thread(new TstlReaderMain(arguments)).start();
 	}
