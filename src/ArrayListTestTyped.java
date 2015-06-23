@@ -1,12 +1,12 @@
 import java.util.ArrayList;
 //this is human-written code that the generator might generate
 
-public class ArrayListTest 
+public class ArrayListTestTyped 
 {
 
 	public static void main(String[] args)
 	{
-		ArrayListTest test = new ArrayListTest();
+		ArrayListTestTyped test = new ArrayListTestTyped();
 		try 
 		{
 			test.body1();

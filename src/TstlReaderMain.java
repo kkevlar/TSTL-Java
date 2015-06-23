@@ -239,7 +239,7 @@ public class TstlReaderMain implements Runnable
 		for(int i = 0; i < testCount; i++)
 		{
 			writer.println("try{");
-			writer.println("x.body" + i + "();");
+			writer.println("x.body" + (i+1) + "();");
 			writer.println("}catch(TstlException ex){");
 			writer.println("System.out.println(\"Test " + i + " failed\");");
 			writer.println("System.out.println(ex.getMessage());");
