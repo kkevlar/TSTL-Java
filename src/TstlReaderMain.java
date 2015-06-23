@@ -96,7 +96,7 @@ public class TstlReaderMain implements Runnable
 		//body methods
 		for(int i = 0; i < getTestCount(); i++)
 		{
-			this.constructBodyMethod(i, lineCount);
+			this.constructBodyMethod(i+1, lineCount);
 		}
 		
 		writer.println("}"); //class close brace
