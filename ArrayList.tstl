@@ -1,0 +1,57 @@
+@import java.util.ArrayList;
+
+pool: ArrayList<Integer> %ARRAYLIST% 2
+pool: int %INT% 2
+
+%INT% := %[1..30]%
+
+%ARRAYLIST% := new ArrayList<Integer>();
+%ARRAYLIST% := new ArrayList<Integer>(%INT%);
+
+%ARRAYLIST%.add(%INT%);
+%ARRAYLIST%.remove(%INT%);
+%INT,2% < %ARRAYLIST,1%.size() -> %INT% := %ARRAYLIST%.get(%INT%);
+
+---
+
+INT_p[0] = ARRAYLIST_p[1].get(INT_p[1]);
+
+--
+
+valid step 1:
+
+ARRAYLIST_p[0] = new ArrayList<Integer>();
+* ARRAYLIST_p[1] = new ArrayList<Integer>();
+INT_p[0] = 3;
+INT_p[1] = 3;
+
+valid step 2:
+
+ARRAYLIST_p[0] = new ArrayList<Integer>();
+INT_p[0] = 3
+* INT_p[1] = 3
+
+valid step 3:
+
+INT_p[0] = 3
+ARRAYLIST_p[0].add(INT_p[1]);
+ARRAYLIST_p[0].remove(INT_p[1]);
+INT_p[0] = ARRAYLIST_p[0].get(INT_p[1]);
+
+
+class SUT() {
+
+      IntWrapper INT_p[2];
+      ArrayList<Integer> ARRAYLIST_p[2];
+
+}
+
+void restart()
+Action[] SUT.actions()
+
+Action:
+   name: string
+   method guard(): Bool
+   method act(): void
+
+SUT.safely(Action): Bool

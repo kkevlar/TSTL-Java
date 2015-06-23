@@ -9,37 +9,22 @@ import java.util.HashMap;
 
 public class TstlReaderMain implements Runnable
 {
-	private static final String ARGLABEL_INPUT_FILEPATH = "infile";
-	private static final String ARGLABEL_OUTPUT_FILEPATH = "outfile";
-	private static final String ARGLABEL_TESTCOUNT = "count";
-	private HashMap<String, String> args;
+	
+	private static final String SUT_CLASS_NAME = "SUT";
 	private String[] tstl;
 	private FlushWriter writer;
 	private String className;
 	private int bodyEndLine;
+	private String[] args;
 
-	public TstlReaderMain(HashMap<String, String> arguments)
+	public TstlReaderMain(String[] args)
 	{		
-
-		this.args = arguments;
-		
+		this.args = args;
 	}
 
 	public static void main(String[] args)
 	{
-		HashMap<String,String> arguments = new HashMap<String,String>();
-		for(int i = 0; i < args.length; i++)
-		{
-			String[] pieces = args[i].replace(":", "~").replace(",", "~").split("~");
-			if(pieces.length == 2)
-				arguments.put(pieces[0], pieces[1]);
-		}
-		if(arguments.isEmpty())
-		{
-			System.out.println("Please provide arguments: infile:<filepath> outfile:<filepath> count:<number>");
-			System.out.println("The count is the number of tests that will be generated.");
-		}
-		new Thread(new TstlReaderMain(arguments)).start();
+		new Thread(new TstlReaderMain(args)).start();
 	}
 
 	@Override
@@ -47,65 +32,37 @@ public class TstlReaderMain implements Runnable
 	{
 		readTstl();
 		createOutWriter();
-		int lineCount = 0;
-		//imports
-		while(true)
-		{
-			if(tstl[lineCount].startsWith("import"))
-			{
-				writer.println(tstl[lineCount]);
-				lineCount++;
-			}
-			else
-				break;
-		}
+		
+		readImports();
 
 		//Makes Class Declaration using the filename from the input
-		className = new File(this.getArg(TstlReaderMain.ARGLABEL_INPUT_FILEPATH)).getName().replace(".", "~").split("~")[0];
-		writer.println("public class " + className);
-		writer.println("{");
-
-		//Constructs main(String args[]) method
-		constructMainMethod();
-
-		//Creates the helper methods used to test SUT
-		while(true)
-		{
-			if(tstl[lineCount].equalsIgnoreCase("body:"))
-				break;
-			String methodName = "p_" + tstl[lineCount].split("\\(")[0];
-			String methodDeclaration = "private void " + methodName + "(" + removePercents(tstl[lineCount].split("\\(")[1], "p_",lineCount )+ " throws TstlException {";
-			writer.println(methodDeclaration);
-			lineCount++;
-			//reads code and outputs it nearly literally until hits END statement
-			while(true)
-			{
-				if(!tstl[lineCount].startsWith("END"))
-				{
-					String noPercent = removePercents(tstl[lineCount], "p_",lineCount);
-					writer.println(noPercent);
-				}
-				else
-					break;
-				lineCount++;
-			}
-			writer.println("}");
-			lineCount++;
-		}
-
-
-		//constructs the actual test methods
-		for(int i = 0; i < getTestCount(); i++)
-		{
-			this.constructBodyMethod(i+1, lineCount);
-		}
+		generateClassDeclaration();
 		
+		//TODO more method generation
+		finishingTouches();
+		
+
+
+
+	}
+	private void readImports() 
+	{
+		// TODO unfinished
+		
+	}
+
+	private void finishingTouches()
+	{
 		writer.println("}"); //class close brace
 		writer.close();
-		System.out.println("finished");
+		System.out.println("finished");	
+	}
 
-
-
+	private void generateClassDeclaration()
+	{
+		className = TstlReaderMain.SUT_CLASS_NAME;
+		writer.println("public class " + className);
+		writer.println("{");
 	}
 	
 	private String removePercents(String line, String variablePrefix, int lineCount)
@@ -139,6 +96,7 @@ public class TstlReaderMain implements Runnable
 		newLine.substring(1, newLine.length() - 2);
 		return newLine;
 	}
+	//obsolete in this version- kept around because its parsing my be useful in later versions
 	private void constructBodyMethod(int num, int tstlLineAfterImport)
 	{
 		writer.println("private void body" + num + "() throws TstlException {");
@@ -229,64 +187,31 @@ public class TstlReaderMain implements Runnable
 		}		
 		writer.println("}"); //body method end brace		
 	}
+	
 	private int randFrom(int low, int hi)
 	{
 		return (int) ((Math.random() * (hi - low)) - low);
 	}
-	private void constructMainMethod() 
-	{
-
-		writer.println("public static void main (String[] args)");
-		writer.println("{");
-		writer.println(className + " x = new " + className + "();");
-
-		int testCount = getTestCount();
-		for(int i = 0; i < testCount; i++)
-		{
-			writer.println("try{");
-			writer.println("x.body" + (i+1) + "();");
-			writer.println("}catch(TstlException ex){");
-			writer.println("System.out.println(\"Test " + i + " failed\");");
-			writer.println("System.out.println(ex.getMessage());");
-			writer.println("}");
-		}
-		writer.println("}"); //mainmethod close brace
-
-	}
-	private int getTestCount()
-	{
-		try
-		{
-			return Integer.parseInt(getArg(TstlReaderMain.ARGLABEL_TESTCOUNT));
-		}
-		catch(Exception ex)
-		{
-			throw new BadArgumentsException(TstlReaderMain.ARGLABEL_TESTCOUNT,"not an integer");
-		}
-	}
+	
 	private void createOutWriter() 
 	{
-		String outPath = getOutPath();
+		String outPath = getOutFilepath();
 		try {
 			writer = new FlushWriter(new File(outPath));
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
 		}
 	}
-	private String getOutPath()
+	
+	private String getOutFilepath() 
 	{
-		String outPath = getArg(ARGLABEL_OUTPUT_FILEPATH,false);
-		if(outPath == null)
-			outPath = getArg(ARGLABEL_INPUT_FILEPATH).replace(".tstl", ".java");
-		return outPath;
+		// TODO unfinished
+		return null;
 	}
+
 	private void readTstl()
 	{
-		String filePath = getArg(ARGLABEL_INPUT_FILEPATH);
-		if(!filePath.endsWith(".tstl"))
-		{
-			throw new BadArgumentsException(ARGLABEL_INPUT_FILEPATH,"missing proper extension");
-		}
+		String filePath = getInFilepath();
 		File file = new File(filePath);
 		BufferedReader reader = null;
 		try {
@@ -322,18 +247,12 @@ public class TstlReaderMain implements Runnable
 			tstl[i] = lines.get(i);
 		}
 	}
-	private String getArg(String argName, boolean exception)
+
+	private String getInFilepath() 
 	{
-		if(args.containsKey(argName))
-			return args.get(argName);
-		else if(!exception)
-			return null;
-		else
-			throw new BadArgumentsException(argName,"missing");
+		// TODO unfinished
+		return null;
 	}
-	private String getArg(String argName)
-	{
-		return this.getArg(argName,true);
-	}
+	
 
 }
