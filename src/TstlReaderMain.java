@@ -60,15 +60,15 @@ public class TstlReaderMain implements Runnable
 				break;
 		}
 
-		//classdeclaration
+		//Makes Class Declaration using the filename from the input
 		className = new File(this.getArg(TstlReaderMain.ARGLABEL_INPUT_FILEPATH)).getName().replace(".", "~").split("~")[0];
 		writer.println("public class " + className);
 		writer.println("{");
 
-		//main method
+		//Constructs main(String args[]) method
 		constructMainMethod();
 
-		//need to make helper methods
+		//Creates the helper methods used to test SUT
 		while(true)
 		{
 			if(tstl[lineCount].equalsIgnoreCase("body:"))
@@ -77,6 +77,7 @@ public class TstlReaderMain implements Runnable
 			String methodDeclaration = "private void " + methodName + "(" + removePercents(tstl[lineCount].split("\\(")[1], "p_",lineCount )+ " throws TstlException {";
 			writer.println(methodDeclaration);
 			lineCount++;
+			//reads code and outputs it nearly literally until hits END statement
 			while(true)
 			{
 				if(!tstl[lineCount].startsWith("END"))
@@ -93,7 +94,7 @@ public class TstlReaderMain implements Runnable
 		}
 
 
-		//body methods
+		//constructs the actual test methods
 		for(int i = 0; i < getTestCount(); i++)
 		{
 			this.constructBodyMethod(i+1, lineCount);
@@ -106,8 +107,11 @@ public class TstlReaderMain implements Runnable
 
 
 	}
+	
 	private String removePercents(String line, String variablePrefix, int lineCount)
 	{
+		//used to replace TSTL variables in a line with ones that would compile in java]
+		//ie "int %INT% = 5" becomes "int p_INT = 5"
 		line = " " + line + " ";
 		boolean asserted = false;
 		String[] percentBlocks = line.split("%");
@@ -167,7 +171,8 @@ public class TstlReaderMain implements Runnable
 		{
 
 			String line = tstl[x];
-
+			//handles random number generation from TSTL ie [1..25] is random # 1-25
+			//in the future an AI could decide the most valid test pool value from 1-25
 			line = line.replace("%[", "~");
 			line = line.replace("]%", "~");
 			String[] pieces = line.split("~");
