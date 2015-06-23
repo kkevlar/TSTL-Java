@@ -11,6 +11,10 @@ public class PoolEntry
 		this.className = className;
 		this.varName = varName;
 		this.listSize = listSize;
+		/*
+		if(className.contains("ArrayList"))
+			throw new MalformedTstlException("ArrayLists aren't allowed int TSTL pools...");
+			*/
 	}
 
 	public String getClassName() 
@@ -37,7 +41,7 @@ public class PoolEntry
 	{
 		String ret =  varName + " = new " + className + "[" + listSize + "]" + ";\n";
 		ret += "for (int i = 0; i < " + varName + ".length; i++)\n";
-		ret += varName + "[i] = null;\n";
+		ret += varName + "[i] = null;";
 		return ret;
 	}
 	
