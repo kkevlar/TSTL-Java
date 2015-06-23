@@ -14,7 +14,7 @@ public class PoolEntry
 		/*
 		if(className.contains("ArrayList"))
 			throw new MalformedTstlException("ArrayLists aren't allowed int TSTL pools...");
-			*/
+		*/
 	}
 
 	public String getClassName() 

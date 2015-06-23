@@ -16,7 +16,7 @@ public class TstlParser implements Runnable
 	private static final String PREFIX_REMOVE_PERCENTS_DEFAULT_VAR = "var_";
 	private static final String VISIBILITY_LEVEL_POOL_VAR = "private";
 	private static final String METHOD_NAME_CLEAR_POOL = "clearPool";
-	
+
 	private ArrayList<String> tstl;
 	private FlushWriter writer;
 	private String[] args;
@@ -24,7 +24,7 @@ public class TstlParser implements Runnable
 
 	public static void main(String[] args) throws URISyntaxException
 	{
-			new Thread(new TstlParser(args)).start();		
+		new Thread(new TstlParser(args)).start();		
 	}
 	public TstlParser(String[] args)
 	{		
@@ -43,9 +43,9 @@ public class TstlParser implements Runnable
 		generateClassDeclaration();
 
 		generatePoolEntries();
-		
+
 		generateInstanceVariables();
-		
+
 		generateClearPool();
 
 		//TODO more method generation??
@@ -94,7 +94,6 @@ public class TstlParser implements Runnable
 			tstl.add(lines.get(i));
 		}
 	}
-
 	private void createOutWriter() 
 	{
 		String outPath = getOutFilepath();
@@ -106,7 +105,6 @@ public class TstlParser implements Runnable
 		}
 		writer.println("//This is auto-generated code.  Changes will be overwritten.");
 	}
-
 	private void readImports() 
 	{
 		for (int i = 0; i < tstl.size(); i++)
@@ -121,14 +119,12 @@ public class TstlParser implements Runnable
 			}
 		}
 	}
-
 	private void generateClassDeclaration()
 	{
 		String className = TstlParser.CLASS_NAME_SUT;
 		writer.println("public class " + className);
 		writer.println("{");
 	}
-
 	private void generatePoolEntries()
 	{
 		ArrayList<PoolEntry> poolEntries = new ArrayList<PoolEntry>();
@@ -154,7 +150,7 @@ public class TstlParser implements Runnable
 						canParseInt = true;
 					}
 					catch(RuntimeException ex){}
-					
+
 					if(canParseInt)
 						arrSize = parsed;					
 					else if(hasParentheses)
@@ -175,14 +171,13 @@ public class TstlParser implements Runnable
 				x--;
 			}
 		}
-		
+
 		this.poolEntries = new PoolEntry[poolEntries.size()];
 		for (int i = 0; i < this.poolEntries.length; i++) 
 		{
 			this.poolEntries[i] = poolEntries.get(i);
 		}
 	}
-	
 	private void generateInstanceVariables()
 	{
 		for(int i =0; i< this.poolEntries.length; i++)
@@ -191,8 +186,6 @@ public class TstlParser implements Runnable
 			writer.println(entry.getInstanceVariableDeclaration(TstlParser.VISIBILITY_LEVEL_POOL_VAR));
 		}		
 	}
-
-	
 	private void generateClearPool() 
 	{
 		writer.println("public void " + METHOD_NAME_CLEAR_POOL + "(){");
@@ -204,8 +197,8 @@ public class TstlParser implements Runnable
 		writer.println("}");
 
 	}
-
-	private void generateGetActions() {
+	private void generateGetActions() 
+	{
 		// TODO Auto-generated method stub
 
 	}
@@ -265,7 +258,7 @@ public class TstlParser implements Runnable
 		}
 		throw new BadArgumentsException("Please provide a path to a valid tstl file in the command line arguments.");
 	}
-	
+
 	private static File getThisJarDir() throws URISyntaxException
 	{
 		return new File(TstlParser.class.getProtectionDomain().getCodeSource().getLocation().toURI().getPath()).getParentFile();
@@ -275,15 +268,15 @@ public class TstlParser implements Runnable
 		//used to replace TSTL variables in a line with ones that would compile in java]
 		//ie "int %INT% = 5" becomes "int var_INT = 5"
 		line = " " + line + " ";
-		
+
 		String[] percentBlocks = line.split("%");
 		if(percentBlocks.length % 2 == 0)
 			throw new MalformedTstlException("Percent signs must surround variables.  There is an odd number of percent signs at line " + line + ".");
 		for(int i = 1; i < percentBlocks.length; i+= 2)
 		{
 			String block = percentBlocks[i];
-			
-				percentBlocks[i] = variablePrefix + block;
+
+			percentBlocks[i] = variablePrefix + block;
 		}
 		String newLine = "";
 		for(int i = 0; i < percentBlocks.length; i++)
