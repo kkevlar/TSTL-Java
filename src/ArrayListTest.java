@@ -1,5 +1,5 @@
 import java.util.ArrayList;
-
+//this is human-written code that the generator might generate
 
 public class ArrayListTest 
 {
