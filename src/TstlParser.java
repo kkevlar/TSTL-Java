@@ -7,48 +7,123 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 
-public class TstlReaderMain implements Runnable
+public class TstlParser implements Runnable
 {
-	
+
 	private static final String SUT_CLASS_NAME = "SUT";
 	private String[] tstl;
 	private FlushWriter writer;
-	private String className;
-	private int bodyEndLine;
+
 	private String[] args;
 
-	public TstlReaderMain(String[] args)
+	public TstlParser(String[] args)
 	{		
 		this.args = args;
 	}
 
 	public static void main(String[] args)
 	{
-		new Thread(new TstlReaderMain(args)).start();
+		new Thread(new TstlParser(args)).start();
 	}
 
 	@Override
 	public void run()
 	{
 		readTstl();
+
 		createOutWriter();
-		
+
 		readImports();
 
 		//Makes Class Declaration using the filename from the input
 		generateClassDeclaration();
-		
+
+		generateClearPool();
+
 		//TODO more method generation
+		generateGetActions();
+
+		generateReset();
+
 		finishingTouches();
-		
-
-
-
 	}
+
+	private void readTstl()
+	{
+		String filePath = getInFilepath();
+		File file = new File(filePath);
+		BufferedReader reader = null;
+		try {
+			reader = new BufferedReader(new FileReader(file));
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		}
+		ArrayList<String> lines = new ArrayList<String>();
+		boolean hadNull = false;
+		while(true)
+		{
+			String line = null;
+			try {
+				line = reader.readLine();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+			if(line == null)
+			{
+				if(!hadNull)
+				{
+					hadNull = true;
+					continue;
+				}
+				else
+					break;
+			}
+			lines.add(line);
+		}
+		tstl = new String[lines.size()];
+		for(int i = 0; i < lines.size(); i++)
+		{
+			tstl[i] = lines.get(i);
+		}
+	}
+
+	private void createOutWriter() 
+	{
+		String outPath = getOutFilepath();
+		try {
+			writer = new FlushWriter(new File(outPath));
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		}
+	}
+
 	private void readImports() 
 	{
 		// TODO unfinished
-		
+
+	}
+
+	private void generateClassDeclaration()
+	{
+		String className = TstlParser.SUT_CLASS_NAME;
+		writer.println("public class " + className);
+		writer.println("{");
+	}
+
+	private void generateClearPool() 
+	{
+		// TODO Auto-generated method stub
+
+	}
+
+	private void generateGetActions() {
+		// TODO Auto-generated method stub
+
+	}
+
+	private void generateReset() {
+		// TODO Auto-generated method stub
+
 	}
 
 	private void finishingTouches()
@@ -56,47 +131,26 @@ public class TstlReaderMain implements Runnable
 		writer.println("}"); //class close brace
 		writer.close();
 		System.out.println("finished");	
+	}	
+
+	private int randFrom(int low, int hi)
+	{
+		return (int) ((Math.random() * (hi - low)) - low);
 	}
 
-	private void generateClassDeclaration()
+	private String getOutFilepath() 
 	{
-		className = TstlReaderMain.SUT_CLASS_NAME;
-		writer.println("public class " + className);
-		writer.println("{");
-	}
-	
-	private String removePercents(String line, String variablePrefix, int lineCount)
-	{
-		//used to replace TSTL variables in a line with ones that would compile in java]
-		//ie "int %INT% = 5" becomes "int p_INT = 5"
-		line = " " + line + " ";
-		boolean asserted = false;
-		String[] percentBlocks = line.split("%");
-		if(percentBlocks.length % 2 == 0)
-			throw new MalformedTstlException("Percent signs must surround variables.  There is an odd number of percent signs at line " + lineCount + ".");
-		for(int i = 1; i < percentBlocks.length; i+= 2)
-		{
-			String block = percentBlocks[i];
-			if(block.equals("assert"))
-			{
-				percentBlocks[i] = "if (!";
-				asserted = true;
-			}
-			else
-				percentBlocks[i] = variablePrefix + block;
+		// TODO unfinished
+		return null;
+	}	
 
-		}
-		String newLine = "";
-		for(int i = 0; i < percentBlocks.length; i++)
-		{
-			newLine += percentBlocks[i];
-		}
-		if(asserted)
-			newLine = newLine + ")\n throw new TstlException();";
-		newLine.substring(1, newLine.length() - 2);
-		return newLine;
+	private String getInFilepath() 
+	{
+		// TODO unfinished
+		return null;
 	}
-	//obsolete in this version- kept around because its parsing my be useful in later versions
+
+	/* obsolete in this version- kept around because its parsing my be useful in later versions
 	private void constructBodyMethod(int num, int tstlLineAfterImport)
 	{
 		writer.println("private void body" + num + "() throws TstlException {");
@@ -187,72 +241,38 @@ public class TstlReaderMain implements Runnable
 		}		
 		writer.println("}"); //body method end brace		
 	}
-	
-	private int randFrom(int low, int hi)
-	{
-		return (int) ((Math.random() * (hi - low)) - low);
-	}
-	
-	private void createOutWriter() 
-	{
-		String outPath = getOutFilepath();
-		try {
-			writer = new FlushWriter(new File(outPath));
-		} catch (FileNotFoundException e) {
-			e.printStackTrace();
-		}
-	}
-	
-	private String getOutFilepath() 
-	{
-		// TODO unfinished
-		return null;
-	}
 
-	private void readTstl()
+	private String removePercents(String line, String variablePrefix, int lineCount)
 	{
-		String filePath = getInFilepath();
-		File file = new File(filePath);
-		BufferedReader reader = null;
-		try {
-			reader = new BufferedReader(new FileReader(file));
-		} catch (FileNotFoundException e) {
-			e.printStackTrace();
-		}
-		ArrayList<String> lines = new ArrayList<String>();
-		boolean hadNull = false;
-		while(true)
+		//used to replace TSTL variables in a line with ones that would compile in java]
+		//ie "int %INT% = 5" becomes "int p_INT = 5"
+		line = " " + line + " ";
+		boolean asserted = false;
+		String[] percentBlocks = line.split("%");
+		if(percentBlocks.length % 2 == 0)
+			throw new MalformedTstlException("Percent signs must surround variables.  There is an odd number of percent signs at line " + lineCount + ".");
+		for(int i = 1; i < percentBlocks.length; i+= 2)
 		{
-			String line = null;
-			try {
-				line = reader.readLine();
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
-			if(line == null)
+			String block = percentBlocks[i];
+			if(block.equals("assert"))
 			{
-				if(!hadNull)
-				{
-					hadNull = true;
-					continue;
-				}
-				else
-					break;
+				percentBlocks[i] = "if (!";
+				asserted = true;
 			}
-			lines.add(line);
-		}
-		tstl = new String[lines.size()];
-		for(int i = 0; i < lines.size(); i++)
-		{
-			tstl[i] = lines.get(i);
-		}
-	}
+			else
+				percentBlocks[i] = variablePrefix + block;
 
-	private String getInFilepath() 
-	{
-		// TODO unfinished
-		return null;
+		}
+		String newLine = "";
+		for(int i = 0; i < percentBlocks.length; i++)
+		{
+			newLine += percentBlocks[i];
+		}
+		if(asserted)
+			newLine = newLine + ")\n throw new TstlException();";
+		newLine.substring(1, newLine.length() - 2);
+		return newLine;
 	}
-	
+	 */
 
 }
