@@ -36,6 +36,7 @@ public class PoolEntry
 	public String getClearLines()
 	{
 		String ret =  getVarName() + " = new ArrayList<" + getClassName() + ">();\n";
+		//should instead use clear()?
 		ret += "for (int i = 0; i < " + this.getListSize() + "; i++)\n";
 		ret += getVarName() + ".add(null);";
 		return ret;

@@ -10,6 +10,7 @@ import java.util.ArrayList;
 public class TstlParser implements Runnable
 {
 
+	private static final String MALFORMED_POOL_DECLARATION = "Malformed pool declaration: \"";
 	private static final String AUTO_GEN_CODE_MESSAGE = "//This is auto-generated code.  Changes will be overwritten.";
 	private static final String NO_TSTL_EXCEPTION_MESSAGE = "Please provide a path to a valid .tstl file in the command line arguments.";
 	private static final String CLASS_NAME_SUT = "SUT";
@@ -17,13 +18,14 @@ public class TstlParser implements Runnable
 	private static final String TSTL_POOL_TAG = "pool:";
 	private static final String PREFIX_REMOVE_PERCENTS_DEFAULT_VAR = "var_";
 	private static final String VISIBILITY_LEVEL_POOL_VAR = "private";
-	private static final String METHOD_NAME_CLEAR_POOL = "clearPool";
+	private static final String METHOD_DECLARATION_CLEAR_POOL = "public void clearPool() {";
 
 	private ArrayList<String> tstl;
 	private FlushWriter writer;
 	private String[] args;
 	private PoolEntry[] poolEntries;
 
+	
 	public static void main(String[] args) throws URISyntaxException
 	{
 		new Thread(new TstlParser(args)).start();		
@@ -167,7 +169,7 @@ public class TstlParser implements Runnable
 					}
 				}	
 				if(className == null || varName == null || arrSize < 1)
-					throw new MalformedTstlException("Malformed pool declaration: \"" + line + "\"");
+					throw new MalformedTstlException(MALFORMED_POOL_DECLARATION + line + "\"");
 				PoolEntry entry = new PoolEntry(className, varName, arrSize);
 				poolEntries.add(entry);
 				tstl.remove(x);
@@ -186,12 +188,12 @@ public class TstlParser implements Runnable
 		for(int i =0; i< this.poolEntries.length; i++)
 		{
 			PoolEntry entry = poolEntries[i];
-			writer.println(entry.getInstanceVariableDeclaration(TstlParser.VISIBILITY_LEVEL_POOL_VAR));
+			writer.println(entry.getInstanceVariableDeclaration(VISIBILITY_LEVEL_POOL_VAR));
 		}		
 	}
 	private void generateClearPool() 
 	{
-		writer.println("public void " + METHOD_NAME_CLEAR_POOL + "(){");
+		writer.println(METHOD_DECLARATION_CLEAR_POOL);
 		for (int i = 0; i < poolEntries.length; i++) 
 		{
 			PoolEntry entry = poolEntries[i];
