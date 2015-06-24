@@ -11,10 +11,6 @@ public class PoolEntry
 		this.className = className;
 		this.varName = varName;
 		this.listSize = listSize;
-		/*
-		if(className.contains("ArrayList"))
-			throw new MalformedTstlException("ArrayLists aren't allowed int TSTL pools...");
-		*/
 	}
 
 	public String getClassName() 
@@ -34,14 +30,15 @@ public class PoolEntry
 	
 	public String getInstanceVariableDeclaration(String visibilityLevel)
 	{
-		return visibilityLevel + " " + this.getClassName() + "[] " + this.getVarName() + ";";
+		return visibilityLevel + " List<" + this.getClassName() + "> "+ this.getVarName() + ";";
 	}
 	
 	public String getClearLines()
 	{
-		String ret =  varName + " = new " + className + "[" + listSize + "]" + ";\n";
-		ret += "for (int i = 0; i < " + varName + ".length; i++)\n";
-		ret += varName + "[i] = null;";
+		String ret =  getVarName() + " = new ArrayList<" + getClassName() + ">();\n";
+		//should instead use clear()?
+		ret += "for (int i = 0; i < " + this.getListSize() + "; i++)\n";
+		ret += getVarName() + ".add(null);";
 		return ret;
 	}
 	
