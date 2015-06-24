@@ -204,7 +204,14 @@ public class TstlParser implements Runnable
 	}
 	private void generateGetActions() 
 	{
-		// TODO Auto-generated method stub
+		for(int x = 0; x < this.poolEntries.length; x++)
+		{
+			PoolEntry entry = this.poolEntries[x];
+			for(int y = 0; y < entry.getListSize(); y++)
+			{
+				//TODO unfinished
+			}
+		}
 
 	}
 

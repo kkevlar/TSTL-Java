@@ -11,5 +11,3 @@ pool: int %INT% 2
 %ARRAYLIST%.add(%INT%);
 %ARRAYLIST%.remove(%INT%);
 %INT,2% < %ARRAYLIST,1%.size() -> %INT% := %ARRAYLIST%.get(%INT%);
-
-S
