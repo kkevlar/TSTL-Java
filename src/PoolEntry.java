@@ -28,23 +28,38 @@ public class PoolEntry
 		return listSize;
 	}
 	
-	public String getInstanceVariableDeclaration(String visibilityLevel)
+	public String getUsedVarName() 
 	{
-		return visibilityLevel + " List<" + this.getClassName() + "> "+ this.getVarName() + ";";
+		return this.getVarName()+TstlConstants.SUFFIX_VAR_USED;
 	}
 	
+	public String getInstanceVariableDeclaration(String visibilityLevel)
+	{
+		
+		String ret = visibilityLevel + " List<" + this.getClassName() + "> "+ this.getVarName() + ";\n";
+		ret += visibilityLevel +  " boolean[] " + this.getUsedVarName() + ";";
+		return ret;
+	}
+	
+	
+
 	public String getClearLines()
 	{
 		String ret =  getVarName() + " = new ArrayList<" + getClassName() + ">();\n";
 		//should instead use clear()?
 		ret += "for (int i = 0; i < " + this.getListSize() + "; i++)\n";
-		ret += getVarName() + ".add(null);";
+		ret += getVarName() + ".add(null);\n";
+		ret += getUsedVarName() + " = new boolean[" + this.getListSize() + "];";
 		return ret;
 	}
 
 	public static PoolEntry getPoolEntryByVarName(PoolEntry[] entirePoolEntries, String varName) 
 	{
-		// TODO Auto-generated method stub
+		for (int i = 0; i < entirePoolEntries.length; i++) 
+		{
+			if(entirePoolEntries[i].getVarName().equals(varName))
+				return entirePoolEntries[i];
+		}
 		return null;
 	}
 	

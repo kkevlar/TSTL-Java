@@ -5,12 +5,16 @@ public class SimpleActionEntry extends ActionEntry
 	private PoolEntry[] entirePoolEntries;	
 	private PoolEntry[] subsetPoolEntries;
 	private String[] javaCodePieces;
+	private int initFinishedIndex = -1;
+	private boolean hasInit = false;
 
 	public SimpleActionEntry(String explicitGuardUnparsed, String actionLine,
-			PoolEntry[] entirePoolEntries) {
+			PoolEntry[] entirePoolEntries) 
+	{
 		super(explicitGuardUnparsed);
 		this.actionLine = actionLine;
 		this.entirePoolEntries = entirePoolEntries;
+		this.parseActionLine();
 	}
 	private void parseActionLine()
 	{
@@ -22,6 +26,11 @@ public class SimpleActionEntry extends ActionEntry
 			throw new MalformedTstlException(TstlConstants.MESSGAGE_NONSURROUNDING_VARIABLE_IDENTIFIERS + actionLine);
 		javaCodePieces = new String[(pieces.length+1)/2];
 		subsetPoolEntries = new PoolEntry[javaCodePieces.length-1];
+
+		if(newActionLine.contains("="))
+			hasInit = true;
+		else
+			hasInit = false;
 		for (int i = 0; i < pieces.length; i++)
 		{
 			if(i%2==0)
@@ -33,26 +42,32 @@ public class SimpleActionEntry extends ActionEntry
 			{
 				int poolIndex = (i-1)/2;
 				subsetPoolEntries[poolIndex] = PoolEntry.getPoolEntryByVarName(this.entirePoolEntries, (TstlConstants.PREFIX_REMOVE_PERCENTS_DEFAULT_VAR + pieces[i]).trim());
+				if (subsetPoolEntries[poolIndex] == null)
+					throw new MalformedTstlException(TstlConstants.MESSAGE_UNDEFINED_TSTL_VARIABLE + "Variable:%" + pieces[i] + "% Line:" + actionLine);
 			}
 		}
- 
-		//TODO   unfinished
 	}
 	@Override
 	protected String[] getJavaPieces() 
 	{
-		// TODO Auto-generated method stub
-		return null;
+		return this.javaCodePieces;
 	}
 
 	@Override
-	protected PoolEntry[] getPoolEntries() {
-		// TODO Auto-generated method stub
-		return null;
+	protected PoolEntry[] getPoolEntries()
+	{
+		return this.subsetPoolEntries;
 	}
 
 	@Override
-	protected String[] getGuardExpressions() {
+	protected String[] getGuardExpressions()
+	{
+		// TODO Auto-generated method stub
+		return null;
+	}
+	@Override
+	protected String[] getUsedActions() 
+	{
 		// TODO Auto-generated method stub
 		return null;
 	}
