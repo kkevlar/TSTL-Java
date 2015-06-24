@@ -10,6 +10,8 @@ import java.util.ArrayList;
 public class TstlParser implements Runnable
 {
 
+	private static final String AUTO_GEN_CODE_MESSAGE = "//This is auto-generated code.  Changes will be overwritten.";
+	private static final String NO_TSTL_EXCEPTION_MESSAGE = "Please provide a path to a valid .tstl file in the command line arguments.";
 	private static final String CLASS_NAME_SUT = "SUT";
 	private static final String TSTL_IMPORT_TAG = "@import";
 	private static final String TSTL_POOL_TAG = "pool:";
@@ -103,7 +105,7 @@ public class TstlParser implements Runnable
 		{
 			e.printStackTrace();
 		}
-		writer.println("//This is auto-generated code.  Changes will be overwritten.");
+		writer.println(AUTO_GEN_CODE_MESSAGE);
 	}
 	private void readImports() 
 	{
@@ -118,6 +120,7 @@ public class TstlParser implements Runnable
 				i--;
 			}
 		}
+		writer.println("import java.util.List;");
 	}
 	private void generateClassDeclaration()
 	{
@@ -239,7 +242,7 @@ public class TstlParser implements Runnable
 			} 
 			catch (URISyntaxException e) 
 			{
-				throw new BadArgumentsException("Please provide a path to a valid tstl file in the command line arguments.");
+				throw new BadArgumentsException(TstlParser.NO_TSTL_EXCEPTION_MESSAGE);
 			}
 			for (int i = 0; i < list.length; i++) 
 			{
@@ -247,16 +250,18 @@ public class TstlParser implements Runnable
 				String extension = null;
 				try
 				{
-					extension = file.getName().replace(".", "~").split("~")[1];
+					String[] pieces = file.getName().replace(".", "~").split("~");
+					extension = pieces[pieces.length -1];
 				}
 				catch(RuntimeException ex) {}
 				if(extension != null && extension.equals("tstl"))
 				{
 					return file.getAbsolutePath();
+					
 				}
 			}
 		}
-		throw new BadArgumentsException("Please provide a path to a valid tstl file in the command line arguments.");
+		throw new BadArgumentsException(NO_TSTL_EXCEPTION_MESSAGE);
 	}
 
 	private static File getThisJarDir() throws URISyntaxException
