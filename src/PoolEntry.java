@@ -41,6 +41,12 @@ public class PoolEntry
 		ret += getVarName() + ".add(null);";
 		return ret;
 	}
+
+	public static PoolEntry getPoolEntryByVarName(PoolEntry[] entirePoolEntries, String varName) 
+	{
+		// TODO Auto-generated method stub
+		return null;
+	}
 	
 	
 }

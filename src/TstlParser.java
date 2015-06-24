@@ -116,6 +116,7 @@ public class TstlParser implements Runnable
 				i--;
 			}
 		}
+		//TODO import arrraylist, test for tstl imports of List and ArrayList and disregard them
 		writer.println("import java.util.List;");
 	}
 	private void generateClassDeclaration()
@@ -163,7 +164,7 @@ public class TstlParser implements Runnable
 					}
 				}	
 				if(className == null || varName == null || arrSize < 1)
-					throw new MalformedTstlException(TstlConstants.MALFORMED_POOL_DECLARATION + line + "\"");
+					throw new MalformedTstlException(TstlConstants.MESSAGE_MALFORMED_POOL_DECLARATION + line + "\"");
 				PoolEntry entry = new PoolEntry(className, varName, arrSize);
 				poolEntries.add(entry);
 				tstl.remove(x);
