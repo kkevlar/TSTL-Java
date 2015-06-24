@@ -5,7 +5,6 @@ public class SimpleActionEntry extends ActionEntry
 	private PoolEntry[] entirePoolEntries;	
 	private PoolEntry[] subsetPoolEntries;
 	private String[] javaCodePieces;
-	private int initFinishedIndex = -1;
 	private boolean hasInit = false;
 
 	public SimpleActionEntry(String explicitGuardUnparsed, String actionLine,
@@ -58,19 +57,12 @@ public class SimpleActionEntry extends ActionEntry
 	{
 		return this.subsetPoolEntries;
 	}
-
-	@Override
-	protected String[] getGuardExpressions()
+	
+	protected boolean hasInit()
 	{
-		// TODO Auto-generated method stub
-		return null;
+		return this.hasInit;
 	}
-	@Override
-	protected String[] getUsedActions() 
-	{
-		// TODO Auto-generated method stub
-		return null;
-	}
+	
 
 
 }

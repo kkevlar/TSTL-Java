@@ -28,8 +28,7 @@ public abstract class ActionEntry
 	
 	protected abstract String[] getJavaPieces();
 	protected abstract PoolEntry[] getPoolEntries();
-	protected abstract String[] getGuardExpressions();
-	protected abstract String[] getUsedActions();
+	protected abstract boolean hasInit();
 	
 	public int[] getMaxForEachPoolEntry()
 	{
