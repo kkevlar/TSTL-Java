@@ -108,9 +108,9 @@ public class TstlParser implements Runnable
 		for (int i = 0; i < tstl.size(); i++)
 		{
 			String line = tstl.get(i);
-			if(line.startsWith(TstlConstants.TSTL_IMPORT_TAG))
+			if(line.startsWith(TstlConstants.IDENTIFIER_IMPORT))
 			{
-				String importObject = line.substring(TstlConstants.TSTL_IMPORT_TAG.length());
+				String importObject = line.substring(TstlConstants.IDENTIFIER_IMPORT.length());
 				writer.println("import " + importObject);
 				tstl.remove(i);
 				i--;
@@ -130,9 +130,9 @@ public class TstlParser implements Runnable
 		for (int x = 0; x < tstl.size(); x++)
 		{
 			String line = tstl.get(x);
-			if(line.startsWith(TstlConstants.TSTL_POOL_TAG))
+			if(line.startsWith(TstlConstants.IDENTIFIER_POOL))
 			{
-				String restLine = line.substring(TstlConstants.TSTL_POOL_TAG.length());
+				String restLine = line.substring(TstlConstants.IDENTIFIER_POOL.length());
 				String[] restLineSplit = restLine.split(" ");
 				String className = null;
 				String varName = null;
@@ -187,7 +187,7 @@ public class TstlParser implements Runnable
 	}
 	private void generateClearPool() 
 	{
-		writer.println(TstlConstants.METHOD_DECLARATION_CLEAR_POOL);
+		writer.println(TstlConstants.DECLARATION_CLEAR_POOL_METHOD);
 		for (int i = 0; i < poolEntries.length; i++) 
 		{
 			PoolEntry entry = poolEntries[i];

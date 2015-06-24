@@ -8,8 +8,8 @@ public class PoolEntry
 	public PoolEntry(String className, String varName, int listSize)
 	{
 		super();
-		this.className = className;
-		this.varName = varName;
+		this.className = className.trim();
+		this.varName = varName.trim();
 		this.listSize = listSize;
 	}
 
@@ -41,5 +41,6 @@ public class PoolEntry
 		ret += getVarName() + ".add(null);";
 		return ret;
 	}
+	
 	
 }

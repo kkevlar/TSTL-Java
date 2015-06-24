@@ -3,9 +3,9 @@ public abstract class ActionEntry
 {
 	public static String[] splitActionLine(String rawLine)
 	{
-		if(rawLine.contains(TstlConstants.TSTL_EXPLICIT_GUARD_IDENTIFIER))
+		if(rawLine.contains(TstlConstants.IDENTIFIER_EXPLICIT_GUARD))
 		{
-			String[] pieces = rawLine.split(TstlConstants.TSTL_EXPLICIT_GUARD_IDENTIFIER);
+			String[] pieces = rawLine.split(TstlConstants.IDENTIFIER_EXPLICIT_GUARD);
 			if(pieces.length > 2)
 				throw new MalformedTstlException(TstlConstants.MESSAGE_ONLY_ONE_EXPLICIT_GUARD + ": " + rawLine);
 			return pieces;
@@ -15,15 +15,15 @@ public abstract class ActionEntry
 			return new String[]{null,rawLine};
 		}
 	}
-	private String eplicitGuardUnparsed;
+	private String explicitGuardUnparsed;
 	
 	public String getEplicitGuardUnparsed()
 	{
-		return eplicitGuardUnparsed;
+		return explicitGuardUnparsed;
 	}
-	protected void setEplicitGuardUnparsed(String eplicitGuardUnparsed) 
+	public ActionEntry(String explicitGuardUnparsed)
 	{
-		this.eplicitGuardUnparsed = eplicitGuardUnparsed;
+		this.explicitGuardUnparsed = explicitGuardUnparsed;
 	}
 	
 	protected abstract String[] getJavaPieces();
