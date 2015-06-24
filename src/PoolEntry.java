@@ -18,6 +18,12 @@ public class PoolEntry
 		return className;
 	}
 
+	@Override
+	public String toString() {
+		return "PoolEntry [className=" + className + ", varName=" + varName
+				+ ", listSize=" + listSize + "]";
+	}
+
 	public String getVarName() 
 	{
 		return varName;
@@ -55,12 +61,18 @@ public class PoolEntry
 
 	public static PoolEntry getPoolEntryByVarName(PoolEntry[] entirePoolEntries, String varName) 
 	{
+		
 		for (int i = 0; i < entirePoolEntries.length; i++) 
 		{
 			if(entirePoolEntries[i].getVarName().equals(varName))
 				return entirePoolEntries[i];
 		}
 		return null;
+	}
+
+	public String getAsVariable(int i)
+	{
+		return this.getVarName() + ".get(" + i + ")";
 	}
 	
 	

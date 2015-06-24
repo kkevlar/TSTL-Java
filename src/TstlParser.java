@@ -14,7 +14,7 @@ public class TstlParser implements Runnable
 	private String[] args;
 	private PoolEntry[] poolEntries;
 
-	
+
 	public static void main(String[] args) throws URISyntaxException
 	{
 		new Thread(new TstlParser(args)).start();		
@@ -42,10 +42,10 @@ public class TstlParser implements Runnable
 		generateClearPool();
 
 		//TODO more method generation??
-		generateActionsNullArray();
-		
+		generateActionEntries();
+
 		generateFillActionsArray();
-		
+
 		generateGetActions();
 
 		generateReset();
@@ -53,7 +53,7 @@ public class TstlParser implements Runnable
 		finishingTouches();
 	}
 
-	
+
 	private void readTstl()
 	{
 		String filePath = getInFilepath();
@@ -197,27 +197,64 @@ public class TstlParser implements Runnable
 		writer.println("}");
 
 	}
-	
-	private void generateActionsNullArray() 
+
+	private void generateActionEntries() 
 	{
-		int actionCount = 0;
-		//init actions
-		for(int x = 0; x < this.poolEntries.length; x++)
-		{
-			PoolEntry entry = this.poolEntries[x];
-			actionCount += entry.getListSize();
+		for (int i = 0; i < poolEntries.length; i++) {
+			System.out.println(poolEntries[i]);
 		}
-		
-		
-		
+		for(int i = 0; i < tstl.size(); i++)
+		{
+			if(!tstl.get(i).equals(""))
+			{
+				String[] parts = ActionEntry.splitActionLine(tstl.get(i));
+				ActionEntry entry = new ActionEntry(parts[0],parts[1],this.poolEntries);
+				//System.out.println(entry);
+				this.getMainLine(entry);
+			}
+		}		
 	}
-	
+
+	private void getMainLine(ActionEntry entry) 
+	{
+		int[] ints = new int[entry.getPoolEntries().length];
+		for (int i = 0; i < ints.length; i++) 
+		{
+			ints[i] = -1;
+		}
+		this.getMainLine(entry,ints);		
+	}
+	private void getMainLine(ActionEntry entry, int[] ints)
+	{
+		int[] newInts = new int[ints.length];
+		int negativeIndex = -1;
+		for (int i = 0; i < newInts.length; i++) 
+		{
+			newInts[i] = ints[i];
+			if(newInts[i] == -1)
+			{
+				negativeIndex = i;
+			}
+		}
+		if(negativeIndex == -1)
+		{
+			System.out.println(entry.getActMainLine(newInts));
+			return;
+		}
+		for(int i = 0; i < entry.getPoolEntries()[negativeIndex].getListSize(); i++)
+		{
+			newInts[negativeIndex] = i;
+			this.getMainLine(entry, newInts);
+		}	
+
+	}
+
 	private void generateFillActionsArray() {
 		// TODO Auto-generated method stub
-		
+
 	}
-	
-	
+
+
 	private void generateGetActions() 
 	{
 		//TODO unfinished
@@ -274,7 +311,7 @@ public class TstlParser implements Runnable
 				if(extension != null && extension.equals("tstl"))
 				{
 					return file.getAbsolutePath();
-					
+
 				}
 			}
 		}
