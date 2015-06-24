@@ -209,7 +209,6 @@ public class TstlParser implements Runnable
 			{
 				String[] parts = ActionEntry.splitActionLine(tstl.get(i));
 				ActionEntry entry = new ActionEntry(parts[0],parts[1],this.poolEntries);
-				//System.out.println(entry);
 				this.getMainLine(entry);
 			}
 		}		
@@ -238,7 +237,7 @@ public class TstlParser implements Runnable
 		}
 		if(negativeIndex == -1)
 		{
-			System.out.println(entry.getActMainLine(newInts));
+			System.out.println(entry.createActionClass(newInts));
 			return;
 		}
 		for(int i = 0; i < entry.getRepeatables()[negativeIndex].getListSize(); i++)
@@ -271,11 +270,6 @@ public class TstlParser implements Runnable
 		writer.close();
 		System.out.println("finished");	
 	}	
-
-	private int randFrom(int low, int hi)
-	{
-		return (int) ((Math.random() * (hi - low)) - low);
-	}
 
 	private String getOutFilepath() 
 	{

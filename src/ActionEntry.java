@@ -104,8 +104,8 @@ public class ActionEntry
 	{
 		String ret = TstlConstants.DECLARATION_ACTION_NAME_METHOD + "\n";
 		ret += "{\n";
-		ret += this.getActMainLine(poolValues) + "\n";
-		ret += "}\n";
+		ret += "return \"" + this.getActMainLine(poolValues) + "\"\n";
+		ret += "} //end name()\n";
 		return ret;
 	}
 	public String makeEnabledMethod(int[] poolValues)
@@ -126,7 +126,7 @@ public class ActionEntry
 		}
 		ret += ";"+ "\n";
 		ret += "return enabled;"+ "\n";
-		ret += "}\n";
+		ret += "} //end enabled()\n";
 		return ret;
 	}
 	public String makeActMethod(int[] poolValues)
@@ -135,7 +135,7 @@ public class ActionEntry
 		ret += "{\n";
 		ret += this.getActMainLine(poolValues) + "\n";
 		ret += this.getActUsageLines(poolValues) + "\n";
-		ret += "} //end act \n";
+		ret += "} //end act() \n";
 		return ret;
 	}
 	public String getActMainLine(int[] poolValues)
@@ -165,9 +165,35 @@ public class ActionEntry
 	}
 	public String getActUsageLines(int[] poolValues)
 	{
-		return null;//TODO unfinished
+		String ret = "";
+		for(int i = 0; i < this.getRepeatables().length; i++)
+		{
+			if(i == 0)
+			{
+				PoolEntry pEntry = (PoolEntry) this.getRepeatables()[i];
+				ret += pEntry.getUsedVarName() + "[" + poolValues[i] + "] = false;\n";
+			}
+			else
+			{
+				if(this.getRepeatables()[i] instanceof PoolEntry)
+				{
+					PoolEntry pEntry = (PoolEntry) this.getRepeatables()[i];
+					ret += pEntry.getUsedVarName() + "[" + poolValues[i] + "] = true;\n";
+				}
+			}
+		}
+		return ret;
 	}
-
+	public String createActionClass(int[] poolValues)
+	{
+		String ret = "Action action = new Action() {" + "\n";
+		ret += this.makeGetNameMethod(poolValues);
+		ret += this.makeEnabledMethod(poolValues);
+		ret += this.makeActMethod(poolValues);
+		ret += "};";
+		return ret;
+	}
+	
 	@Override
 	public String toString() 
 	{

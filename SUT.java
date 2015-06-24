@@ -13,8 +13,8 @@ for (int i = 0; i < 2; i++)
 var_ARRAYLIST.add(null);
 var_ARRAYLIST_used = new boolean[2];
 var_INT = new ArrayList<Integer>();
-for (int i = 0; i < 6; i++)
+for (int i = 0; i < 2; i++)
 var_INT.add(null);
-var_INT_used = new boolean[6];
+var_INT_used = new boolean[2];
 }
 }
