@@ -13,7 +13,7 @@ public class TstlParser implements Runnable
 	private FlushWriter writer;
 	private String[] args;
 	private PoolEntry[] poolEntries;
-
+	private long actionsPrinted;
 
 	public static void main(String[] args) throws URISyntaxException
 	{
@@ -42,9 +42,9 @@ public class TstlParser implements Runnable
 		generateClearPool();
 
 		//TODO more method generation??
-		generateActionEntries();
+		generateActionsInit();
 
-		generateFillActionsArray();
+		generateActionInterface();
 
 		generateGetActions();
 
@@ -141,7 +141,7 @@ public class TstlParser implements Runnable
 				for (int y = 0; y < restLineSplit.length; y++) 
 				{
 					String piece = restLineSplit[y];
-					boolean hasParentheses = piece.contains("%");
+					boolean hasParentheses = piece.contains(TstlConstants.IDENTIFIER_TSTLVARIABLE);
 					boolean canParseInt = false;
 					int parsed = -1;
 					try
@@ -184,7 +184,8 @@ public class TstlParser implements Runnable
 		{
 			PoolEntry entry = poolEntries[i];
 			writer.println(entry.getInstanceVariableDeclaration(TstlConstants.VISIBILITY_LEVEL_POOL_VAR));
-		}		
+		}
+		writer.println(TstlConstants.DECLARATION_ACTION_ARRAY_INSTANCE_VARIABLE);
 	}
 	private void generateClearPool() 
 	{
@@ -198,8 +199,9 @@ public class TstlParser implements Runnable
 
 	}
 
-	private void generateActionEntries() 
+	private void generateActionsInit() 
 	{
+		//TODO unfinished
 		for (int i = 0; i < poolEntries.length; i++) {
 			System.out.println(poolEntries[i]);
 		}
@@ -209,21 +211,23 @@ public class TstlParser implements Runnable
 			{
 				String[] parts = ActionEntry.splitActionLine(tstl.get(i));
 				ActionEntry entry = new ActionEntry(parts[0],parts[1],this.poolEntries);
-				this.getMainLine(entry);
+				writer.println(TstlConstants.CONSTRUCT_ACTION_ARRAY_INSTANCE_VARIABLE + entry.getActionCount() + "];");
+				writer.println(TstlConstants.DECLARATION_ACTION_LOCAL_VARIABLE);
+				this.printAllActions(entry);
 			}
 		}		
 	}
 
-	private void getMainLine(ActionEntry entry) 
+	private void printAllActions(ActionEntry entry) 
 	{
 		int[] ints = new int[entry.getRepeatables().length];
 		for (int i = 0; i < ints.length; i++) 
 		{
 			ints[i] = -1;
 		}
-		this.getMainLine(entry,ints);		
+		this.printAllActions(entry,ints);		
 	}
-	private void getMainLine(ActionEntry entry, int[] ints)
+	private void printAllActions(ActionEntry entry, int[] ints)
 	{
 		int[] newInts = new int[ints.length];
 		int negativeIndex = -1;
@@ -237,20 +241,26 @@ public class TstlParser implements Runnable
 		}
 		if(negativeIndex == -1)
 		{
-			System.out.println(entry.createActionClass(newInts));
+			printAction(entry, newInts);
 			return;
 		}
 		for(int i = 0; i < entry.getRepeatables()[negativeIndex].getListSize(); i++)
 		{
 			newInts[negativeIndex] = i;
-			this.getMainLine(entry, newInts);
+			this.printAllActions(entry, newInts);
 		}	
 
 	}
 
-	private void generateFillActionsArray() {
-		// TODO Auto-generated method stub
-
+	private void printAction(ActionEntry entry, int[] poolValues)
+	{
+		writer.println(entry.createActionClass(poolValues));	
+		writer.println("actions[" + actionsPrinted + "] = action;");
+		actionsPrinted++;
+	}
+	private void generateActionInterface()
+	{
+		//TODO unfinished
 	}
 
 

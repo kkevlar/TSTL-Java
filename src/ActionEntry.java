@@ -90,12 +90,19 @@ public class ActionEntry
 	{
 		return this.javaCodePieces;
 	}
-
+	public int getActionCount()
+	{
+		int count = 1;
+		for (int i = 0; i < this.getRepeatables().length; i++) 
+		{
+			count *= this.getRepeatables()[i].getListSize();		
+		}
+		return count;
+	}
 	protected Repeatable[] getRepeatables()
 	{
 		return this.repeatables;
 	}
-
 	protected boolean hasInit()
 	{
 		return this.getRepeatables().length == this.getJavaPieces().length;
@@ -186,14 +193,13 @@ public class ActionEntry
 	}
 	public String createActionClass(int[] poolValues)
 	{
-		String ret = "Action action = new Action() {" + "\n";
+		String ret = TstlConstants.DECLARATION_ACTION_CLASS + "\n";
 		ret += this.makeGetNameMethod(poolValues);
 		ret += this.makeEnabledMethod(poolValues);
 		ret += this.makeActMethod(poolValues);
 		ret += "};";
 		return ret;
 	}
-	
 	@Override
 	public String toString() 
 	{
