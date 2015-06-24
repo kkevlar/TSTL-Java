@@ -84,7 +84,7 @@ public class TstlParser implements Runnable
 				else
 					break;
 			}
-			lines.add(line);
+			lines.add(line.replace(";", ""));
 		}
 		tstl = new ArrayList<String>();
 		for(int i = 0; i < lines.size(); i++)
