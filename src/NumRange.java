@@ -7,7 +7,6 @@ public class NumRange implements Repeatable
 
 	public static NumRange getNumRange(String s)
 	{
-		System.out.println("try numrange: " + s);
 		String[] pieces = s.replace(TstlConstants.IDENTIFIER_NUMRANGE_LEFT, "").replace(TstlConstants.IDENTIFIER_NUMRANGE_RIGHT, "").replace(TstlConstants.IDENTIFIER_NUMRANGE_MID,"~").split("~");
 		if(pieces.length < 2 || pieces.length > 2)
 			return null;
@@ -41,6 +40,16 @@ public class NumRange implements Repeatable
 	public String getAsJava(int i)
 	{
 		return low+i+"";
+	}
+	@Override
+	public String getIsUsableExpression(int i) 
+	{
+		return true+"";
+	}
+	@Override
+	public String getCanOverwriteExpression(int i)
+	{
+		return true+"";
 	}
 
 }

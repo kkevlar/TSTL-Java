@@ -164,7 +164,7 @@ public class TstlParser implements Runnable
 					}
 				}	
 				if(className == null || varName == null || arrSize < 1)
-					throw new MalformedTstlException(TstlConstants.MESSAGE_MALFORMED_POOL_DECLARATION + line + "\"");
+					throw new MalformedTstlException(TstlConstants.MESSAGE_MALFORMED_POOL_DECLARATION + "\"" + line + "\"");
 				PoolEntry entry = new PoolEntry(className, varName, arrSize);
 				poolEntries.add(entry);
 				tstl.remove(x);
@@ -217,7 +217,7 @@ public class TstlParser implements Runnable
 
 	private void getMainLine(ActionEntry entry) 
 	{
-		int[] ints = new int[entry.getPoolEntries().length];
+		int[] ints = new int[entry.getRepeatables().length];
 		for (int i = 0; i < ints.length; i++) 
 		{
 			ints[i] = -1;
@@ -241,7 +241,7 @@ public class TstlParser implements Runnable
 			System.out.println(entry.getActMainLine(newInts));
 			return;
 		}
-		for(int i = 0; i < entry.getPoolEntries()[negativeIndex].getListSize(); i++)
+		for(int i = 0; i < entry.getRepeatables()[negativeIndex].getListSize(); i++)
 		{
 			newInts[negativeIndex] = i;
 			this.getMainLine(entry, newInts);

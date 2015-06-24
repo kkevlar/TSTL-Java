@@ -22,7 +22,7 @@ public class ActionEntry
 
 	private String actionLine;
 	private PoolEntry[] entirePoolEntries;	
-	private Repeatable[] subsetPoolEntries;
+	private Repeatable[] repeatables;
 	private String[] javaCodePieces;
 
 	public ActionEntry(String explicitGuardUnparsed, String actionLine, PoolEntry[] entirePoolEntries) 
@@ -73,7 +73,7 @@ public class ActionEntry
 					entries.add(entry);
 			}
 		}
-		this.subsetPoolEntries = (Repeatable[]) entries.toArray(new Repeatable[entries.size()]);
+		this.repeatables = (Repeatable[]) entries.toArray(new Repeatable[entries.size()]);
 	}
 	private Repeatable getRepeatableFromVariable(String var, boolean mustBePool) 
 	{
@@ -83,7 +83,7 @@ public class ActionEntry
 			rep = NumRange.getNumRange(var);
 		if(rep == null)
 			throw new MalformedTstlException(TstlConstants.MESSAGE_UNDEFINED_TSTL_VARIABLE + "Variable:%" + var + "% Line:" + actionLine);
-		
+
 		return rep;
 	}
 	protected String[] getJavaPieces() 
@@ -91,39 +91,51 @@ public class ActionEntry
 		return this.javaCodePieces;
 	}
 
-	protected Repeatable[] getPoolEntries()
+	protected Repeatable[] getRepeatables()
 	{
-		return this.subsetPoolEntries;
+		return this.repeatables;
 	}
 
 	protected boolean hasInit()
 	{
-		return this.getPoolEntries().length == this.getJavaPieces().length;
-	}
-
-	@Override
-	public String toString() {
-		return "ActionEntry [explicitGuardUnparsed=" + explicitGuardUnparsed
-				+ ", actionLine=" + actionLine + ", entirePoolEntries="
-				+ Arrays.toString(entirePoolEntries) + ", subsetPoolEntries="
-				+ Arrays.toString(subsetPoolEntries) + ", javaCodePieces="
-				+ Arrays.toString(javaCodePieces) + "]";
+		return this.getRepeatables().length == this.getJavaPieces().length;
 	}
 	public String makeGetNameMethod(int[] poolValues)
 	{
-		return this.getActMainLine(poolValues);
+		String ret = TstlConstants.DECLARATION_ACTION_NAME_METHOD + "\n";
+		ret += "{\n";
+		ret += this.getActMainLine(poolValues) + "\n";
+		ret += "}\n";
+		return ret;
 	}
 	public String makeEnabledMethod(int[] poolValues)
 	{
-		return null; //TODO unifnished
+		String ret = TstlConstants.DECLARATION_ACTION_ENABLED_METHOD + "\n";
+		ret += "{\n";
+		ret += "boolean enabled = ";
+		for (int i = 0; i < this.getRepeatables().length; i++)
+		{
+			if(i == 0)
+				ret += this.getRepeatables()[i].getCanOverwriteExpression(poolValues[i]);
+			else
+			{
+				ret += " &&\n";
+				ret += this.getRepeatables()[i].getIsUsableExpression(poolValues[i]);
+			}
+			
+		}
+		ret += ";"+ "\n";
+		ret += "return enabled;"+ "\n";
+		ret += "}\n";
+		return ret;
 	}
 	public String makeActMethod(int[] poolValues)
 	{
-		String ret = "public void act() \n";
+		String ret = TstlConstants.DECLARATION_ACTION_ACT_METHOD + " \n";
 		ret += "{\n";
 		ret += this.getActMainLine(poolValues) + "\n";
 		ret += this.getActUsageLines(poolValues) + "\n";
-		ret += "} //end act";
+		ret += "} //end act \n";
 		return ret;
 	}
 	public String getActMainLine(int[] poolValues)
@@ -133,7 +145,7 @@ public class ActionEntry
 		int poolStartIndex= 0;
 		if(this.hasInit())
 		{
-			PoolEntry poolEntry = (PoolEntry) this.getPoolEntries()[0];
+			PoolEntry poolEntry = (PoolEntry) this.getRepeatables()[0];
 			mainLine += poolEntry.getVarName() + ".set(" + poolValues[0] + ", ";
 			endingCharacters = ")" + endingCharacters;
 			poolStartIndex = 1;
@@ -145,7 +157,7 @@ public class ActionEntry
 			else
 			{
 				int index = (i/2)+poolStartIndex;
-				mainLine += this.getPoolEntries()[index].getAsJava(poolValues[index]);
+				mainLine += this.getRepeatables()[index].getAsJava(poolValues[index]);
 			}
 		}
 		mainLine += endingCharacters;
@@ -156,5 +168,14 @@ public class ActionEntry
 		return null;//TODO unfinished
 	}
 
+	@Override
+	public String toString() 
+	{
+		return "ActionEntry [explicitGuardUnparsed=" + explicitGuardUnparsed
+				+ ", actionLine=" + actionLine + ", entirePoolEntries="
+				+ Arrays.toString(entirePoolEntries) + ", repeatables="
+				+ Arrays.toString(repeatables) + ", javaCodePieces="
+				+ Arrays.toString(javaCodePieces) + "]";
+	}
 
 }

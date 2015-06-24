@@ -74,6 +74,21 @@ public class PoolEntry implements Repeatable
 	{
 		return this.getVarName() + ".get(" + i + ")";
 	}
-	
-	
+	public String getUsedAsJava(int i)
+	{
+		return this.getUsedVarName() + "["+ i + "]";
+	}
+
+	@Override
+	public String getIsUsableExpression(int i) 
+	{
+		return this.getAsJava(i) + " != null";
+	}
+
+	@Override
+	public String getCanOverwriteExpression(int i) 
+	{
+		return "(" + this.getAsJava(i) + " == null ||" + this.getUsedAsJava(i) + "== true)";
+	}
+
 }
