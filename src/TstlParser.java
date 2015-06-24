@@ -9,17 +9,6 @@ import java.util.ArrayList;
 
 public class TstlParser implements Runnable
 {
-
-	private static final String MALFORMED_POOL_DECLARATION = "Malformed pool declaration: \"";
-	private static final String AUTO_GEN_CODE_MESSAGE = "//This is auto-generated code.  Changes will be overwritten.";
-	private static final String NO_TSTL_EXCEPTION_MESSAGE = "Please provide a path to a valid .tstl file in the command line arguments.";
-	private static final String CLASS_NAME_SUT = "SUT";
-	private static final String TSTL_IMPORT_TAG = "@import";
-	private static final String TSTL_POOL_TAG = "pool:";
-	private static final String PREFIX_REMOVE_PERCENTS_DEFAULT_VAR = "var_";
-	private static final String VISIBILITY_LEVEL_POOL_VAR = "private";
-	private static final String METHOD_DECLARATION_CLEAR_POOL = "public void clearPool() {";
-
 	private ArrayList<String> tstl;
 	private FlushWriter writer;
 	private String[] args;
@@ -107,16 +96,16 @@ public class TstlParser implements Runnable
 		{
 			e.printStackTrace();
 		}
-		writer.println(AUTO_GEN_CODE_MESSAGE);
+		writer.println(TstlConstants.AUTO_GEN_CODE_MESSAGE);
 	}
 	private void readImports() 
 	{
 		for (int i = 0; i < tstl.size(); i++)
 		{
 			String line = tstl.get(i);
-			if(line.startsWith(TSTL_IMPORT_TAG))
+			if(line.startsWith(TstlConstants.TSTL_IMPORT_TAG))
 			{
-				String importObject = line.substring(TSTL_IMPORT_TAG.length());
+				String importObject = line.substring(TstlConstants.TSTL_IMPORT_TAG.length());
 				writer.println("import " + importObject);
 				tstl.remove(i);
 				i--;
@@ -126,7 +115,7 @@ public class TstlParser implements Runnable
 	}
 	private void generateClassDeclaration()
 	{
-		String className = TstlParser.CLASS_NAME_SUT;
+		String className = TstlConstants.CLASS_NAME_SUT;
 		writer.println("public class " + className);
 		writer.println("{");
 	}
@@ -136,9 +125,9 @@ public class TstlParser implements Runnable
 		for (int x = 0; x < tstl.size(); x++)
 		{
 			String line = tstl.get(x);
-			if(line.startsWith(TSTL_POOL_TAG))
+			if(line.startsWith(TstlConstants.TSTL_POOL_TAG))
 			{
-				String restLine = line.substring(TSTL_POOL_TAG.length());
+				String restLine = line.substring(TstlConstants.TSTL_POOL_TAG.length());
 				String[] restLineSplit = restLine.split(" ");
 				String className = null;
 				String varName = null;
@@ -169,7 +158,7 @@ public class TstlParser implements Runnable
 					}
 				}	
 				if(className == null || varName == null || arrSize < 1)
-					throw new MalformedTstlException(MALFORMED_POOL_DECLARATION + line + "\"");
+					throw new MalformedTstlException(TstlConstants.MALFORMED_POOL_DECLARATION + line + "\"");
 				PoolEntry entry = new PoolEntry(className, varName, arrSize);
 				poolEntries.add(entry);
 				tstl.remove(x);
@@ -188,12 +177,12 @@ public class TstlParser implements Runnable
 		for(int i =0; i< this.poolEntries.length; i++)
 		{
 			PoolEntry entry = poolEntries[i];
-			writer.println(entry.getInstanceVariableDeclaration(VISIBILITY_LEVEL_POOL_VAR));
+			writer.println(entry.getInstanceVariableDeclaration(TstlConstants.VISIBILITY_LEVEL_POOL_VAR));
 		}		
 	}
 	private void generateClearPool() 
 	{
-		writer.println(METHOD_DECLARATION_CLEAR_POOL);
+		writer.println(TstlConstants.METHOD_DECLARATION_CLEAR_POOL);
 		for (int i = 0; i < poolEntries.length; i++) 
 		{
 			PoolEntry entry = poolEntries[i];
@@ -236,7 +225,7 @@ public class TstlParser implements Runnable
 	{
 		File inFile = new File(this.getInFilepath());
 		File parFile = inFile.getParentFile();
-		return parFile.getAbsolutePath() + "/" + CLASS_NAME_SUT+".java";
+		return parFile.getAbsolutePath() + "/" + TstlConstants.CLASS_NAME_SUT+".java";
 	}	
 
 	private String getInFilepath()
@@ -251,7 +240,7 @@ public class TstlParser implements Runnable
 			} 
 			catch (URISyntaxException e) 
 			{
-				throw new BadArgumentsException(TstlParser.NO_TSTL_EXCEPTION_MESSAGE);
+				throw new BadArgumentsException(TstlConstants.NO_TSTL_EXCEPTION_MESSAGE);
 			}
 			for (int i = 0; i < list.length; i++) 
 			{
@@ -270,7 +259,7 @@ public class TstlParser implements Runnable
 				}
 			}
 		}
-		throw new BadArgumentsException(NO_TSTL_EXCEPTION_MESSAGE);
+		throw new BadArgumentsException(TstlConstants.NO_TSTL_EXCEPTION_MESSAGE);
 	}
 
 	private static File getThisJarDir() throws URISyntaxException
@@ -301,7 +290,7 @@ public class TstlParser implements Runnable
 	}
 	private String removePercents(String line)
 	{
-		return removePercents(line,PREFIX_REMOVE_PERCENTS_DEFAULT_VAR);
+		return removePercents(line,TstlConstants.PREFIX_REMOVE_PERCENTS_DEFAULT_VAR);
 	}
 
 
