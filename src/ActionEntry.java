@@ -22,7 +22,7 @@ public class ActionEntry
 
 	private String actionLine;
 	private PoolEntry[] entirePoolEntries;	
-	private PoolEntry[] subsetPoolEntries;
+	private Repeatable[] subsetPoolEntries;
 	private String[] javaCodePieces;
 
 	public ActionEntry(String explicitGuardUnparsed, String actionLine, PoolEntry[] entirePoolEntries) 
@@ -40,17 +40,15 @@ public class ActionEntry
 			hasInit = true;
 		else
 			hasInit = false;
-		ArrayList<PoolEntry> entries = new ArrayList<PoolEntry>();
+		ArrayList<Repeatable> entries = new ArrayList<Repeatable>();
 
 		if(hasInit)
 		{
 			PoolEntry initVar = null;
 			String[] pieces = newActionLine.split(":=");
 			newActionLine = pieces[1];
-			String name = TstlConstants.PREFIX_REMOVE_PERCENTS_DEFAULT_VAR + pieces[0].replace("%", " ").trim();
-			initVar = PoolEntry.getPoolEntryByVarName(this.entirePoolEntries,name);
-			if(initVar == null)
-				throw new MalformedTstlException(TstlConstants.MESSAGE_UNDEFINED_TSTL_VARIABLE + "Variable:%" + name + "% Line:" + actionLine);
+			String name =  pieces[0].replace("%", " ").trim();
+			initVar = (PoolEntry) getRepeatableFromVariable(name,true);
 			entries.add(initVar);
 		}
 		newActionLine = " " + newActionLine + " ";
@@ -68,21 +66,32 @@ public class ActionEntry
 			}
 			else
 			{
-				PoolEntry entry = PoolEntry.getPoolEntryByVarName(this.entirePoolEntries, (TstlConstants.PREFIX_REMOVE_PERCENTS_DEFAULT_VAR + pieces[i]).trim());
+				Repeatable entry = this.getRepeatableFromVariable((pieces[i]).trim(), false);
 				if (entry == null)
 					throw new MalformedTstlException(TstlConstants.MESSAGE_UNDEFINED_TSTL_VARIABLE + "Variable:%" + pieces[i] + "% Line:" + actionLine);
 				else
 					entries.add(entry);
 			}
 		}
-		this.subsetPoolEntries = (PoolEntry[]) entries.toArray(new PoolEntry[entries.size()]);
+		this.subsetPoolEntries = (Repeatable[]) entries.toArray(new Repeatable[entries.size()]);
+	}
+	private Repeatable getRepeatableFromVariable(String var, boolean mustBePool) 
+	{
+		Repeatable rep;
+		rep = PoolEntry.getPoolEntryByVarName(this.entirePoolEntries,TstlConstants.PREFIX_JAVA_VARIABLES +var);
+		if(rep == null && !mustBePool)
+			rep = NumRange.getNumRange(var);
+		if(rep == null)
+			throw new MalformedTstlException(TstlConstants.MESSAGE_UNDEFINED_TSTL_VARIABLE + "Variable:%" + var + "% Line:" + actionLine);
+		
+		return rep;
 	}
 	protected String[] getJavaPieces() 
 	{
 		return this.javaCodePieces;
 	}
 
-	protected PoolEntry[] getPoolEntries()
+	protected Repeatable[] getPoolEntries()
 	{
 		return this.subsetPoolEntries;
 	}
@@ -120,11 +129,12 @@ public class ActionEntry
 	public String getActMainLine(int[] poolValues)
 	{
 		String mainLine = "";
-		String endingCharacters = "";
+		String endingCharacters = ";";
 		int poolStartIndex= 0;
 		if(this.hasInit())
 		{
-			mainLine += this.getPoolEntries()[0].getVarName() + ".set(" + poolValues[0] + ", ";
+			PoolEntry poolEntry = (PoolEntry) this.getPoolEntries()[0];
+			mainLine += poolEntry.getVarName() + ".set(" + poolValues[0] + ", ";
 			endingCharacters = ")" + endingCharacters;
 			poolStartIndex = 1;
 		}
@@ -135,7 +145,7 @@ public class ActionEntry
 			else
 			{
 				int index = (i/2)+poolStartIndex;
-				mainLine += this.getPoolEntries()[index].getAsVariable(poolValues[index]);
+				mainLine += this.getPoolEntries()[index].getAsJava(poolValues[index]);
 			}
 		}
 		mainLine += endingCharacters;

@@ -346,11 +346,11 @@ public class TstlParser implements Runnable
 	}
 	private String removePercents(String line)
 	{
-		return removePercents(line,TstlConstants.PREFIX_REMOVE_PERCENTS_DEFAULT_VAR);
+		return removePercents(line,TstlConstants.PREFIX_JAVA_VARIABLES);
 	}
 
 
-	/* obsolete in this version- kept around because its parsing my be useful in later versions
+	/* obsolete in this version- kept around because its parsing may be useful in later versions
 	private void constructBodyMethod(int num, int tstlLineAfterImport)
 	{
 		writer.println("private void body" + num + "() throws TstlException {");

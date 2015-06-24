@@ -1,5 +1,5 @@
 
-public class PoolEntry 
+public class PoolEntry implements Repeatable
 {
 	private String className;
 	private String varName;
@@ -70,7 +70,7 @@ public class PoolEntry
 		return null;
 	}
 
-	public String getAsVariable(int i)
+	public String getAsJava(int i)
 	{
 		return this.getVarName() + ".get(" + i + ")";
 	}

@@ -5,12 +5,14 @@ public class TstlConstants
 	
 	public static final String COMMENT_AUTO_GEN_CODE = "//This is auto-generated code.  Changes will be overwritten.";
 	
-	public static final String DECLARATION_ACTION_INNERCLASS = null; //TODO temp
 	public static final String DECLARATION_CLEAR_POOL_METHOD = "public void clearPool() {";
 	
 	public static final String IDENTIFIER_EXPLICIT_GUARD = "->";
 	public static final String IDENTIFIER_IMPORT = "@import";
 	public static final String IDENTIFIER_INITIALIZATION = ":=";
+	public static final String IDENTIFIER_NUMRANGE_LEFT = "[";
+	public static final String IDENTIFIER_NUMRANGE_MID = "..";	
+	public static final String IDENTIFIER_NUMRANGE_RIGHT = "]";	
 	public static final String IDENTIFIER_POOL = "pool:";
 	public static final String IDENTIFIER_TSTLVARIABLE = "%";
 	
@@ -20,9 +22,13 @@ public class TstlConstants
 	public static final String MESSGAGE_NONSURROUNDING_VARIABLE_IDENTIFIERS = "Variable identifiers must surround variables: ";
 	public static final String MESSAGE_UNDEFINED_TSTL_VARIABLE = "Tstl Variable undefined in pool. ";
 	
-	public static final String PREFIX_REMOVE_PERCENTS_DEFAULT_VAR = "var_";
+	public static final String PREFIX_JAVA_VARIABLES = "var_";
 	
 	public static final String SUFFIX_VAR_USED = "_used";
 	
-	public static final String VISIBILITY_LEVEL_POOL_VAR = "private";	
+	public static final String VISIBILITY_LEVEL_POOL_VAR = "private";
+
+	
+
+	
 }
