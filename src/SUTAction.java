@@ -1,5 +1,5 @@
 
-public interface Action 
+public interface SUTAction 
 {
 	public String getName();
 	public void act();

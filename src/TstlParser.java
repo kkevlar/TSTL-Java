@@ -42,6 +42,10 @@ public class TstlParser implements Runnable
 		generateClearPool();
 
 		//TODO more method generation??
+		generateActionsNullArray();
+		
+		generateFillActionsArray();
+		
 		generateGetActions();
 
 		generateReset();
@@ -49,6 +53,7 @@ public class TstlParser implements Runnable
 		finishingTouches();
 	}
 
+	
 	private void readTstl()
 	{
 		String filePath = getInFilepath();
@@ -96,7 +101,7 @@ public class TstlParser implements Runnable
 		{
 			e.printStackTrace();
 		}
-		writer.println(TstlConstants.AUTO_GEN_CODE_MESSAGE);
+		writer.println(TstlConstants.COMMENT_AUTO_GEN_CODE);
 	}
 	private void readImports() 
 	{
@@ -191,17 +196,30 @@ public class TstlParser implements Runnable
 		writer.println("}");
 
 	}
-	private void generateGetActions() 
+	
+	private void generateActionsNullArray() 
 	{
+		int actionCount = 0;
+		//init actions
 		for(int x = 0; x < this.poolEntries.length; x++)
 		{
 			PoolEntry entry = this.poolEntries[x];
-			for(int y = 0; y < entry.getListSize(); y++)
-			{
-				//TODO unfinished
-			}
+			actionCount += entry.getListSize();
 		}
-
+		
+		
+		
+	}
+	
+	private void generateFillActionsArray() {
+		// TODO Auto-generated method stub
+		
+	}
+	
+	
+	private void generateGetActions() 
+	{
+		//TODO unfinished
 	}
 
 	private void generateReset() {
@@ -240,7 +258,7 @@ public class TstlParser implements Runnable
 			} 
 			catch (URISyntaxException e) 
 			{
-				throw new BadArgumentsException(TstlConstants.NO_TSTL_EXCEPTION_MESSAGE);
+				throw new BadArgumentsException(TstlConstants.MESSAGE_NO_TSTL);
 			}
 			for (int i = 0; i < list.length; i++) 
 			{
@@ -259,7 +277,7 @@ public class TstlParser implements Runnable
 				}
 			}
 		}
-		throw new BadArgumentsException(TstlConstants.NO_TSTL_EXCEPTION_MESSAGE);
+		throw new BadArgumentsException(TstlConstants.MESSAGE_NO_TSTL);
 	}
 
 	private static File getThisJarDir() throws URISyntaxException
