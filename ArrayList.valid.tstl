@@ -1,0 +1,13 @@
+@import java.util.ArrayList
+
+pool: ArrayList<Integer> %ARRAYLIST% 2
+pool: Integer %INT% 2
+
+%INT% := 5
+
+%ARRAYLIST% := new ArrayList<Integer>()
+%ARRAYLIST% := new ArrayList<Integer>(%INT%)
+
+%ARRAYLIST%.add(%INT%)
+%ARRAYLIST%.remove(%INT%)
+%INT,2% < %ARRAYLIST,1%.size() -> %INT% := %ARRAYLIST%.get(%INT%)
