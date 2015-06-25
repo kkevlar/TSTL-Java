@@ -1,7 +1,7 @@
 @import java.util.ArrayList
 
-pool: ArrayList<Integer> %ARRAYLIST% 1
-pool: Integer %INT% 3
+pool: ArrayList<Integer> %ARRAYLIST% 2
+pool: Integer %INT% 2
 
 %INT% := %[1..5]%
 
