@@ -27,6 +27,8 @@ public class ActionEntry
 	private Repeatable[] repeatables;
 	private String[] javaCodePieces;
 	private HashMap<Repeatable, int[]> repeatingPoolValues;
+	private String[] javaExpressionPieces;
+	private String[] expressionVarInformation;
 
 	public ActionEntry(String explicitGuardUnparsed, String actionLine, PoolEntry[] entirePoolEntries) 
 	{
@@ -62,11 +64,30 @@ public class ActionEntry
 				newInts[newInts.length-1] = x;
 				storeRep = testRep;
 				repeatingPoolValues.remove(testRep);
+				break;
 			}
 			repeatingPoolValues.put(storeRep, newInts);
 		}
 		System.out.println(this.explicitGuardUnparsed);
 		Temp.printMyMap(this.repeatingPoolValues);
+		
+		String[] pieces = this.explicitGuardUnparsed.split(TstlConstants.IDENTIFIER_TSTLVARIABLE);
+		if(pieces.length % 2 != 1)
+			throw new MalformedTstlException(TstlConstants.MESSGAGE_NONSURROUNDING_VARIABLE_IDENTIFIERS + actionLine);
+		javaExpressionPieces = new String[(pieces.length+1)/2];
+		expressionVarInformation = new String[javaExpressionPieces.length -1];
+		for (int i = 0; i < pieces.length; i++)
+		{
+			if(i%2==0)
+			{
+				int javaIndex = i/2;
+				javaExpressionPieces[javaIndex] = pieces[i];
+			}
+			else
+			{
+				expressionVarInformation[(i-1)/2] = pieces[i];
+			}
+		}
 	}
 	private void parseActionLine()
 	{
@@ -172,6 +193,28 @@ public class ActionEntry
 		ret += "} //end enabled()\n";
 		return ret;
 	}
+	public String getExplicitGuardExpression(int[] vals)
+	{
+		if(this.explicitGuardUnparsed == null)
+			return null;
+		String expressionLine = "";
+		for (int i = 0; i < (this.javaExpressionPieces.length*2)-1;i++) 
+		{
+			if(i%2==0)
+				expressionLine += this.javaExpressionPieces[(i)/2];
+			else
+			{
+				String inf = this.expressionVarInformation[(i-1)/2];
+				String[] split = inf.split(",");
+				PoolEntry pEntry = (PoolEntry) this.getRepeatableFromVariable(split[0], true);
+				int index = Integer.parseInt(split[1])-1;//can error need throws.....
+				int indexFromVals = this.repeatingPoolValues.get(pEntry)[index];
+				int giveToPoolNum = vals[indexFromVals];
+				expressionLine += pEntry.getAsJava(giveToPoolNum);
+			}
+		}
+		return expressionLine;
+	}
 	public String makeActMethod(int[] poolValues)
 	{
 		String ret = TstlConstants.DECLARATION_ACTION_ACT_METHOD + " \n";
@@ -196,7 +239,7 @@ public class ActionEntry
 		for (int i = 0; i < (this.getJavaPieces().length*2)-1;i++) 
 		{
 			if(i%2==0)
-				mainLine += this.getJavaPieces()[(i+1)/2];
+				mainLine += this.getJavaPieces()[(i)/2];//was (i+1)/2 - if bug reimplement
 			else
 			{
 				int index = (i/2)+poolStartIndex;
