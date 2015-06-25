@@ -274,6 +274,7 @@ public class TstlParser implements Runnable
 	{
 		writer.println(entry.createActionClass(poolValues));	
 		writer.println("actions[" + actionsPrinted + "] = action;");
+		System.out.println(entry.getExplicitGuardExpression(poolValues));
 		actionsPrinted++;
 	}
 	private void generateActionInterface()

@@ -68,8 +68,6 @@ public class ActionEntry
 			}
 			repeatingPoolValues.put(storeRep, newInts);
 		}
-		System.out.println(this.explicitGuardUnparsed);
-		Temp.printMyMap(this.repeatingPoolValues);
 		
 		String[] pieces = this.explicitGuardUnparsed.split(TstlConstants.IDENTIFIER_TSTLVARIABLE);
 		if(pieces.length % 2 != 1)
@@ -187,6 +185,11 @@ public class ActionEntry
 				ret += this.getRepeatables()[i].getIsUsableExpression(poolValues[i]);
 			}
 			
+		}
+		String s= this.getExplicitGuardExpression(poolValues);
+		if(s != null)
+		{
+			ret += "\n&& (" + s + ")";
 		}
 		ret += ";"+ "\n";
 		ret += "return enabled;"+ "\n";
