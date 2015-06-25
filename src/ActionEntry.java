@@ -1,5 +1,8 @@
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
+
+import sun.security.util.Length;
 
 
 public class ActionEntry
@@ -19,11 +22,11 @@ public class ActionEntry
 		}
 	}
 	private String explicitGuardUnparsed;
-
 	private String actionLine;
 	private PoolEntry[] entirePoolEntries;	
 	private Repeatable[] repeatables;
 	private String[] javaCodePieces;
+	private HashMap<Repeatable, int[]> repeatingPoolValues;
 
 	public ActionEntry(String explicitGuardUnparsed, String actionLine, PoolEntry[] entirePoolEntries) 
 	{
@@ -31,12 +34,45 @@ public class ActionEntry
 		this.actionLine = actionLine;
 		this.entirePoolEntries = entirePoolEntries;
 		this.parseActionLine();
+		this.parseExplicitGuard();
+	}
+	private void parseExplicitGuard()
+	{
+		if(this.explicitGuardUnparsed == null)
+			return;
+		repeatingPoolValues = new HashMap<Repeatable,int[]>();
+		for(int x = 0; x < this.getRepeatables().length; x++)
+		{
+			Repeatable rep = this.getRepeatables()[x];
+			Repeatable[] reps = repeatingPoolValues.keySet().toArray(new Repeatable[repeatingPoolValues.size()]);
+			Repeatable storeRep = rep;
+			int[] newInts = new int[]{x};
+			for(int y = 0; y < reps.length; y++)
+			{
+				Repeatable testRep = reps[y];
+				boolean equal = rep.equalsRepeatable(testRep);
+				if(!equal)
+					continue;
+				int[] ints  = repeatingPoolValues.get(testRep);
+				newInts = new int[ints.length + 1];
+				for (int z = 0; z < ints.length; z++) 
+				{
+					newInts[z] = ints[z];
+				}
+				newInts[newInts.length-1] = x;
+				storeRep = testRep;
+				repeatingPoolValues.remove(testRep);
+			}
+			repeatingPoolValues.put(storeRep, newInts);
+		}
+		System.out.println(this.explicitGuardUnparsed);
+		Temp.printMyMap(this.repeatingPoolValues);
 	}
 	private void parseActionLine()
 	{
 		String newActionLine = actionLine;
 		boolean hasInit;
-		if(newActionLine.contains(":="))
+		if(newActionLine.contains(TstlConstants.IDENTIFIER_INITIALIZATION))
 			hasInit = true;
 		else
 			hasInit = false;
@@ -45,9 +81,9 @@ public class ActionEntry
 		if(hasInit)
 		{
 			PoolEntry initVar = null;
-			String[] pieces = newActionLine.split(":=");
+			String[] pieces = newActionLine.split(TstlConstants.IDENTIFIER_INITIALIZATION);
 			newActionLine = pieces[1];
-			String name =  pieces[0].replace("%", " ").trim();
+			String name =  pieces[0].replace(TstlConstants.IDENTIFIER_TSTLVARIABLE, " ").trim();
 			initVar = (PoolEntry) getRepeatableFromVariable(name,true);
 			entries.add(initVar);
 		}
@@ -68,7 +104,7 @@ public class ActionEntry
 			{
 				Repeatable entry = this.getRepeatableFromVariable((pieces[i]).trim(), false);
 				if (entry == null)
-					throw new MalformedTstlException(TstlConstants.MESSAGE_UNDEFINED_TSTL_VARIABLE + "Variable:%" + pieces[i] + "% Line:" + actionLine);
+					throw new MalformedTstlException(TstlConstants.MESSAGE_UNDEFINED_TSTL_VARIABLE + "Variable:" + TstlConstants.IDENTIFIER_TSTLVARIABLE + pieces[i] + TstlConstants.IDENTIFIER_TSTLVARIABLE + " Line:" + actionLine);
 				else
 					entries.add(entry);
 			}
@@ -82,7 +118,7 @@ public class ActionEntry
 		if(rep == null && !mustBePool)
 			rep = NumRange.getNumRange(var);
 		if(rep == null)
-			throw new MalformedTstlException(TstlConstants.MESSAGE_UNDEFINED_TSTL_VARIABLE + "Variable:%" + var + "% Line:" + actionLine);
+			throw new MalformedTstlException(TstlConstants.MESSAGE_UNDEFINED_TSTL_VARIABLE + "Variable:" + TstlConstants.IDENTIFIER_TSTLVARIABLE + var + TstlConstants.IDENTIFIER_TSTLVARIABLE + " Line:" + actionLine);
 
 		return rep;
 	}

@@ -51,5 +51,23 @@ public class NumRange implements Repeatable
 	{
 		return true+"";
 	}
-
+	@Override
+	public boolean equalsRepeatable(Repeatable rep)
+	{
+		if(!(rep instanceof NumRange))
+			return false;
+		NumRange range = (NumRange) rep;
+		if(range.low == this.low && range.hi == this.hi)
+			return true;
+		return false;
+	}
+	@Override
+	public String toString() 
+	{
+		return "NumRange [low=" + low + "- hi=" + hi + "]";
+	}	
 }
+
+
+
+

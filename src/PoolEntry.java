@@ -91,4 +91,15 @@ public class PoolEntry implements Repeatable
 		return "(" + this.getAsJava(i) + " == null ||" + this.getUsedAsJava(i) + "== true)";
 	}
 
+	
+	public boolean equalsRepeatable(Repeatable rep)
+	{
+		if(!(rep instanceof PoolEntry))
+			return false;
+		PoolEntry pool = (PoolEntry) rep;
+		if(pool.varName.equals(this.varName))
+			return true;
+		return false;		
+	}
+
 }
