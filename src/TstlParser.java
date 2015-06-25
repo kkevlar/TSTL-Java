@@ -38,7 +38,7 @@ public class TstlParser implements Runnable
 		generatePoolEntries();
 
 		generateInstanceVariables();
-		
+
 		generateConstructor();
 
 		generateClearPool();
@@ -189,8 +189,12 @@ public class TstlParser implements Runnable
 	}
 	private void generateConstructor()
 	{
-		// TODO Auto-generated method stub
-		
+		writer.println("public " + TstlConstants.CLASS_NAME_SUT + "()"+ "\n"
+				+"{"+ "\n"
+				+"clearPool();"+ "\n"
+				+"actionsInit();"+ "\n"
+				+"}"+ "\n");
+
 	}
 	private void generateClearPool() 
 	{
@@ -278,12 +282,20 @@ public class TstlParser implements Runnable
 
 	private void generateGetActions() 
 	{
-		//TODO unfinished
+		String ret = TstlConstants.DECLARATION_SUT_GETACTIONS_METHOD + "\n";
+		ret +="{\n";
+		ret +="return actions;\n";
+		ret +="}//close reset()\n";
+		writer.print(ret);
 	}
 
-	private void generateReset() {
-		// TODO Auto-generated method stub
-
+	private void generateReset()
+	{
+		String ret = TstlConstants.DECLARATION_SUT_RESET_METHOD + "\n";
+		ret +="{\n";
+		ret +="clearPool();\n";
+		ret +="}//close reset()\n";
+		writer.print(ret);
 	}
 
 	private void finishingTouches()
@@ -338,6 +350,7 @@ public class TstlParser implements Runnable
 	{
 		return new File(TstlParser.class.getProtectionDomain().getCodeSource().getLocation().toURI().getPath()).getParentFile();
 	}
+
 	private String removePercents(String line, String variablePrefix)
 	{
 		//used to replace TSTL variables in a line with ones that would compile in java]

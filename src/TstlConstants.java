@@ -42,5 +42,9 @@ public class TstlConstants
 	
 	public static final String SUFFIX_VAR_USED = "_used";
 	
-	public static final String VISIBILITY_LEVEL_POOL_VAR = "private";	
+	public static final String VISIBILITY_LEVEL_POOL_VAR = "private";
+
+	static final String DECLARATION_SUT_GETACTIONS_METHOD = "public Action[] getActions()";
+
+	static final String DECLARATION_SUT_RESET_METHOD = "public void reset()";	
 }

@@ -1,6 +1,6 @@
 
 public interface SUTInterface 
 {
-	public void restart();
+	public void reset();
 	public Action[] getActions();
 }
