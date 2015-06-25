@@ -68,7 +68,7 @@ public class ActionEntry
 			}
 			repeatingPoolValues.put(storeRep, newInts);
 		}
-		
+
 		String[] pieces = this.explicitGuardUnparsed.split(TstlConstants.IDENTIFIER_TSTLVARIABLE);
 		if(pieces.length % 2 != 1)
 			throw new MalformedTstlException(TstlConstants.MESSGAGE_NONSURROUNDING_VARIABLE_IDENTIFIERS + actionLine);
@@ -177,14 +177,15 @@ public class ActionEntry
 		ret += "boolean enabled = ";
 		for (int i = 0; i < this.getRepeatables().length; i++)
 		{
-			if(i == 0)
+			if(i == 0 && this.hasInit())
 				ret += this.getRepeatables()[i].getCanOverwriteExpression(poolValues[i]);
 			else
 			{
-				ret += " &&\n";
+				if(i != 0)
+					ret += " &&\n";
 				ret += this.getRepeatables()[i].getIsUsableExpression(poolValues[i]);
 			}
-			
+
 		}
 		String s= this.getExplicitGuardExpression(poolValues);
 		if(s != null)
