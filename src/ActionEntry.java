@@ -111,7 +111,7 @@ public class ActionEntry
 	{
 		String ret = TstlConstants.DECLARATION_ACTION_NAME_METHOD + "\n";
 		ret += "{\n";
-		ret += "return \"" + this.getActMainLine(poolValues) + "\"\n";
+		ret += "return \"" + this.getActMainLine(poolValues).replace(";", "") + "\";\n";
 		ret += "} //end name()\n";
 		return ret;
 	}
@@ -173,12 +173,13 @@ public class ActionEntry
 	public String getActUsageLines(int[] poolValues)
 	{
 		String ret = "";
+		String save = "";
 		for(int i = 0; i < this.getRepeatables().length; i++)
 		{
 			if(i == 0)
 			{
 				PoolEntry pEntry = (PoolEntry) this.getRepeatables()[i];
-				ret += pEntry.getUsedVarName() + "[" + poolValues[i] + "] = false;\n";
+				save = pEntry.getUsedVarName() + "[" + poolValues[i] + "] = false;\n";
 			}
 			else
 			{
@@ -189,6 +190,7 @@ public class ActionEntry
 				}
 			}
 		}
+		ret += save;
 		return ret;
 	}
 	public String createActionClass(int[] poolValues)

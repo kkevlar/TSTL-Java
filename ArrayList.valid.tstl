@@ -1,9 +1,9 @@
 @import java.util.ArrayList
 
-pool: ArrayList<Integer> %ARRAYLIST% 2
-pool: Integer %INT% 2
+pool: ArrayList<Integer> %ARRAYLIST% 1
+pool: Integer %INT% 1
 
-%INT% := %[1..2]%
+%INT% := %[1..4]%
 
 %ARRAYLIST% := new ArrayList<Integer>()
 %ARRAYLIST% := new ArrayList<Integer>(%INT%)

@@ -38,10 +38,11 @@ public class TstlParser implements Runnable
 		generatePoolEntries();
 
 		generateInstanceVariables();
+		
+		generateConstructor();
 
 		generateClearPool();
 
-		//TODO more method generation??
 		generateActionsInit();
 
 		generateActionInterface();
@@ -52,8 +53,6 @@ public class TstlParser implements Runnable
 
 		finishingTouches();
 	}
-
-
 	private void readTstl()
 	{
 		String filePath = getInFilepath();
@@ -111,13 +110,16 @@ public class TstlParser implements Runnable
 			if(line.startsWith(TstlConstants.IDENTIFIER_IMPORT))
 			{
 				String importObject = line.substring(TstlConstants.IDENTIFIER_IMPORT.length());
-				writer.println("import " + importObject);
+				if(!(importObject.trim().equals(TstlConstants.IMPORT_ARRAY_LIST) || importObject.trim().equals(TstlConstants.IMPORT_LIST)))
+				{
+					writer.println("import " + importObject + ";");
+				}
 				tstl.remove(i);
 				i--;
 			}
 		}
-		//TODO import arrraylist, test for tstl imports of List and ArrayList and disregard them
-		writer.println("import java.util.List;");
+		writer.println("import " + TstlConstants.IMPORT_LIST + ";");
+		writer.println("import " + TstlConstants.IMPORT_ARRAY_LIST + ";");
 	}
 	private void generateClassDeclaration()
 	{
@@ -187,6 +189,11 @@ public class TstlParser implements Runnable
 		}
 		writer.println(TstlConstants.DECLARATION_ACTION_ARRAY_INSTANCE_VARIABLE);
 	}
+	private void generateConstructor()
+	{
+		// TODO Auto-generated method stub
+		
+	}
 	private void generateClearPool() 
 	{
 		writer.println(TstlConstants.DECLARATION_CLEAR_POOL_METHOD);
@@ -201,21 +208,32 @@ public class TstlParser implements Runnable
 
 	private void generateActionsInit() 
 	{
-		//TODO unfinished
-		for (int i = 0; i < poolEntries.length; i++) {
-			System.out.println(poolEntries[i]);
-		}
+		writer.println(TstlConstants.DECLARATION_ACTIONS_INIT_METHOD + " {");
+
+		ArrayList<String> actionLines = new ArrayList<String>();
+		int totalCount = 0;
 		for(int i = 0; i < tstl.size(); i++)
 		{
 			if(!tstl.get(i).equals(""))
 			{
-				String[] parts = ActionEntry.splitActionLine(tstl.get(i));
-				ActionEntry entry = new ActionEntry(parts[0],parts[1],this.poolEntries);
-				writer.println(TstlConstants.CONSTRUCT_ACTION_ARRAY_INSTANCE_VARIABLE + entry.getActionCount() + "];");
-				writer.println(TstlConstants.DECLARATION_ACTION_LOCAL_VARIABLE);
-				this.printAllActions(entry);
+				ActionEntry entry = makeActionEntry(tstl.get(i));
+				actionLines.add(tstl.get(i));
+				totalCount += entry.getActionCount();
 			}
-		}		
+		}	
+		writer.println(TstlConstants.CONSTRUCT_ACTION_ARRAY_INSTANCE_VARIABLE + totalCount + "];");
+		writer.println(TstlConstants.DECLARATION_ACTION_LOCAL_VARIABLE);
+		for(int i = 0; i < actionLines.size(); i++)
+		{			
+			this.printAllActions(this.makeActionEntry(actionLines.get(i)));
+		}
+		writer.println("}//close actionInit()");
+	}
+	private ActionEntry makeActionEntry(String tstlLine) 
+	{
+		String[] parts = ActionEntry.splitActionLine(tstlLine);
+		ActionEntry entry = new ActionEntry(parts[0],parts[1],this.poolEntries);
+		return entry;
 	}
 
 	private void printAllActions(ActionEntry entry) 
@@ -260,7 +278,12 @@ public class TstlParser implements Runnable
 	}
 	private void generateActionInterface()
 	{
-		//TODO unfinished
+		String aInterface = TstlConstants.DECLARATION_ACTION_INTERFACE + "{\n";
+		aInterface += TstlConstants.DECLARATION_NAME_METHOD_ACTION_INTERFACE+ "\n";
+		aInterface += TstlConstants.DECLARATION_ENABLED_METHOD_ACTION_INTERFACE + "\n";
+		aInterface += TstlConstants.DECLARATION_ACT_METHOD_ACTION_INTERFACE + "\n";
+		aInterface += "}//close interface" + "\n";
+		writer.print(aInterface);
 	}
 
 
@@ -332,9 +355,9 @@ public class TstlParser implements Runnable
 		//ie "int %INT% = 5" becomes "int var_INT = 5"
 		line = " " + line + " ";
 
-		String[] percentBlocks = line.split("%");
+		String[] percentBlocks = line.split(TstlConstants.IDENTIFIER_TSTLVARIABLE);
 		if(percentBlocks.length % 2 == 0)
-			throw new MalformedTstlException("Percent signs must surround variables.  There is an odd number of percent signs at line " + line + ".");
+			throw new MalformedTstlException(TstlConstants.MESSGAGE_NONSURROUNDING_VARIABLE_IDENTIFIERS + line);
 		for(int i = 1; i < percentBlocks.length; i+= 2)
 		{
 			String block = percentBlocks[i];
