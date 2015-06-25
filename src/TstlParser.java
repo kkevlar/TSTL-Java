@@ -45,8 +45,6 @@ public class TstlParser implements Runnable
 
 		generateActionsInit();
 
-		generateActionInterface();
-
 		generateGetActions();
 
 		generateReset();
@@ -124,7 +122,7 @@ public class TstlParser implements Runnable
 	private void generateClassDeclaration()
 	{
 		String className = TstlConstants.CLASS_NAME_SUT;
-		writer.println("public class " + className);
+		writer.println("public class " + className + " implements SUTInterface");
 		writer.println("{");
 	}
 	private void generatePoolEntries()
@@ -277,16 +275,6 @@ public class TstlParser implements Runnable
 		System.out.println(entry.getExplicitGuardExpression(poolValues));
 		actionsPrinted++;
 	}
-	private void generateActionInterface()
-	{
-		String aInterface = TstlConstants.DECLARATION_ACTION_INTERFACE + "{\n";
-		aInterface += TstlConstants.DECLARATION_NAME_METHOD_ACTION_INTERFACE+ "\n";
-		aInterface += TstlConstants.DECLARATION_ENABLED_METHOD_ACTION_INTERFACE + "\n";
-		aInterface += TstlConstants.DECLARATION_ACT_METHOD_ACTION_INTERFACE + "\n";
-		aInterface += "}//close interface" + "\n";
-		writer.print(aInterface);
-	}
-
 
 	private void generateGetActions() 
 	{
