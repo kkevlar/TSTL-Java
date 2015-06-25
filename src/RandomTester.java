@@ -2,8 +2,8 @@
 public class RandomTester 
 {
 
-	private static final long MAX_TESTS = 100;
-	private static final long TIMEOUT = 30*1000;
+	private static final long MAX_TESTS = 1000;
+	private static final long TIMEOUT = 3*60*1000;
 
 	public static void main(String[] args) 
 	{		
@@ -13,15 +13,15 @@ public class RandomTester
 	private void go() 
 	{
 		SUTInterface sut = new SUT();
-		System.out.println(String.format("%-65s " + "enabled:","Actions:"));
-		System.out.println();
+		println(String.format("%-65s " + "enabled:","Actions:"));
+		println();
 		for(int i = 0; i < sut.getActions().length; i++)
 		{
 			boolean enabled = sut.getActions()[i].enabled();
 			String name = sut.getActions()[i].name().trim();
-			System.out.println(String.format("%-65s " + enabled,name));
+			println(String.format("%-65s " + enabled,name));
 		}
-		System.out.println("Initializing test...");
+		println("Initializing test...");
 		long startTime = System.currentTimeMillis();
 		long testCount = 0;
 		long maxTests = MAX_TESTS;
@@ -33,10 +33,10 @@ public class RandomTester
 		{
 			sut.reset();
 			testCount = 0;
-			int randNum = (int) (Math.random()*1000000);
+			int randNum = (int) (Math.random()*100000);
 			boolean print = randNum == 2;
 			if(print)
-			System.out.println(">>Test Number " + loopCount);
+			println(">>Test Number " + loopCount);
 			while(testCount<maxTests&&timeInBounds(startTime,timeout))
 			{
 				boolean enabled = false;
@@ -47,17 +47,38 @@ public class RandomTester
 					enabled = sut.getActions()[testNum].enabled();
 				}
 				if(print)
-				System.out.println(sut.getActions()[testNum].name().trim());				
-				sut.getActions()[testNum].act();				
+				println(sut.getActions()[testNum].name().trim());	
+				try
+				{
+				sut.getActions()[testNum].act();	
+				}
+				catch(Exception ex)
+				{
+				
+					ex.printStackTrace();
+					println("EXCEPTION!! Heres the info:");
+					println(sut.getActions()[testNum].getAllInfo());
+					System.exit(-1);
+				}
 				testCount++;
 			}
 			loopCount++;
 		}
-		System.out.println("-Tested for " + ((System.currentTimeMillis()-startTime+0.0)/(1000+0)) + " seconds.");
-		System.out.println("-Ran " + loopCount + " tests of " + maxTests +" actions.");
-		System.out.println("-Final test only got to " + testCount + " actions.");
+		println("-Tested for " + ((System.currentTimeMillis()-startTime+0.0)/(1000+0)) + " seconds.");
+		println("-Ran " + loopCount + " tests of " + maxTests +" actions.");
+		println("-Final test only got to " + testCount + " actions.");
 	}
 	
+	private void println() 
+	{
+		println("");
+	}
+
+	private void println(String string) 
+	{
+		System.out.println(string);		
+	}
+
 	private boolean timeInBounds(long startTime, long timeout) 
 	{		
 		return System.currentTimeMillis() - startTime < timeout;

@@ -228,6 +228,25 @@ public class ActionEntry
 		ret += "} //end act() \n";
 		return ret;
 	}
+	public String makeGetAllInfoMethod(int vals[])
+	{
+		String ret = "public String getAllInfo()"+ "\n"
+				+"{"+ "\n"+ "\n"
+				+"LabelFormatter formatter = new LabelFormatter();"+ "\n"
+				+"formatter.addToStorage"+"(\"MainLine/Name\",\"" + this.getActMainLine(vals) + "\");"+ "\n"
+				+"formatter.addToStorage"+"(\"enabled()\",enabled()+\"\");"+ "\n";
+		for(int i = 0; i < this.getRepeatables().length; i++)
+		{
+			
+			String asJava = this.getRepeatables()[i].getAsJava(vals[i]);
+			ret += "formatter.addToStorage"+"(\"" + asJava+"\","+asJava+"+\"\");"+ "\n";
+		
+		}
+		ret += "return formatter.getAllFormatted();"+"\n";
+		ret += "}"+"\n";
+		return ret;
+	}
+
 	public String getActMainLine(int[] poolValues)
 	{
 		String mainLine = "";
@@ -282,9 +301,11 @@ public class ActionEntry
 		ret += this.makeGetNameMethod(poolValues);
 		ret += this.makeEnabledMethod(poolValues);
 		ret += this.makeActMethod(poolValues);
+		ret += this.makeGetAllInfoMethod(poolValues);
 		ret += "};";
 		return ret;
 	}
+
 	@Override
 	public String toString() 
 	{
