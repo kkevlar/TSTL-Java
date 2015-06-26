@@ -3,8 +3,13 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.PrintWriter;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
+import java.util.Scanner;
+
+import javax.swing.JFileChooser;
 
 
 public class TstlParser implements Runnable
@@ -26,11 +31,11 @@ public class TstlParser implements Runnable
 	@Override
 	public void run()
 	{
-		
-		
+
+
 		TstlConstants.outputDependencies();
-		
-		
+
+
 		readTstl();
 
 		createOutWriter();
@@ -55,9 +60,10 @@ public class TstlParser implements Runnable
 		generateReset();
 
 		finishingTouches();
-		
-		
+
+		compileGeneratedClasses();
 	}
+
 	private void readTstl()
 	{
 		String filePath = getInputFileFilepath();
@@ -311,10 +317,71 @@ public class TstlParser implements Runnable
 		System.out.println("finished");	
 	}	
 
+	private void compileGeneratedClasses() 
+	{
+		new File(TstlConstants.getAppDataDir()).mkdirs();
+		String filePath = TstlConstants.getAppDataDir() + "/javac.whereis";
+		String javacPath = null;
+		try
+		{
+			File whereIs = new File(filePath);
+			if(whereIs.exists())
+			{
+				Scanner scan = new Scanner(whereIs);
+				javacPath = scan.nextLine();
+				scan.close();
+			}
+		}
+		catch(Exception ex)
+		{
+			ex.printStackTrace();
+		}
+		if(javacPath != null && javacPath.equals(""))
+			javacPath = null;
+		if(javacPath == null)
+		{
+			JFileChooser chooser = new JFileChooser();
+			chooser.setDialogTitle("Please point to your jdk/bin/javac file.");
+			chooser.showOpenDialog(null);
+			chooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
+			File f = chooser.getSelectedFile();
+			javacPath = f.getAbsolutePath();
+			try
+			{
+			File whereIs = new File(filePath);
+			whereIs.createNewFile();
+			PrintWriter writer = new PrintWriter(whereIs);
+			writer.println(javacPath);
+			writer.flush();
+			writer.close();
+			}
+			catch(Exception ex)
+			{
+				ex.printStackTrace();
+			}
+		}
+		javacPath = "\""+ javacPath + "\"";
+		//javacPath = "javac";
+		Runtime run = Runtime.getRuntime();
+		String exec =  javacPath +  " -d \"C:\\Users\\Kevin\\Documents\\Eclipse Luna\\workspaceJ\\TSTL-Java\\out\" -sourcepath \"C:\\Users\\Kevin\\Documents\\Eclipse Luna\\workspaceJ\\TSTL-Java\\output\" \"C:\\Users\\Kevin\\Documents\\Eclipse Luna\\workspaceJ\\TSTL-Java\\output\\RandomTester.java\"";
+		System.out.println(exec);
+		//File runDir = new File("C:\\Users\\Kevin\\Documents\\Eclipse Luna\\workspaceJ\\TSTL-Java\\");
+		try {
+			Process p = run.exec(new String[]{exec}, null, null);
+			
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		//ProcessBuilder pb = new ProcessBuilder("javac" +  " -d out "+ "-sourcepath output \\output\\SUT.java");
+		//pb.directory(new File("C:\\Users\\Kevin\\Documents\\Eclipse Luna\\workspaceJ\\TSTL-Java\\"));
+		
+	}
+
 	private String getOutputFileFilepath() 
- 	{
+	{
 		return TstlConstants.getParserOutputDir()+ TstlConstants.CLASS_NAME_SUT+".java";
- 	}	
+	}	
 
 	private String getInputFileFilepath()
 	{

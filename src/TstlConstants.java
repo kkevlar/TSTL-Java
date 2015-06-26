@@ -1,10 +1,13 @@
 import java.io.File;
 import java.io.IOException;
 import java.net.URISyntaxException;
+import java.util.Locale;
 
 
 public class TstlConstants 
 {
+	private static final String TSTL_JAVA = "TSTL-Java";
+
 	public static final String CLASS_NAME_SUT = "SUT";	
 	
 	public static final String COMMENT_AUTO_GEN_CODE = "//This is auto-generated code.  Changes will be overwritten.";	
@@ -110,6 +113,20 @@ public class TstlConstants
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+		}
+	}
+	public static String getAppDataDir()
+	{
+		String os = System.getProperty("os.name","generic").toLowerCase(Locale.ENGLISH);
+		String home = System.getProperty("user.home");
+		if ((os.indexOf("mac") >= 0) || (os.indexOf("darwin") >= 0)) {
+			return home + "/Library/Application Support/"+ TSTL_JAVA +"/" ;
+		} else if (os.indexOf("win") >= 0) {
+			return home + "/AppData/Roaming/"+ TSTL_JAVA +"/" ;
+		} else if (os.indexOf("nux") >= 0) {
+			return home + "/."+ TSTL_JAVA +"/"  ;
+		} else {
+			return home + "/"+ TSTL_JAVA +"/"  ;
 		}
 	}
 }
