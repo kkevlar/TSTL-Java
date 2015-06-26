@@ -26,15 +26,15 @@ public class TstlParser implements Runnable
 	@Override
 	public void run()
 	{
-		/*
+		
 		CodeCopier cc = new CodeCopier();
 		try {
-			cc.copyCode("FlushWriter.java");
+			cc.copyCode("FlushWriter.java.nocompile");
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		*/
+		
 		
 		readTstl();
 
@@ -317,9 +317,9 @@ public class TstlParser implements Runnable
 	}	
 
 	private String getOutputFileFilepath() 
-	{
-		return TstlConstants.getParserOutputDir().getAbsolutePath() + TstlConstants.CLASS_NAME_SUT+".java";
-	}	
+ 	{
+		return TstlConstants.getParserOutputDir()+ TstlConstants.CLASS_NAME_SUT+".java";
+ 	}	
 
 	private String getInputFileFilepath()
 	{
@@ -329,7 +329,7 @@ public class TstlParser implements Runnable
 		{
 			File[] list;
 			try {
-				list = getThisJarDir().listFiles();
+				list = TstlConstants.getThisJarDir().listFiles();
 			} 
 			catch (URISyntaxException e) 
 			{
@@ -353,11 +353,6 @@ public class TstlParser implements Runnable
 			}
 		}
 		throw new BadArgumentsException(TstlConstants.MESSAGE_NO_TSTL);
-	}
-
-	private static File getThisJarDir() throws URISyntaxException
-	{
-		return new File(TstlParser.class.getProtectionDomain().getCodeSource().getLocation().toURI().getPath()).getParentFile();
 	}
 
 	private String removePercents(String line, String variablePrefix)

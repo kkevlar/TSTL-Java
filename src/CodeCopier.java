@@ -12,15 +12,7 @@ public class CodeCopier
 	public void copyCode(String className) throws IOException
 	{
 		ArrayList<String> lines = new ArrayList<String>();
-		InputStream stream = this.getClass().getResourceAsStream(className);
-		if(stream == null)
-		 stream = this.getClass().getResourceAsStream("src/" + className);
-		if(stream == null)
-			 stream = this.getClass().getResourceAsStream("/src/" + className);
-		if(stream == null)
-			 stream = this.getClass().getResourceAsStream("src\\" + className);
-		if(stream == null)
-			 stream = this.getClass().getResourceAsStream("\\src\\" + className);
+		InputStream stream = this.getClass().getResourceAsStream("res/" + className);
 		if(stream == null)
 		{
 			System.out.println("null");
@@ -37,8 +29,16 @@ public class CodeCopier
 		}
 		reader.close();
 		String[] strings = (String[]) lines.toArray(new String[lines.size()]);
-		File outFile = new File(TstlConstants.getParserOutputDir().getAbsolutePath() + className);
-		outFile.createNewFile();
+		String[] split = className.replace(".", "~").split("~");
+		String newClassName = "";
+		for (int i = 0; i < split.length-1; i++) 
+		{
+			newClassName += split[i] + ".";
+		}
+		newClassName = newClassName.substring(0, newClassName.length() -1);
+		File outFile = new File(TstlConstants.getParserOutputDir()+ newClassName);
+				System.out.println(outFile.getAbsolutePath());
+				outFile.createNewFile();
 		PrintWriter writer = new PrintWriter(outFile);
 		for (int i = 0; i < strings.length; i++) 
 		{
