@@ -319,6 +319,18 @@ public class TstlParser implements Runnable
 
 	private void compileGeneratedClasses() 
 	{
+		boolean success = false;
+		try
+		{
+			compileCode("javac");
+			success = true;
+		}
+		catch(Exception ex)
+		{
+			
+		}
+		if(success)
+			return;
 		new File(TstlConstants.getAppDataDir()).mkdirs();
 		String filePath = TstlConstants.getAppDataDir() + "/javac.whereis";
 		String javacPath = null;
@@ -348,39 +360,60 @@ public class TstlParser implements Runnable
 			javacPath = f.getAbsolutePath();
 			try
 			{
-			File whereIs = new File(filePath);
-			whereIs.createNewFile();
-			PrintWriter writer = new PrintWriter(whereIs);
-			writer.println(javacPath);
-			writer.flush();
-			writer.close();
+				File whereIs = new File(filePath);
+				whereIs.createNewFile();
+				PrintWriter writer = new PrintWriter(whereIs);
+				writer.println(javacPath);
+				writer.flush();
+				writer.close();
 			}
 			catch(Exception ex)
 			{
 				ex.printStackTrace();
 			}
 		}
-		javacPath = "\""+ javacPath + "\"";
-		//javacPath = "javac";
-		Runtime run = Runtime.getRuntime();
-		String exec =  javacPath +  " -d \"C:\\Users\\Kevin\\Documents\\Eclipse Luna\\workspaceJ\\TSTL-Java\\out\" -sourcepath \"C:\\Users\\Kevin\\Documents\\Eclipse Luna\\workspaceJ\\TSTL-Java\\output\" \"C:\\Users\\Kevin\\Documents\\Eclipse Luna\\workspaceJ\\TSTL-Java\\output\\RandomTester.java\"";
-		System.out.println(exec);
-		//File runDir = new File("C:\\Users\\Kevin\\Documents\\Eclipse Luna\\workspaceJ\\TSTL-Java\\");
-		try {
-			Process p = run.exec(new String[]{exec}, null, null);
-			
+		try 
+		{
+			compileCode(javacPath);
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		
+
+	}
+	private void compileCode(String javacPath) throws IOException
+	{
+		javacPath = "\""+ javacPath + "\"";
+		Runtime run = Runtime.getRuntime();
+		String srcDir = TstlConstants.getParserOutputSourceDir();
+		String srcMainClass = srcDir + "RandomTester.java";
+		String compDir = new File(srcDir).getParentFile().getAbsolutePath() + "/genbin";
+		System.out.println(srcDir);
+		srcDir = srcDir.substring(0, srcDir.length()-1);
+		System.out.println(srcDir);
+		File compDirFile = new File(compDir);
+		compDirFile.mkdirs();
+		String compDirArg = "\"" +compDir.replace("/", "\\") + "\"";
+		String srcDirArg = "\"" +srcDir.replace("/", "\\") + "\"";
+		String srcMainClassArg = "\"" +srcMainClass.replace("/", "\\") + "\"";
+		//compDirArg = "\"C:\\Users\\Kevin\\Documents\\Eclipse Luna\\workspaceJ\\TSTL-Java\\genbin\"";
+		//String srcDirArg = "\"C:\\Users\\Kevin\\Documents\\Eclipse Luna\\workspaceJ\\TSTL-Java\\gensrc\"";
+		//String srcMainClassArg  = "\"C:\\Users\\Kevin\\Documents\\Eclipse Luna\\workspaceJ\\TSTL-Java\\gensrc\\RandomTester.java\"";
+		System.out.println(compDirArg);
+		System.out.println(srcMainClassArg);
+		System.out.println(srcDirArg);
+		String exec =  javacPath +  " -d "+compDirArg+" -sourcepath "+srcDirArg+" "+srcMainClassArg;
+		System.out.println(exec);
+		//File runDir = new File("C:\\Users\\Kevin\\Documents\\Eclipse Luna\\workspaceJ\\TSTL-Java\\");
+			Process p = run.exec(new String[]{exec}, null, null);
 		//ProcessBuilder pb = new ProcessBuilder("javac" +  " -d out "+ "-sourcepath output \\output\\SUT.java");
 		//pb.directory(new File("C:\\Users\\Kevin\\Documents\\Eclipse Luna\\workspaceJ\\TSTL-Java\\"));
-		
 	}
 
 	private String getOutputFileFilepath() 
 	{
-		return TstlConstants.getParserOutputDir()+ TstlConstants.CLASS_NAME_SUT+".java";
+		return TstlConstants.getParserOutputSourceDir()+ TstlConstants.CLASS_NAME_SUT+".java";
 	}	
 
 	private String getInputFileFilepath()

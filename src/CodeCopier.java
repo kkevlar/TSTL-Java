@@ -36,7 +36,7 @@ public class CodeCopier
 			newClassName += split[i] + ".";
 		}
 		newClassName = newClassName.substring(0, newClassName.length() -1);
-		File outFile = new File(TstlConstants.getParserOutputDir()+ newClassName);
+		File outFile = new File(TstlConstants.getParserOutputSourceDir()+ newClassName);
 				System.out.println(outFile.getAbsolutePath());
 				outFile.createNewFile();
 		PrintWriter writer = new PrintWriter(outFile);

@@ -55,19 +55,19 @@ public class TstlConstants
 
 	public static final String DECLARATION_SUT_RESET_METHOD = "public void reset()";
 
-	public static String getParserOutputDir()
+	public static String getParserOutputSourceDir()
 	{
-		File f = new File(getParserOutputDirPath());
+		File f = new File(getParserOutputSourceDirPath());
 		f.mkdirs();
 		
 		return f.getAbsolutePath() + "/";
 	}
-	private static String getParserOutputDirPath()
+	private static String getParserOutputSourceDirPath()
 	{
 		File parFile = null;
 		try {
 			parFile = getThisJarDir();
-			return parFile.getAbsolutePath() + "/output/";
+			return parFile.getAbsolutePath() + "/gensrc/";
 		} catch (URISyntaxException e)
 		{
 			
