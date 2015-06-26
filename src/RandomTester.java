@@ -1,17 +1,28 @@
+import java.io.File;
+import java.io.FileNotFoundException;
+
 
 public class RandomTester 
 {
 
 	private static final long MAX_TESTS = 1000;
 	private static final long TIMEOUT = 3*60*1000;
-
+	private FlushWriter writer;
 	public static void main(String[] args) 
 	{		
 		new RandomTester().go();
 	}
 
+	
+
 	private void go() 
 	{
+		try {
+			this.writer = new FlushWriter(new File("randomtester.log"));
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		SUTInterface sut = new SUT();
 		println(String.format("%-65s " + "enabled:","Actions:"));
 		println();
@@ -71,11 +82,13 @@ public class RandomTester
 	
 	private void println() 
 	{
+		
 		println("");
 	}
 
 	private void println(String string) 
 	{
+		this.writer.println(string);
 		System.out.println(string);		
 	}
 

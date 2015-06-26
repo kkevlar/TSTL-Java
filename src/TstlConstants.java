@@ -1,3 +1,6 @@
+import java.io.File;
+import java.net.URISyntaxException;
+
 
 public class TstlConstants 
 {
@@ -44,7 +47,26 @@ public class TstlConstants
 	
 	public static final String VISIBILITY_LEVEL_POOL_VAR = "private";
 
-	static final String DECLARATION_SUT_GETACTIONS_METHOD = "public Action[] getActions()";
+	public static final String DECLARATION_SUT_GETACTIONS_METHOD = "public Action[] getActions()";
 
-	static final String DECLARATION_SUT_RESET_METHOD = "public void reset()";	
+	public static final String DECLARATION_SUT_RESET_METHOD = "public void reset()";
+
+	public static File getParserOutputDir()
+	{
+		File f = new File(getParserOutputDirPath());
+		f.mkdirs();
+		return f;
+	}
+	private static String getParserOutputDirPath()
+	{
+		File parFile = null;
+		try {
+			parFile = new File(TstlParser.class.getProtectionDomain().getCodeSource().getLocation().toURI().getPath()).getParentFile().getParentFile();
+			return parFile.getAbsolutePath() + "output/";
+		} catch (URISyntaxException e)
+		{
+			
+		}
+		return "output/";
+	}
 }

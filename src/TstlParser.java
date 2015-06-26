@@ -26,6 +26,16 @@ public class TstlParser implements Runnable
 	@Override
 	public void run()
 	{
+		/*
+		CodeCopier cc = new CodeCopier();
+		try {
+			cc.copyCode("FlushWriter.java");
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		*/
+		
 		readTstl();
 
 		createOutWriter();
@@ -50,10 +60,12 @@ public class TstlParser implements Runnable
 		generateReset();
 
 		finishingTouches();
+		
+		
 	}
 	private void readTstl()
 	{
-		String filePath = getInFilepath();
+		String filePath = getInputFileFilepath();
 		File file = new File(filePath);
 		BufferedReader reader = null;
 		try {
@@ -91,7 +103,7 @@ public class TstlParser implements Runnable
 	}
 	private void createOutWriter() 
 	{
-		String outPath = getOutFilepath();
+		String outPath = getOutputFileFilepath();
 		try {
 			writer = new FlushWriter(new File(outPath));
 		} catch (FileNotFoundException e)
@@ -304,14 +316,12 @@ public class TstlParser implements Runnable
 		System.out.println("finished");	
 	}	
 
-	private String getOutFilepath() 
+	private String getOutputFileFilepath() 
 	{
-		File inFile = new File(this.getInFilepath());
-		File parFile = inFile.getParentFile();
-		return parFile.getAbsolutePath() + "/" + TstlConstants.CLASS_NAME_SUT+".java";
+		return TstlConstants.getParserOutputDir().getAbsolutePath() + TstlConstants.CLASS_NAME_SUT+".java";
 	}	
 
-	private String getInFilepath()
+	private String getInputFileFilepath()
 	{
 		if(args.length > 0)
 			return args[0];
