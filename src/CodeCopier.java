@@ -12,7 +12,7 @@ public class CodeCopier
 	public void copyCode(String className) throws IOException
 	{
 		ArrayList<String> lines = new ArrayList<String>();
-		InputStream stream = this.getClass().getResourceAsStream("res/" + className);
+		InputStream stream = this.getClass().getResourceAsStream("res/" + className + ".nocompile");
 		if(stream == null)
 		{
 			System.out.println("null");
@@ -31,7 +31,7 @@ public class CodeCopier
 		String[] strings = (String[]) lines.toArray(new String[lines.size()]);
 		String[] split = className.replace(".", "~").split("~");
 		String newClassName = "";
-		for (int i = 0; i < split.length-1; i++) 
+		for (int i = 0; i < split.length; i++) 
 		{
 			newClassName += split[i] + ".";
 		}

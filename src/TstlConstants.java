@@ -1,4 +1,5 @@
 import java.io.File;
+import java.io.IOException;
 import java.net.URISyntaxException;
 
 
@@ -76,5 +77,39 @@ public class TstlConstants
 		if(f == null)
 			return new File("");
 		return f;
+	}
+	public static void outputDependencies() 
+	{
+		CodeCopier cc = new CodeCopier();
+		try {
+			cc.copyCode("FlushWriter.java");
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		try {
+			cc.copyCode("Action.java");
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		try {
+			cc.copyCode("SUTInterface.java");
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		try {
+			cc.copyCode("LabelFormatter.java");
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		try {
+			cc.copyCode("RandomTester.java");
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 }

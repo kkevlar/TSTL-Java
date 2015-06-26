@@ -27,13 +27,8 @@ public class TstlParser implements Runnable
 	public void run()
 	{
 		
-		CodeCopier cc = new CodeCopier();
-		try {
-			cc.copyCode("FlushWriter.java.nocompile");
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		
+		TstlConstants.outputDependencies();
 		
 		
 		readTstl();
