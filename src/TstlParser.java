@@ -409,6 +409,7 @@ public class TstlParser implements Runnable
 			Process p = run.exec(new String[]{exec}, null, null);
 		//ProcessBuilder pb = new ProcessBuilder("javac" +  " -d out "+ "-sourcepath output \\output\\SUT.java");
 		//pb.directory(new File("C:\\Users\\Kevin\\Documents\\Eclipse Luna\\workspaceJ\\TSTL-Java\\"));
+			run.exec("java " + srcMainClassArg);
 	}
 
 	private String getOutputFileFilepath() 

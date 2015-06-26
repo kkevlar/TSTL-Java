@@ -7,22 +7,18 @@ public class RandomTester
 
 	private static final long MAX_TESTS = 1000;
 	private static final long TIMEOUT = 3*60*1000;
-	private FlushWriter writer;
 	public static void main(String[] args) 
 	{		
 		new RandomTester().go();
 	}
 
-	
+	private OutputWindow window;
+
+
 
 	private void go() 
 	{
-		try {
-			this.writer = new FlushWriter(new File("randomtester.log"));
-		} catch (FileNotFoundException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		window = new OutputWindow(this.getClass().getName(),false);
 		SUTInterface sut = new SUT();
 		println(String.format("%-65s " + "enabled:","Actions:"));
 		println();
@@ -38,7 +34,7 @@ public class RandomTester
 		long maxTests = MAX_TESTS;
 		long timeout = TIMEOUT;
 		long loopCount = 1;
-		
+
 		int actionCount = sut.getActions().length;
 		while(timeInBounds(startTime, timeout))
 		{
@@ -47,7 +43,7 @@ public class RandomTester
 			int randNum = (int) (Math.random()*100000);
 			boolean print = randNum == 2;
 			if(print)
-			println(">>Test Number " + loopCount);
+				println(">>Test Number " + loopCount);
 			while(testCount<maxTests&&timeInBounds(startTime,timeout))
 			{
 				boolean enabled = false;
@@ -58,14 +54,14 @@ public class RandomTester
 					enabled = sut.getActions()[testNum].enabled();
 				}
 				if(print)
-				println(sut.getActions()[testNum].name().trim());	
+					println(sut.getActions()[testNum].name().trim());	
 				try
 				{
-				sut.getActions()[testNum].act();	
+					sut.getActions()[testNum].act();	
 				}
 				catch(Exception ex)
 				{
-				
+
 					ex.printStackTrace();
 					println("EXCEPTION!! Heres the info:");
 					println(sut.getActions()[testNum].getAllInfo());
@@ -79,16 +75,16 @@ public class RandomTester
 		println("-Ran " + loopCount + " tests of " + maxTests +" actions.");
 		println("-Final test only got to " + testCount + " actions.");
 	}
-	
+
 	private void println() 
 	{
-		
+
 		println("");
 	}
 
 	private void println(String string) 
 	{
-		this.writer.println(string);
+		window.println(string);
 		System.out.println(string);		
 	}
 
