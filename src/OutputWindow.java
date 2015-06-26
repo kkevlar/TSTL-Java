@@ -14,14 +14,13 @@ public class OutputWindow
 	private JFrame frame;
 	private JScrollPane pane;
 	private JTextArea area;
-	public OutputWindow(String title, boolean exitOnClose) 
+	public OutputWindow(String title) 
 	{
 		frame = new JFrame();
 		frame.setSize(600,300);
-		if(exitOnClose == true)
-			frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		else
-			frame.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
+
+		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+
 		frame.setTitle(title);
 		frame.getContentPane().setBackground(Color.BLACK);
 		area = new JTextArea();

@@ -18,7 +18,7 @@ public class RandomTester
 
 	private void go() 
 	{
-		window = new OutputWindow(this.getClass().getName(),false);
+		window = new OutputWindow(this.getClass().getName());
 		SUTInterface sut = new SUT();
 		println(String.format("%-65s " + "enabled:","Actions:"));
 		println();
