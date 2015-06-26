@@ -26,7 +26,9 @@ public class TstlConstants
 	public static final String DECLARATION_NAME_METHOD_ACTION_INTERFACE = "public String name();";
 	public static final String DECLARATION_SUT_GETACTIONS_METHOD = "public Action[] getActions()";		
 	public static final String DECLARATION_SUT_RESET_METHOD = "public void reset()";
-
+	
+	public static final String GEN_CLASS_MAIN = "RandomTester.java";
+	
 	public static final String IDENTIFIER_EXPLICIT_GUARD = "->";	
 	public static final String IDENTIFIER_IMPORT = "@import";
 	public static final String IDENTIFIER_INITIALIZATION = ":=";
@@ -112,4 +114,5 @@ public class TstlConstants
 		cc.copyCode("RandomTester.java");		
 		cc.copyCode("OutputWindow.java");
 	}
+	
 }
