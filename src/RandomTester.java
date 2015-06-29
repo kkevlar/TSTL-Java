@@ -12,13 +12,14 @@ public class RandomTester
 	}
 
 	private OutputWindow window;
+	private SUT sut;
 
 
 
 	private void go() 
 	{
 		window = new OutputWindow(this.getClass().getName());
-		SUTInterface sut = new SUT();
+		sut = new SUT();
 		println(String.format("%-65s " + "enabled:","Actions:"));
 		println();
 		for(int i = 0; i < sut.getActions().length; i++)
@@ -56,15 +57,19 @@ public class RandomTester
 					println(sut.getActions()[testNum].name().trim());	
 				try
 				{
-					sut.getActions()[testNum].act();	
+					sut.getActions()[testNum].act();
+					String check = sut.check();
+					if(check!= null)
+					{
+						println("Check failed! \"" + check + "\" failed to evaluate true!");
+						hasError(testNum);
+					}
 				}
 				catch(Exception ex)
 				{
-
 					ex.printStackTrace();
 					println("EXCEPTION!! Heres the info:");
-					println(sut.getActions()[testNum].getAllInfo());
-					System.exit(-1);
+					hasError(testNum);				
 				}
 				testCount++;
 			}
@@ -73,6 +78,12 @@ public class RandomTester
 		println("-Tested for " + ((System.currentTimeMillis()-startTime+0.0)/(1000+0)) + " seconds.");
 		println("-Ran " + loopCount + " tests of " + maxTests +" actions.");
 		println("-Final test only got to " + testCount + " actions.");
+	}
+
+	private void hasError(int testNum) 
+	{
+		println(sut.getActions()[testNum].getAllInfo());
+		System.exit(-1);//temp
 	}
 
 	private void println() 

@@ -44,10 +44,10 @@ public class TstlParser implements Runnable
 		generatePoolEntries();
 		
 		generatePropertyEntries();
-		
-		generateCheckMethod();
 
 		generateInstanceVariables();
+		
+		generateCheckMethod();
 
 		generateConstructor();
 
@@ -240,10 +240,7 @@ public class TstlParser implements Runnable
 		}
 		propEntries = arrListPropEntries.toArray(new PropertyEntry[arrListPropEntries.size()]);
 	}
-	private void generateCheckMethod() 
-	{
-		writer.println(PropertyEntry.generateCheck(propEntries));		
-	}
+	
 	private void generateInstanceVariables()
 	{
 		for(int i =0; i< this.poolEntries.length; i++)
@@ -253,6 +250,7 @@ public class TstlParser implements Runnable
 		}
 		writer.println(TstlConstants.DECLARATION_ACTION_ARRAY_INSTANCE_VARIABLE);
 	}
+	
 	private void generateConstructor()
 	{
 		writer.println("public " + TstlConstants.CLASS_NAME_SUT + "()"+ "\n"
@@ -273,7 +271,10 @@ public class TstlParser implements Runnable
 		writer.println("}");
 
 	}
-
+	private void generateCheckMethod() 
+	{
+		writer.println(PropertyEntry.generateCheck(propEntries));		
+	}
 	private void generateActionsInit() 
 	{
 		writer.println(TstlConstants.DECLARATION_ACTIONS_INIT_METHOD + " {");
