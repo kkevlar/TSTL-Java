@@ -13,7 +13,8 @@ public class TstlParser implements Runnable
 	private FlushWriter writer;
 	private String[] args;
 	private PoolEntry[] poolEntries;
-	private long actionsPrinted;
+	private long countActionsPrinted;
+	private PropertyEntry[] propEntries;
 
 	public static void main(String[] args) throws URISyntaxException
 	{
@@ -41,8 +42,12 @@ public class TstlParser implements Runnable
 		generateClassDeclaration();
 
 		generatePoolEntries();
+		
+		generatePropertyEntries();
 
 		generateInstanceVariables();
+		
+		generateCheckMethod();
 
 		generateConstructor();
 
@@ -59,6 +64,7 @@ public class TstlParser implements Runnable
 		compileGeneratedClasses();
 	}
 
+	
 	private void readTstl()
 	{
 		String filePath = getInputFileFilepath();
@@ -186,6 +192,55 @@ public class TstlParser implements Runnable
 			this.poolEntries[i] = poolEntries.get(i);
 		}
 	}
+	
+	private void generatePropertyEntries()
+	{		
+		ArrayList<PropertyEntry> arrListPropEntries = new ArrayList<PropertyEntry>();
+		for (int x = 0; x < tstl.size(); x++)
+		{
+			String line = tstl.get(x);
+			if(line.startsWith(TstlConstants.IDENTIFIER_PROPERTY))
+			{
+				String restLine = line.substring(TstlConstants.IDENTIFIER_PROPERTY.length());
+				String[] split = restLine.split(TstlConstants.IDENTIFIER_TSTLVARIABLE);
+				String[] javaCodeSplit = null;
+				ArrayList<Repeatable> arrListRepeatables = new ArrayList<Repeatable>();
+				
+				if(split.length % 2 != 1)
+					throw new MalformedTstlException(TstlConstants.MESSGAGE_NONSURROUNDING_VARIABLE_IDENTIFIERS + line);
+				javaCodeSplit = new String[(split.length+1)/2];
+				
+				for (int i = 0; i < split.length; i++)
+				{
+					if(i%2==0)
+					{
+						int javaIndex = i/2;
+						javaCodeSplit[javaIndex] = split[i];
+					}
+					else
+					{
+						Repeatable entry = TstlConstants.getRepeatableFromVariable((split[i]).trim(), false, poolEntries, line);
+						if (entry == null)
+							throw new MalformedTstlException(TstlConstants.MESSAGE_UNDEFINED_TSTL_VARIABLE + "Variable:" + TstlConstants.IDENTIFIER_TSTLVARIABLE + split[i] + TstlConstants.IDENTIFIER_TSTLVARIABLE + " Line:" + line);
+						else
+							arrListRepeatables.add(entry);
+					}
+				}
+				
+				Repeatable[] repeatables = arrListRepeatables.toArray(new Repeatable[arrListRepeatables.size()]);
+				
+				PropertyEntry propEntry = new PropertyEntry(javaCodeSplit,repeatables);
+				arrListPropEntries.add(propEntry);
+				
+				
+				
+				tstl.remove(x);
+				x--;
+			}
+		}
+		propEntries = arrListPropEntries.toArray(new PropertyEntry[arrListPropEntries.size()]);
+	}
+	
 	private void generateInstanceVariables()
 	{
 		for(int i =0; i< this.poolEntries.length; i++)
@@ -195,6 +250,7 @@ public class TstlParser implements Runnable
 		}
 		writer.println(TstlConstants.DECLARATION_ACTION_ARRAY_INSTANCE_VARIABLE);
 	}
+	
 	private void generateConstructor()
 	{
 		writer.println("public " + TstlConstants.CLASS_NAME_SUT + "()"+ "\n"
@@ -215,7 +271,10 @@ public class TstlParser implements Runnable
 		writer.println("}");
 
 	}
-
+	private void generateCheckMethod() 
+	{
+		writer.println(PropertyEntry.generateCheck(propEntries));		
+	}
 	private void generateActionsInit() 
 	{
 		writer.println(TstlConstants.DECLARATION_ACTIONS_INIT_METHOD + " {");
@@ -235,7 +294,20 @@ public class TstlParser implements Runnable
 		writer.println(TstlConstants.DECLARATION_ACTION_LOCAL_VARIABLE);
 		for(int i = 0; i < actionLines.size(); i++)
 		{			
-			this.printAllActions(this.makeActionEntry(actionLines.get(i)));
+			ActionEntry entry = this.makeActionEntry(actionLines.get(i));
+			RepeatablesAction action = new RepeatablesAction()
+			{
+				@Override
+				public void actOnRepValues(int[] vals, RepeatablesContainer cont)
+				{
+					ActionEntry aEntry = (ActionEntry) cont;
+					writer.println(aEntry.createActionClass(vals));	
+					writer.println("actions[" + countActionsPrinted + "] = action;");
+					countActionsPrinted++;					
+				}
+				
+			};
+			entry.actOnValidCombinations(action);
 		}
 		writer.println("}//close actionInit()");
 	}
@@ -245,47 +317,7 @@ public class TstlParser implements Runnable
 		ActionEntry entry = new ActionEntry(parts[0],parts[1],this.poolEntries);
 		return entry;
 	}
-
-	private void printAllActions(ActionEntry entry) 
-	{
-		int[] ints = new int[entry.getRepeatables().length];
-		for (int i = 0; i < ints.length; i++) 
-		{
-			ints[i] = -1;
-		}
-		this.printAllActions(entry,ints);		
-	}
-	private void printAllActions(ActionEntry entry, int[] ints)
-	{
-		int[] newInts = new int[ints.length];
-		int negativeIndex = -1;
-		for (int i = 0; i < newInts.length; i++) 
-		{
-			newInts[i] = ints[i];
-			if(newInts[i] == -1)
-			{
-				negativeIndex = i;
-			}
-		}
-		if(negativeIndex == -1)
-		{
-			printAction(entry, newInts);
-			return;
-		}
-		for(int i = 0; i < entry.getRepeatables()[negativeIndex].getListSize(); i++)
-		{
-			newInts[negativeIndex] = i;
-			this.printAllActions(entry, newInts);
-		}	
-
-	}
-
-	private void printAction(ActionEntry entry, int[] poolValues)
-	{
-		writer.println(entry.createActionClass(poolValues));	
-		writer.println("actions[" + actionsPrinted + "] = action;");
-		actionsPrinted++;
-	}
+	
 
 	private void generateGetActions() 
 	{

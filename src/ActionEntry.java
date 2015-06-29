@@ -3,7 +3,7 @@ import java.util.Arrays;
 import java.util.HashMap;
 
 
-public class ActionEntry
+public class ActionEntry extends RepeatablesContainer
 {
 	public static String[] splitActionLine(String rawLine)
 	{
@@ -101,7 +101,7 @@ public class ActionEntry
 			String[] pieces = newActionLine.split(TstlConstants.IDENTIFIER_INITIALIZATION);
 			newActionLine = pieces[1];
 			String name =  pieces[0].replace(TstlConstants.IDENTIFIER_TSTLVARIABLE, " ").trim();
-			initVar = (PoolEntry) getRepeatableFromVariable(name,true);
+			initVar = (PoolEntry) TstlConstants.getRepeatableFromVariable(name,true, entirePoolEntries, actionLine);
 			entries.add(initVar);
 		}
 		newActionLine = " " + newActionLine + " ";
@@ -119,7 +119,7 @@ public class ActionEntry
 			}
 			else
 			{
-				Repeatable entry = this.getRepeatableFromVariable((pieces[i]).trim(), false);
+				Repeatable entry = TstlConstants.getRepeatableFromVariable((pieces[i]).trim(), false, entirePoolEntries, actionLine);
 				if (entry == null)
 					throw new MalformedTstlException(TstlConstants.MESSAGE_UNDEFINED_TSTL_VARIABLE + "Variable:" + TstlConstants.IDENTIFIER_TSTLVARIABLE + pieces[i] + TstlConstants.IDENTIFIER_TSTLVARIABLE + " Line:" + actionLine);
 				else
@@ -128,34 +128,17 @@ public class ActionEntry
 		}
 		this.repeatables = entries.toArray(new Repeatable[entries.size()]);
 	}
-	private Repeatable getRepeatableFromVariable(String var, boolean mustBePool) 
-	{
-		Repeatable rep;
-		rep = PoolEntry.getPoolEntryByVarName(this.entirePoolEntries,TstlConstants.PREFIX_JAVA_VARIABLES +var);
-		if(rep == null && !mustBePool)
-			rep = NumRange.getNumRange(var);
-		if(rep == null)
-			throw new MalformedTstlException(TstlConstants.MESSAGE_UNDEFINED_TSTL_VARIABLE + "Variable:" + TstlConstants.IDENTIFIER_TSTLVARIABLE + var + TstlConstants.IDENTIFIER_TSTLVARIABLE + " Line:" + actionLine);
-
-		return rep;
-	}
+	
 	protected String[] getJavaPieces() 
 	{
 		return this.javaCodePieces;
 	}
-	public int getActionCount()
-	{
-		int count = 1;
-		for (int i = 0; i < this.getRepeatables().length; i++) 
-		{
-			count *= this.getRepeatables()[i].getListSize();		
-		}
-		return count;
-	}
-	protected Repeatable[] getRepeatables()
+	
+	public Repeatable[] getRepeatables()
 	{
 		return this.repeatables;
 	}
+	
 	protected boolean hasInit()
 	{
 		return this.getRepeatables().length == this.getJavaPieces().length;
@@ -208,8 +191,8 @@ public class ActionEntry
 			{
 				String inf = this.expressionVarInformation[(i-1)/2];
 				String[] split = inf.split(",");
-				PoolEntry pEntry = (PoolEntry) this.getRepeatableFromVariable(split[0], true);
-				int index = Integer.parseInt(split[1])-1;//can error need throws.....
+				PoolEntry pEntry = (PoolEntry) TstlConstants.getRepeatableFromVariable(split[0], true, entirePoolEntries, actionLine);
+				int index = Integer.parseInt(split[1])-1;//can error need throw/catch.....
 				int indexFromVals = this.repeatingPoolValues.get(pEntry)[index];
 				int giveToPoolNum = vals[indexFromVals];
 				expressionLine += pEntry.getAsJava(giveToPoolNum);
