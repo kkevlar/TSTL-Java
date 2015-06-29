@@ -1,9 +1,11 @@
 @import java.util.ArrayList
 
-pool: ArrayList<Integer> %ARRAYLIST% 4
-pool: Integer %INT% 10
+pool: ArrayList<Integer> %ARRAYLIST% 1
+pool: Integer %INT% 3
 
-%INT% := %[1..50]%
+property: %INT% == 1
+
+%INT% := %[1..1]%
 
 %ARRAYLIST% := new ArrayList<Integer>()
 %ARRAYLIST% := new ArrayList<Integer>(%INT%)

@@ -44,6 +44,8 @@ public class TstlParser implements Runnable
 		generatePoolEntries();
 		
 		generatePropertyEntries();
+		
+		generateCheckMethod();
 
 		generateInstanceVariables();
 
@@ -62,6 +64,7 @@ public class TstlParser implements Runnable
 		compileGeneratedClasses();
 	}
 
+	
 	private void readTstl()
 	{
 		String filePath = getInputFileFilepath();
@@ -229,66 +232,17 @@ public class TstlParser implements Runnable
 				PropertyEntry propEntry = new PropertyEntry(javaCodeSplit,repeatables);
 				arrListPropEntries.add(propEntry);
 				
-				propEntries = arrListPropEntries.toArray(new PropertyEntry[arrListPropEntries.size()]);
+				
 				
 				tstl.remove(x);
 				x--;
 			}
 		}
-		
-		
-		/* code to base on
-		ArrayList<PoolEntry> poolEntries = new ArrayList<PoolEntry>();
-		for (int x = 0; x < tstl.size(); x++)
-		{
-			String line = tstl.get(x);
-			if(line.startsWith(TstlConstants.IDENTIFIER_POOL))
-			{
-				String restLine = line.substring(TstlConstants.IDENTIFIER_POOL.length());
-				String[] restLineSplit = restLine.split(" ");
-				String className = null;
-				String varName = null;
-				int arrSize = 1;
-				for (int y = 0; y < restLineSplit.length; y++) 
-				{
-					String piece = restLineSplit[y];
-					boolean hasParentheses = piece.contains(TstlConstants.IDENTIFIER_TSTLVARIABLE);
-					boolean canParseInt = false;
-					int parsed = -1;
-					try
-					{
-						parsed = Integer.parseInt(piece);
-						canParseInt = true;
-					}
-					catch(RuntimeException ex){}
-
-					if(canParseInt)
-						arrSize = parsed;					
-					else if(hasParentheses)
-					{
-						varName = removePercents(piece);
-					}
-					else
-					{
-						if(piece != null)
-							className = piece;
-					}
-				}	
-				if(className == null || varName == null || arrSize < 1)
-					throw new MalformedTstlException(TstlConstants.MESSAGE_MALFORMED_POOL_DECLARATION + "\"" + line + "\"");
-				PoolEntry entry = new PoolEntry(className, varName, arrSize);
-				poolEntries.add(entry);
-				tstl.remove(x);
-				x--;
-			}
-		}
-
-		this.poolEntries = new PoolEntry[poolEntries.size()];
-		for (int i = 0; i < this.poolEntries.length; i++) 
-		{
-			this.poolEntries[i] = poolEntries.get(i);
-		}
-		*/
+		propEntries = arrListPropEntries.toArray(new PropertyEntry[arrListPropEntries.size()]);
+	}
+	private void generateCheckMethod() 
+	{
+		writer.println(PropertyEntry.generateCheck(propEntries));		
 	}
 	private void generateInstanceVariables()
 	{

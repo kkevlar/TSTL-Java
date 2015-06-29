@@ -5,6 +5,20 @@ public class PropertyEntry extends RepeatablesContainer implements RepeatablesAc
 	private String[] javaCodeSplit;
 	private Repeatable[] repeatables;
 	private String myCheck;
+	
+	public static String generateCheck(PropertyEntry[] propEntries)
+	{
+		String ret = "public String check()\n{\n";
+				ret += "String fail = null;\n";
+		for (int i = 0; i < propEntries.length; i++) 
+		{
+			ret += propEntries[i].getMyCheck();
+		}
+		ret += "return fail;\n";
+		ret += "}\n";
+		return ret;		 
+	}
+	
 	public PropertyEntry(String[] javaCodeSplit, Repeatable[] repeatables)
 	{
 		super();
@@ -50,8 +64,8 @@ public class PropertyEntry extends RepeatablesContainer implements RepeatablesAc
 			else
 				add += this.getRepeatables()[(i-1)/2].getAsJava(vals[(i-1)/2]);
 		}
-		myCheck += "if(!(" + add + ")) \n";
-		myCheck += "fail =" + add + ";\n";
+		myCheck += "if(!(" + add + "))\n";
+		myCheck += "fail =\"" + add + "\";\n";
 	}
 
 	private String getMyCheck()
