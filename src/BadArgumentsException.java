@@ -6,6 +6,7 @@ public class BadArgumentsException extends RuntimeException
 	{
 		this.message = message; 
 	}
+	@Override
 	public String getMessage()
 	{
 		return "BadArgunmentsException: " + message;	

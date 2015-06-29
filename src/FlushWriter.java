@@ -50,16 +50,19 @@ public class FlushWriter extends PrintWriter {
 		super(arg0, arg1);
 		
 	}
+	@Override
 	public void println()
 	{
 		super.println();
 		this.flush();
 	}
+	@Override
 	public void print(String s)
 	{
 		super.print(s);
 		this.flush();
 	}
+	@Override
 	public void println(String s)
 	{
 		super.println(s);

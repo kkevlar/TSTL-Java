@@ -126,7 +126,7 @@ public class ActionEntry
 					entries.add(entry);
 			}
 		}
-		this.repeatables = (Repeatable[]) entries.toArray(new Repeatable[entries.size()]);
+		this.repeatables = entries.toArray(new Repeatable[entries.size()]);
 	}
 	private Repeatable getRepeatableFromVariable(String var, boolean mustBePool) 
 	{

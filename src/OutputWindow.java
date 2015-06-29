@@ -6,7 +6,6 @@ import javax.swing.JFrame;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.ScrollPaneConstants;
-import javax.swing.WindowConstants;
 
 public class OutputWindow
 {

@@ -8,6 +8,7 @@ public class MalformedTstlException extends RuntimeException
 	{
 		this.message = string;
 	}
+	@Override
 	public String getMessage()
 	{
 		return message;

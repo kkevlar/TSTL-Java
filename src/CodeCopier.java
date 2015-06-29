@@ -28,7 +28,7 @@ public class CodeCopier
 				break;
 		}
 		reader.close();
-		String[] strings = (String[]) lines.toArray(new String[lines.size()]);
+		String[] strings = lines.toArray(new String[lines.size()]);
 		String[] split = className.replace(".", "~").split("~");
 		String newClassName = "";
 		for (int i = 0; i < split.length; i++) 

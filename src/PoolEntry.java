@@ -29,6 +29,7 @@ public class PoolEntry implements Repeatable
 		return varName;
 	}
 
+	@Override
 	public int getListSize() 
 	{
 		return listSize;
@@ -70,6 +71,7 @@ public class PoolEntry implements Repeatable
 		return null;
 	}
 
+	@Override
 	public String getAsJava(int i)
 	{
 		return this.getVarName() + ".get(" + i + ")";
@@ -92,6 +94,7 @@ public class PoolEntry implements Repeatable
 	}
 
 	
+	@Override
 	public boolean equalsRepeatable(Repeatable rep)
 	{
 		if(!(rep instanceof PoolEntry))
