@@ -7,22 +7,17 @@ public class PropertyEntry extends RepeatablesContainer implements RepeatablesAc
 {
 	private String[] javaCodeSplit;
 	private Repeatable[] repeatables;
-	private String myCheck;
-	private HashMap<Repeatable, int[]> repeatingPoolValues;
+	private ArrayList<String> checks;
 
 	public static String generateCheck(PropertyEntry[] propEntries)
 	{
-		ArrayList<String> pastChecks = new ArrayList<String>();
+		
 		String ret = "public String check()\n{\n";
 		ret += "String fail = null;\n";
-		for (int i = 0; i < propEntries.length; i++) 
+		for (int x = 0; x < propEntries.length; x++) 
 		{
-			String check =  propEntries[i].getMyCheck();
-			if(!pastChecks.contains(check))
-			{
-				ret +=check;
-				pastChecks.add(check);
-			}
+			ret += propEntries[x].getMyCheck() + "\n";
+			
 		}
 		ret += "return fail;\n";
 		ret += "}\n";
@@ -35,42 +30,8 @@ public class PropertyEntry extends RepeatablesContainer implements RepeatablesAc
 
 		this.setJavaCodeSplit(packet.getJavaCodePieces());
 		this.setRepeatables(packet.getRepeatables());
-		this.buildCheckString();
+		checks = new ArrayList<String>();
 		this.actOnValidCombinations(this);
-	}
-
-
-
-	private void buildCheckString() 
-	{
-		myCheck = "";
-
-		repeatingPoolValues = new HashMap<Repeatable,int[]>();
-		for(int x = 0; x < this.getRepeatables().length; x++)
-		{
-			Repeatable rep = this.getRepeatables()[x];
-			Repeatable[] reps = repeatingPoolValues.keySet().toArray(new Repeatable[repeatingPoolValues.size()]);
-			Repeatable storeRep = rep;
-			int[] newInts = new int[]{x};
-			for(int y = 0; y < reps.length; y++)
-			{
-				Repeatable testRep = reps[y];
-				boolean equal = rep.equalsRepeatable(testRep);
-				if(!equal)
-					continue;
-				int[] ints  = repeatingPoolValues.get(testRep);
-				newInts = new int[ints.length + 1];
-				for (int z = 0; z < ints.length; z++) 
-				{
-					newInts[z] = ints[z];
-				}
-				newInts[newInts.length-1] = x;
-				storeRep = testRep;
-				repeatingPoolValues.remove(testRep);
-				break;
-			}
-			repeatingPoolValues.put(storeRep, newInts);
-		}
 	}
 
 	public String[] getJavaCodeSplit() 
@@ -115,13 +76,22 @@ public class PropertyEntry extends RepeatablesContainer implements RepeatablesAc
 				}
 			}
 		}
-		myCheck += "if(!(" + add + "))\n";
-		myCheck += "fail =\"" + add + "\";\n";
+		String check = "";
+		check += "if(!(" + add + "))\n";
+		check += "fail =\"" + add + "\";\n";
+		if(!(this.checks.contains(check)))
+			checks.add(check);
+		
 	}
 
 	private String getMyCheck()
 	{
-		return myCheck;
+		String checkString = "";
+		for(int i = 0; i < this.checks.size(); i++)
+		{
+			checkString += this.checks.get(i);
+		}
+		return checkString;
 	}
 
 
