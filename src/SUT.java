@@ -13,23 +13,11 @@ public String check()
 String fail = null;
 if(!( var_INT.get(0) == null || var_INT.get(0) == 1))
 fail =" var_INT.get(0) == null || var_INT.get(0) == 1";
-if(!( var_INT.get(1) == null || var_INT.get(0) == 1))
-fail =" var_INT.get(1) == null || var_INT.get(0) == 1";
-if(!( var_INT.get(2) == null 
-|| var_INT.get(0) == 1))
-fail =" var_INT.get(2) == null || var_INT.get(0) == 1";
-if(!( var_INT.get(0) == null || var_INT.get(1) == 1))
-fail =" var_INT.get(0) == null || var_INT.get(1) == 1";
 if(!( var_INT.get(1) == null || var_INT.get(1) == 1))
 fail =" var_INT.get(1) == null || var_INT.get(1) == 1";
-if(!( var_INT.get(2) == null || var_INT.get(1) == 1))
-fail =" var_INT.get(2) == null || var_INT.get(1) == 1";
-if(!( var_INT.get(0) == null || var_INT.get(2) == 1))
-fail =" var_INT.get(0) == null || var_INT.get(2) == 1";
-if(!( var_INT.get(1) == null || var_INT.get(2) == 1))
-fail =" var_INT.get(1) == null || var_INT.get(2) == 1";
 if(!( var_INT.get(2) == null || var_INT.get(2) == 1))
 fail =" var_INT.get(2) == null || var_INT.get(2) == 1";
+
 return fail;
 }
 
