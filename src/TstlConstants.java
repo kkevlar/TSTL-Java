@@ -159,7 +159,7 @@ public class TstlConstants
 				if (entry == null)
 					throw new MalformedTstlException(TstlConstants.MESSAGE_UNDEFINED_TSTL_VARIABLE + "Variable:" + TstlConstants.IDENTIFIER_TSTLVARIABLE + pieces[i] + TstlConstants.IDENTIFIER_TSTLVARIABLE + " Line:" + varLine);
 				else
-					reps[i] = entry;
+					reps[(i-1)/2] = entry;
 			}
 		}
 		return new LineParsePacket(javaCodePieces, reps);

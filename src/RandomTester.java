@@ -57,7 +57,8 @@ public class RandomTester
 					enabled = sut.getActions()[testNum].enabled();
 				}
 				if(print)
-					println(sut.getActions()[testNum].name().trim());	
+					println(sut.getActions()[testNum].name().trim());
+				String info = sut.getActions()[testNum].getAllInfo();
 				try
 				{
 					sut.getActions()[testNum].act();
@@ -65,14 +66,14 @@ public class RandomTester
 					if(check!= null)
 					{
 						println("Check failed! \"" + check + "\" failed to evaluate true!");
-						hasError(testNum);
+						hasError(info);
 					}
 				}
 				catch(Exception ex)
 				{
 					ex.printStackTrace();
 					println("EXCEPTION!! Heres the info:");
-					hasError(testNum);				
+					hasError(info);				
 				}
 				testCount++;
 			}
@@ -83,9 +84,9 @@ public class RandomTester
 		println("-Final test only got to " + testCount + " actions.");
 	}
 
-	private void hasError(int testNum) 
+	private void hasError(String info) 
 	{
-		println(sut.getActions()[testNum].getAllInfo());
+		println(info);
 		System.exit(-1);//temp
 	}
 
