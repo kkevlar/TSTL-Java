@@ -57,6 +57,8 @@ public class TstlConstants
 	public static final String TSTL_JAVA = "TSTL-Java";
 
 	public static final String VISIBILITY_LEVEL_POOL_VAR = "private";
+
+	public static final String IDENTIFIER_PROPERTY = "property:";
 	
 	private static void copyCode(CodeCopier cc) throws IOException 
 	{
@@ -112,8 +114,8 @@ public class TstlConstants
 		CodeCopier cc = new CodeCopier();		
 		try {
 			copyCode(cc);
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
+		} catch (IOException e) 
+		{
 			e.printStackTrace();
 		}
 	}
@@ -124,6 +126,18 @@ public class TstlConstants
 		File compDirFile = new File(compDir);
 		compDirFile.mkdirs();
 		return compDirFile;
+	}
+	
+	public static Repeatable getRepeatableFromVariable(String var, boolean mustBePool, PoolEntry[] entirePoolEntries, String actionLine) 
+	{
+		Repeatable rep;
+		rep = PoolEntry.getPoolEntryByVarName(entirePoolEntries,TstlConstants.PREFIX_JAVA_VARIABLES +var);
+		if(rep == null && !mustBePool)
+			rep = NumRange.getNumRange(var);
+		if(rep == null)
+			throw new MalformedTstlException(TstlConstants.MESSAGE_UNDEFINED_TSTL_VARIABLE + "Variable:" + TstlConstants.IDENTIFIER_TSTLVARIABLE + var + TstlConstants.IDENTIFIER_TSTLVARIABLE + " Line:" + actionLine);
+
+		return rep;
 	}
 	
 }

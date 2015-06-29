@@ -14,6 +14,7 @@ public class TstlParser implements Runnable
 	private String[] args;
 	private PoolEntry[] poolEntries;
 	private long actionsPrinted;
+	private PropertyEntry[] propEntries;
 
 	public static void main(String[] args) throws URISyntaxException
 	{
@@ -191,6 +192,51 @@ public class TstlParser implements Runnable
 	
 	private void generatePropertyEntries()
 	{		
+		ArrayList<PropertyEntry> arrListPropEntries = new ArrayList<PropertyEntry>();
+		for (int x = 0; x < tstl.size(); x++)
+		{
+			String line = tstl.get(x);
+			if(line.startsWith(TstlConstants.IDENTIFIER_PROPERTY))
+			{
+				String restLine = line.substring(TstlConstants.IDENTIFIER_PROPERTY.length());
+				String[] split = restLine.split(TstlConstants.IDENTIFIER_TSTLVARIABLE);
+				String[] javaCodeSplit = null;
+				ArrayList<Repeatable> arrListRepeatables = new ArrayList<Repeatable>();
+				
+				if(split.length % 2 != 1)
+					throw new MalformedTstlException(TstlConstants.MESSGAGE_NONSURROUNDING_VARIABLE_IDENTIFIERS + line);
+				javaCodeSplit = new String[(split.length+1)/2];
+				
+				for (int i = 0; i < split.length; i++)
+				{
+					if(i%2==0)
+					{
+						int javaIndex = i/2;
+						javaCodeSplit[javaIndex] = split[i];
+					}
+					else
+					{
+						Repeatable entry = TstlConstants.getRepeatableFromVariable((split[i]).trim(), false, poolEntries, line);
+						if (entry == null)
+							throw new MalformedTstlException(TstlConstants.MESSAGE_UNDEFINED_TSTL_VARIABLE + "Variable:" + TstlConstants.IDENTIFIER_TSTLVARIABLE + split[i] + TstlConstants.IDENTIFIER_TSTLVARIABLE + " Line:" + line);
+						else
+							arrListRepeatables.add(entry);
+					}
+				}
+				
+				Repeatable[] repeatables = arrListRepeatables.toArray(new Repeatable[arrListRepeatables.size()]);
+				
+				PropertyEntry propEntry = new PropertyEntry(javaCodeSplit,repeatables);
+				arrListPropEntries.add(propEntry);
+				
+				propEntries = arrListPropEntries.toArray(new PropertyEntry[arrListPropEntries.size()]);
+				
+				tstl.remove(x);
+				x--;
+			}
+		}
+		
+		
 		/* code to base on
 		ArrayList<PoolEntry> poolEntries = new ArrayList<PoolEntry>();
 		for (int x = 0; x < tstl.size(); x++)
