@@ -4,8 +4,9 @@
 public class RandomTester 
 {
 
-	private static final long MAX_TESTS = 1000;
+	private static final long MAX_TESTS = 200;
 	private static final long TIMEOUT = 3*60*1000;
+	private static final long TEST_PRINT_DELAY = 10*1000;
 	public static void main(String[] args) 
 	{		
 		new RandomTester().go();
@@ -34,16 +35,18 @@ public class RandomTester
 		long maxTests = MAX_TESTS;
 		long timeout = TIMEOUT;
 		long loopCount = 1;
-
+		long printTime = 0;
 		int actionCount = sut.getActions().length;
 		while(timeInBounds(startTime, timeout))
 		{
 			sut.reset();
 			testCount = 0;
-			int randNum = (int) (Math.random()*100000);
-			boolean print = randNum == 2;
+			boolean print = System.currentTimeMillis() - printTime > TEST_PRINT_DELAY;
 			if(print)
+			{
 				println(">>Test Number " + loopCount);
+				printTime = System.currentTimeMillis();
+			}
 			while(testCount<maxTests&&timeInBounds(startTime,timeout))
 			{
 				boolean enabled = false;
@@ -54,7 +57,8 @@ public class RandomTester
 					enabled = sut.getActions()[testNum].enabled();
 				}
 				if(print)
-					println(sut.getActions()[testNum].name().trim());	
+					println(sut.getActions()[testNum].name().trim());
+				String info = sut.getActions()[testNum].getAllInfo();
 				try
 				{
 					sut.getActions()[testNum].act();
@@ -62,14 +66,14 @@ public class RandomTester
 					if(check!= null)
 					{
 						println("Check failed! \"" + check + "\" failed to evaluate true!");
-						hasError(testNum);
+						hasError(info);
 					}
 				}
 				catch(Exception ex)
 				{
 					ex.printStackTrace();
 					println("EXCEPTION!! Heres the info:");
-					hasError(testNum);				
+					hasError(info);				
 				}
 				testCount++;
 			}
@@ -80,9 +84,9 @@ public class RandomTester
 		println("-Final test only got to " + testCount + " actions.");
 	}
 
-	private void hasError(int testNum) 
+	private void hasError(String info) 
 	{
-		println(sut.getActions()[testNum].getAllInfo());
+		println(info);
 		System.exit(-1);//temp
 	}
 

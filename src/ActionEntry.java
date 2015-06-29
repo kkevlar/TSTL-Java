@@ -105,27 +105,12 @@ public class ActionEntry extends RepeatablesContainer
 			entries.add(initVar);
 		}
 		newActionLine = " " + newActionLine + " ";
-		String[] pieces = newActionLine.split(TstlConstants.IDENTIFIER_TSTLVARIABLE);
-		if(pieces.length % 2 != 1)
-			throw new MalformedTstlException(TstlConstants.MESSGAGE_NONSURROUNDING_VARIABLE_IDENTIFIERS + actionLine);
-		javaCodePieces = new String[(pieces.length+1)/2];
-
-		for (int i = 0; i < pieces.length; i++)
+		LineParsePacket packet = TstlConstants.parseVarLine(newActionLine, entirePoolEntries);
+		for(int i = 0; i < packet.getRepeatables().length; i++)
 		{
-			if(i%2==0)
-			{
-				int javaIndex = i/2;
-				javaCodePieces[javaIndex] = pieces[i];
-			}
-			else
-			{
-				Repeatable entry = TstlConstants.getRepeatableFromVariable((pieces[i]).trim(), false, entirePoolEntries, actionLine);
-				if (entry == null)
-					throw new MalformedTstlException(TstlConstants.MESSAGE_UNDEFINED_TSTL_VARIABLE + "Variable:" + TstlConstants.IDENTIFIER_TSTLVARIABLE + pieces[i] + TstlConstants.IDENTIFIER_TSTLVARIABLE + " Line:" + actionLine);
-				else
-					entries.add(entry);
-			}
+			entries.add(packet.getRepeatables()[i]);
 		}
+		this.javaCodePieces = packet.getJavaCodePieces();
 		this.repeatables = entries.toArray(new Repeatable[entries.size()]);
 	}
 	

@@ -3,7 +3,7 @@
 pool: ArrayList<Integer> %ARRAYLIST% 1
 pool: Integer %INT% 3
 
-property: %INT% == 1
+property: %INT% == null || %INT% == 1
 
 %INT% := %[1..1]%
 

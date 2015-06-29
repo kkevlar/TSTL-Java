@@ -202,38 +202,9 @@ public class TstlParser implements Runnable
 			if(line.startsWith(TstlConstants.IDENTIFIER_PROPERTY))
 			{
 				String restLine = line.substring(TstlConstants.IDENTIFIER_PROPERTY.length());
-				String[] split = restLine.split(TstlConstants.IDENTIFIER_TSTLVARIABLE);
-				String[] javaCodeSplit = null;
-				ArrayList<Repeatable> arrListRepeatables = new ArrayList<Repeatable>();
-				
-				if(split.length % 2 != 1)
-					throw new MalformedTstlException(TstlConstants.MESSGAGE_NONSURROUNDING_VARIABLE_IDENTIFIERS + line);
-				javaCodeSplit = new String[(split.length+1)/2];
-				
-				for (int i = 0; i < split.length; i++)
-				{
-					if(i%2==0)
-					{
-						int javaIndex = i/2;
-						javaCodeSplit[javaIndex] = split[i];
-					}
-					else
-					{
-						Repeatable entry = TstlConstants.getRepeatableFromVariable((split[i]).trim(), false, poolEntries, line);
-						if (entry == null)
-							throw new MalformedTstlException(TstlConstants.MESSAGE_UNDEFINED_TSTL_VARIABLE + "Variable:" + TstlConstants.IDENTIFIER_TSTLVARIABLE + split[i] + TstlConstants.IDENTIFIER_TSTLVARIABLE + " Line:" + line);
-						else
-							arrListRepeatables.add(entry);
-					}
-				}
-				
-				Repeatable[] repeatables = arrListRepeatables.toArray(new Repeatable[arrListRepeatables.size()]);
-				
-				PropertyEntry propEntry = new PropertyEntry(javaCodeSplit,repeatables);
-				arrListPropEntries.add(propEntry);
-				
-				
-				
+				LineParsePacket packet = TstlConstants.parseVarLine(restLine, poolEntries);				
+				PropertyEntry propEntry = new PropertyEntry(packet);
+				arrListPropEntries.add(propEntry);			
 				tstl.remove(x);
 				x--;
 			}

@@ -11,7 +11,7 @@ public class TstlConstants
 	public static final String COMMENT_AUTO_GEN_CODE = "//This is auto-generated code.  Changes will be overwritten.";
 
 	public static final String CONSTRUCT_ACTION_ARRAY_INSTANCE_VARIABLE = "actions = new Action[";	
-	
+
 	public static final String DECLARATION_ACT_METHOD_ACTION_INTERFACE = "public void act();";	
 	public static final String DECLARATION_ACTION_ACT_METHOD = "public void act()";		
 	public static final String DECLARATION_ACTION_ARRAY_INSTANCE_VARIABLE = "private Action[] actions;";
@@ -26,12 +26,12 @@ public class TstlConstants
 	public static final String DECLARATION_NAME_METHOD_ACTION_INTERFACE = "public String name();";
 	public static final String DECLARATION_SUT_GETACTIONS_METHOD = "public Action[] getActions()";
 	public static final String DECLARATION_SUT_RESET_METHOD = "public void reset()";	
-	
+
 	public static final String DIR_GENBIN = "genbin";	
 	public static final String DIR_GENSRC = "gensrc";
-	
+
 	public static final String GEN_CLASS_MAIN = "RandomTester.java";	
-	
+
 	public static final String IDENTIFIER_EXPLICIT_GUARD = "->";
 	public static final String IDENTIFIER_IMPORT = "@import";
 	public static final String IDENTIFIER_INITIALIZATION = ":=";	
@@ -40,10 +40,10 @@ public class TstlConstants
 	public static final String IDENTIFIER_NUMRANGE_RIGHT = "]";			
 	public static final String IDENTIFIER_POOL = "pool:";
 	public static final String IDENTIFIER_TSTLVARIABLE = "%";	
-	
+
 	public static final String IMPORT_ARRAY_LIST = "java.util.ArrayList";	
 	public static final String IMPORT_LIST = "java.util.List";	
-	
+
 	public static final String MESSAGE_MALFORMED_POOL_DECLARATION = "Malformed pool declaration: ";
 	public static final String MESSAGE_NO_TSTL = "Please provide a path to a valid .tstl file in the command line arguments.";
 	public static final String MESSAGE_ONLY_ONE_EXPLICIT_GUARD = "Each action can only have one explicit guard.";	
@@ -59,7 +59,7 @@ public class TstlConstants
 	public static final String VISIBILITY_LEVEL_POOL_VAR = "private";
 
 	public static final String IDENTIFIER_PROPERTY = "property:";
-	
+
 	private static void copyCode(CodeCopier cc) throws IOException 
 	{
 		cc.copyCode("FlushWriter.java");	
@@ -127,7 +127,7 @@ public class TstlConstants
 		compDirFile.mkdirs();
 		return compDirFile;
 	}
-	
+
 	public static Repeatable getRepeatableFromVariable(String var, boolean mustBePool, PoolEntry[] entirePoolEntries, String actionLine) 
 	{
 		Repeatable rep;
@@ -139,5 +139,30 @@ public class TstlConstants
 
 		return rep;
 	}
-	
+	public static LineParsePacket parseVarLine(String varLine, PoolEntry[] entirePoolEntries)
+	{
+		String[] pieces = varLine.split(TstlConstants.IDENTIFIER_TSTLVARIABLE);
+		if(pieces.length % 2 != 1)
+			throw new MalformedTstlException(TstlConstants.MESSGAGE_NONSURROUNDING_VARIABLE_IDENTIFIERS + varLine);
+		String[] javaCodePieces = new String[(pieces.length+1)/2];
+		Repeatable[] reps = new Repeatable[(pieces.length-1)/2];
+		for (int i = 0; i < pieces.length; i++)
+		{
+			if(i%2==0)
+			{
+				int javaIndex = i/2;
+				javaCodePieces[javaIndex] = pieces[i];
+			}
+			else
+			{
+				Repeatable entry = TstlConstants.getRepeatableFromVariable((pieces[i]).trim(), false, entirePoolEntries, varLine);
+				if (entry == null)
+					throw new MalformedTstlException(TstlConstants.MESSAGE_UNDEFINED_TSTL_VARIABLE + "Variable:" + TstlConstants.IDENTIFIER_TSTLVARIABLE + pieces[i] + TstlConstants.IDENTIFIER_TSTLVARIABLE + " Line:" + varLine);
+				else
+					reps[(i-1)/2] = entry;
+			}
+		}
+		return new LineParsePacket(javaCodePieces, reps);
+	}
+
 }

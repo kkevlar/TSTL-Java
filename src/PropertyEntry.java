@@ -19,15 +19,18 @@ public class PropertyEntry extends RepeatablesContainer implements RepeatablesAc
 		return ret;		 
 	}
 	
-	public PropertyEntry(String[] javaCodeSplit, Repeatable[] repeatables)
+	public PropertyEntry(LineParsePacket packet)
 	{
 		super();
-		this.setJavaCodeSplit(javaCodeSplit);
-		this.setRepeatables(repeatables);
+		
+		this.setJavaCodeSplit(packet.getJavaCodePieces());
+		this.setRepeatables(packet.getRepeatables());
 		this.buildCheckString();
 		this.actOnValidCombinations(this);
 	}
 	
+	
+
 	private void buildCheckString() 
 	{
 		myCheck = "";
