@@ -312,13 +312,15 @@ public class TstlParser implements Runnable
 
 	private void finishingTouches()
 	{
-		writer.println("}"); //class close brace
+		writer.println("}//class close brace"); 
 		writer.close();
 		System.out.println("finished");	
 	}	
 
 	private void compileGeneratedClasses() 
 	{
+		TstlConstants.getGeneratedClassesFolder();
+		/*
 		boolean success = false;
 		try
 		{
@@ -379,9 +381,11 @@ public class TstlParser implements Runnable
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		*/
 		
 
 	}
+	
 	private void compileCode(String javacPath) throws IOException
 	{
 		javacPath = "\""+ javacPath + "\"";
