@@ -4,8 +4,9 @@
 public class RandomTester 
 {
 
-	private static final long MAX_TESTS = 1000;
+	private static final long MAX_TESTS = 200;
 	private static final long TIMEOUT = 3*60*1000;
+	private static final long TEST_PRINT_DELAY = 10*1000;
 	public static void main(String[] args) 
 	{		
 		new RandomTester().go();
@@ -34,16 +35,18 @@ public class RandomTester
 		long maxTests = MAX_TESTS;
 		long timeout = TIMEOUT;
 		long loopCount = 1;
-
+		long printTime = 0;
 		int actionCount = sut.getActions().length;
 		while(timeInBounds(startTime, timeout))
 		{
 			sut.reset();
 			testCount = 0;
-			int randNum = (int) (Math.random()*100000);
-			boolean print = randNum == 2;
+			boolean print = System.currentTimeMillis() - printTime > TEST_PRINT_DELAY;
 			if(print)
+			{
 				println(">>Test Number " + loopCount);
+				printTime = System.currentTimeMillis();
+			}
 			while(testCount<maxTests&&timeInBounds(startTime,timeout))
 			{
 				boolean enabled = false;
