@@ -13,7 +13,7 @@ public class TstlParser implements Runnable
 	private FlushWriter writer;
 	private String[] args;
 	private PoolEntry[] poolEntries;
-	private long actionsPrinted;
+	private long countActionsPrinted;
 	private PropertyEntry[] propEntries;
 
 	public static void main(String[] args) throws URISyntaxException
@@ -339,7 +339,20 @@ public class TstlParser implements Runnable
 		writer.println(TstlConstants.DECLARATION_ACTION_LOCAL_VARIABLE);
 		for(int i = 0; i < actionLines.size(); i++)
 		{			
-			this.printAllActions(this.makeActionEntry(actionLines.get(i)));
+			ActionEntry entry = this.makeActionEntry(actionLines.get(i));
+			RepeatablesAction action = new RepeatablesAction()
+			{
+				@Override
+				public void actOnRepValues(int[] vals, RepeatablesContainer cont)
+				{
+					ActionEntry aEntry = (ActionEntry) cont;
+					writer.println(aEntry.createActionClass(vals));	
+					writer.println("actions[" + countActionsPrinted + "] = action;");
+					countActionsPrinted++;					
+				}
+				
+			};
+			entry.actOnValidCombinations(action);
 		}
 		writer.println("}//close actionInit()");
 	}
@@ -349,47 +362,7 @@ public class TstlParser implements Runnable
 		ActionEntry entry = new ActionEntry(parts[0],parts[1],this.poolEntries);
 		return entry;
 	}
-
-	private void printAllActions(ActionEntry entry) 
-	{
-		int[] ints = new int[entry.getRepeatables().length];
-		for (int i = 0; i < ints.length; i++) 
-		{
-			ints[i] = -1;
-		}
-		this.printAllActions(entry,ints);		
-	}
-	private void printAllActions(ActionEntry entry, int[] ints)
-	{
-		int[] newInts = new int[ints.length];
-		int negativeIndex = -1;
-		for (int i = 0; i < newInts.length; i++) 
-		{
-			newInts[i] = ints[i];
-			if(newInts[i] == -1)
-			{
-				negativeIndex = i;
-			}
-		}
-		if(negativeIndex == -1)
-		{
-			printAction(entry, newInts);
-			return;
-		}
-		for(int i = 0; i < entry.getRepeatables()[negativeIndex].getListSize(); i++)
-		{
-			newInts[negativeIndex] = i;
-			this.printAllActions(entry, newInts);
-		}	
-
-	}
-
-	private void printAction(ActionEntry entry, int[] poolValues)
-	{
-		writer.println(entry.createActionClass(poolValues));	
-		writer.println("actions[" + actionsPrinted + "] = action;");
-		actionsPrinted++;
-	}
+	
 
 	private void generateGetActions() 
 	{

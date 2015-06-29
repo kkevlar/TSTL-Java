@@ -3,7 +3,7 @@ import java.util.Arrays;
 import java.util.HashMap;
 
 
-public class ActionEntry
+public class ActionEntry extends RepeatablesContainer
 {
 	public static String[] splitActionLine(String rawLine)
 	{
@@ -133,19 +133,12 @@ public class ActionEntry
 	{
 		return this.javaCodePieces;
 	}
-	public int getActionCount()
-	{
-		int count = 1;
-		for (int i = 0; i < this.getRepeatables().length; i++) 
-		{
-			count *= this.getRepeatables()[i].getListSize();		
-		}
-		return count;
-	}
-	protected Repeatable[] getRepeatables()
+	
+	public Repeatable[] getRepeatables()
 	{
 		return this.repeatables;
 	}
+	
 	protected boolean hasInit()
 	{
 		return this.getRepeatables().length == this.getJavaPieces().length;
@@ -199,7 +192,7 @@ public class ActionEntry
 				String inf = this.expressionVarInformation[(i-1)/2];
 				String[] split = inf.split(",");
 				PoolEntry pEntry = (PoolEntry) TstlConstants.getRepeatableFromVariable(split[0], true, entirePoolEntries, actionLine);
-				int index = Integer.parseInt(split[1])-1;//can error need throws.....
+				int index = Integer.parseInt(split[1])-1;//can error need throw/catch.....
 				int indexFromVals = this.repeatingPoolValues.get(pEntry)[index];
 				int giveToPoolNum = vals[indexFromVals];
 				expressionLine += pEntry.getAsJava(giveToPoolNum);
