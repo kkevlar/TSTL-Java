@@ -177,8 +177,6 @@ public class TstlConstants
 				for(int i = 0; i < s.length(); i++)
 				{
 					String rep = null;
-					if(s.charAt(i) == '"')
-						System.out.println(s + " ~ " + s.charAt(i));
 					if(s.charAt(i) == '"' && !(s.charAt(i-1) == '\\'))				
 					{
 						rep = "\\" + s.charAt(i)+"";
