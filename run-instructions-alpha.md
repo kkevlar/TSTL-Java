@@ -2,7 +2,7 @@ Releases of Tstl-Java are best run through the included .jar archive or in an ID
 
 ###Generate code with the runnable jar:
 * Download the runnable jar below.
-* Download the ArrayListTest.valid.tstl file included, or write your own .tstl file.
+* Download the sample .tstl file included, or write your own .tstl file.
   * The .jar and the .tstl file must be in the same directory.
 * Open command prompt and set working directory to the root of the project folder.
 * Run the jar with `java -jar TSTL-Java-v3.0.1-alpha.jar`
