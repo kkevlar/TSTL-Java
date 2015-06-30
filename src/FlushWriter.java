@@ -53,8 +53,12 @@ public class FlushWriter extends PrintWriter {
 	@Override
 	public void println()
 	{
-		super.println();
-		this.flush();
+		this.println("");
+	}
+	@Override
+	public void println(String s)
+	{
+		this.print(s + "\n");
 	}
 	@Override
 	public void print(String s)
@@ -62,11 +66,6 @@ public class FlushWriter extends PrintWriter {
 		super.print(s);
 		this.flush();
 	}
-	@Override
-	public void println(String s)
-	{
-		super.println(s);
-		this.flush();
-	}
+	
 
 }

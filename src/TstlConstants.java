@@ -9,6 +9,8 @@ public class TstlConstants
 	public static final String CLASS_NAME_SUT = "SUT";
 
 	public static final String COMMENT_AUTO_GEN_CODE = "//This is auto-generated code.  Changes will be overwritten.";
+	public static final String COMMENT_CORE_FUNCTIONALITY_IMPORT = " //import for SUT.java core functionality";
+	public static final String COMMENT_TSTL_SOURCE_IMPORT = " //imported from .tstl source file";
 
 	public static final String CONSTRUCT_ACTION_ARRAY_INSTANCE_VARIABLE = "actions = new Action[";	
 
@@ -164,5 +166,35 @@ public class TstlConstants
 		}
 		return new LineParsePacket(javaCodePieces, reps);
 	}
+	public static String excapeString(String s)
+	{
+		
+		if(s.contains("\""))
+		{
+			while(true)
+			{
+				boolean restart = false;
+				for(int i = 0; i < s.length(); i++)
+				{
+					String rep = null;
+					if(s.charAt(i) == '"')
+						System.out.println(s + " ~ " + s.charAt(i));
+					if(s.charAt(i) == '"' && !(s.charAt(i-1) == '\\'))				
+					{
+						rep = "\\" + s.charAt(i)+"";
+						s = s.replace(s.charAt(i)+"", rep);
+						restart = true;
+						break;
+					}
+				}
+				if(restart)
+					continue;
+				break;
+			}
+		}
+		
+		return s;
+	}
+
 
 }
