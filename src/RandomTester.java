@@ -6,7 +6,7 @@ public class RandomTester
 
 	private static final long MAX_TESTS = 200;
 	private static final long TIMEOUT = 3*60*1000;
-	private static final long TEST_PRINT_DELAY = 10*1000;
+	private static final long TEST_PRINT_DELAY = 30*1000;
 	public static void main(String[] args) 
 	{		
 		new RandomTester().go();
@@ -68,6 +68,8 @@ public class RandomTester
 						println("Check failed! \"" + check + "\" failed to evaluate true!");
 						hasError(info);
 					}
+					else if (print && testCount +1==MAX_TESTS )
+						println(info);
 				}
 				catch(Exception ex)
 				{
