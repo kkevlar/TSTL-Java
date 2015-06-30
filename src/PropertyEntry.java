@@ -44,6 +44,7 @@ public class PropertyEntry extends RepeatablesContainer implements RepeatablesAc
 		this.javaCodeSplit = javaCodeSplit;
 	}
 
+	@Override
 	public Repeatable[] getRepeatables() 
 	{
 		return repeatables;
