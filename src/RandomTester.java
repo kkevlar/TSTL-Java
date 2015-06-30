@@ -4,7 +4,7 @@
 public class RandomTester 
 {
 
-	private static final long MAX_TESTS = 200;
+	private static final int MAX_TESTS = 200;
 	private static final long TIMEOUT = 3*60*1000;
 	private static final long TEST_PRINT_DELAY = 30*1000;
 	public static void main(String[] args) 
@@ -14,7 +14,7 @@ public class RandomTester
 
 	private OutputWindow window;
 	private SUT sut;
-
+	private int[] actTrace;
 
 
 	private void go() 
@@ -31,8 +31,8 @@ public class RandomTester
 		}
 		println("Initializing test...");
 		long startTime = System.currentTimeMillis();
-		long testCount = 0;
-		long maxTests = MAX_TESTS;
+		int testCount = 0;
+		int maxTests = MAX_TESTS;
 		long timeout = TIMEOUT;
 		long loopCount = 1;
 		long printTime = 0;
@@ -40,6 +40,7 @@ public class RandomTester
 		while(timeInBounds(startTime, timeout))
 		{
 			sut.reset();
+			actTrace = new int[maxTests];
 			testCount = 0;
 			boolean print = System.currentTimeMillis() - printTime > TEST_PRINT_DELAY;
 			if(print)
@@ -70,6 +71,7 @@ public class RandomTester
 					}
 					else if (print && testCount +1==MAX_TESTS )
 						println(info);
+					actTrace[testCount] = testNum;
 				}
 				catch(Exception ex)
 				{
