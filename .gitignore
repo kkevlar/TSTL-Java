@@ -1,20 +1,17 @@
-*.class
-
-# Mobile Tools for Java (J2ME)
 .mtj.tmp/
 
-# Package Files #
+# Files 
 *.war
 *.ear
 *.log
 *.bat
 *.tstl
+*.class
 
-# virtual machine crash logs, see http://www.java.com/en/download/help/error_hotspot.xml
+#Directories
 hs_err_pid*
 /bin/
 /src/res/
 /genbin/
 /gensrc/
-/copyToRes/runCopyToRes.bat
 /src/SUT.java
