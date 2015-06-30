@@ -9,7 +9,9 @@ public class TstlConstants
 	public static final String CLASS_NAME_SUT = "SUT";
 
 	public static final String COMMENT_AUTO_GEN_CODE = "//This is auto-generated code.  Changes will be overwritten.";
-
+	public static final String COMMENT_CORE_FUNCTIONALITY_IMPORT = " //import for SUT.java core functionality";
+	public static final String COMMENT_TSTL_SOURCE_IMPORT = " //imported from .tstl source file";
+	
 	public static final String CONSTRUCT_ACTION_ARRAY_INSTANCE_VARIABLE = "actions = new Action[";	
 
 	public static final String DECLARATION_ACT_METHOD_ACTION_INTERFACE = "public void act();";	
@@ -164,5 +166,6 @@ public class TstlConstants
 		}
 		return new LineParsePacket(javaCodePieces, reps);
 	}
+	
 
 }

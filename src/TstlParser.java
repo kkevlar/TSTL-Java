@@ -124,14 +124,14 @@ public class TstlParser implements Runnable
 				String importObject = line.substring(TstlConstants.IDENTIFIER_IMPORT.length());
 				if(!(importObject.trim().equals(TstlConstants.IMPORT_ARRAY_LIST) || importObject.trim().equals(TstlConstants.IMPORT_LIST)))
 				{
-					writer.println("import " + importObject + ";");
+					writer.println("import " + importObject + ";"+TstlConstants.COMMENT_TSTL_SOURCE_IMPORT);
 				}
 				tstl.remove(i);
 				i--;
 			}
 		}
-		writer.println("import " + TstlConstants.IMPORT_LIST + ";");
-		writer.println("import " + TstlConstants.IMPORT_ARRAY_LIST + ";");
+		writer.println("import " + TstlConstants.IMPORT_LIST + ";"+TstlConstants.COMMENT_CORE_FUNCTIONALITY_IMPORT);
+		writer.println("import " + TstlConstants.IMPORT_ARRAY_LIST + ";"+TstlConstants.COMMENT_CORE_FUNCTIONALITY_IMPORT);
 	}
 	private void generateClassDeclaration()
 	{
