@@ -166,6 +166,24 @@ public class TstlConstants
 		}
 		return new LineParsePacket(javaCodePieces, reps);
 	}
+	public static String excapeString(String s)
+	{
+		boolean finish = true;
+		for(int i = 0; i < s.length(); i++)
+		{
+			char c = s.charAt(i);
+			String rep = null;
+			if(c == '"')				
+			{
+				rep = "\\" + c+"";
+				s.replace(c+"", rep);
+				finish = false;
+			}
+		}
+		if(!finish)
+			s = TstlConstants.excapeString(s);
+		return s;
+	}
 	
 
 }

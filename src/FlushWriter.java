@@ -53,20 +53,20 @@ public class FlushWriter extends PrintWriter {
 	@Override
 	public void println()
 	{
-		super.println();
-		this.flush();
-	}
-	@Override
-	public void print(String s)
-	{
-		super.print(s);
-		this.flush();
+		this.println("");
 	}
 	@Override
 	public void println(String s)
 	{
-		super.println(s);
+		this.print(s + "\n");
+	}
+	@Override
+	public void print(String s)
+	{
+		s = TstlConstants.excapeString(s);
+		super.print(s);
 		this.flush();
 	}
+	
 
 }
