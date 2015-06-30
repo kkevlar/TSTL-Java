@@ -1,13 +1,13 @@
 Releases of Tstl-Java are best run through the included .jar archive or in an IDE such as eclipse.
 
-##Generate code with the runnable jar:
+###Generate code with the runnable jar:
 * Download the runnable jar below.
-* Download the ArrayListTest.valid.tstl file included, or write your own .tstl file.
+* Download the sample .tstl file included, or write your own .tstl file.
   * The .jar and the .tstl file must be in the same directory.
 * Open command prompt and set working directory to the root of the project folder.
 * Run the jar with `java -jar TSTL-Java-v3.0.1-alpha.jar`
 
-##Generate code with eclipse:
+###Generate code with eclipse:
 * Extract the source into a new project
 * Run the copyToRes/CopyToRes.jar archive.  It will allow the program to find dependencies for generated code.
 * Refresh the project files (Right-click project folder in Package Explorer).
@@ -15,7 +15,7 @@ Releases of Tstl-Java are best run through the included .jar archive or in an ID
 * Run TstlParser in eclipse.
 * Navigate to the project folder in file explorer
 
-##Running the generated code:
+###Running the generated code:
 * Locate the gensrc and genbin folders.  If everything worked properly they should be found in the root of the project directory. 
   * If you can't see them, attempt to find them in your $HOME directory.  If it is there, report the bug and move the directories next to the jar file
 * Compile and run the generated java:
