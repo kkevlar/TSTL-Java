@@ -11,7 +11,7 @@ public class TstlConstants
 	public static final String COMMENT_AUTO_GEN_CODE = "//This is auto-generated code.  Changes will be overwritten.";
 	public static final String COMMENT_CORE_FUNCTIONALITY_IMPORT = " //import for SUT.java core functionality";
 	public static final String COMMENT_TSTL_SOURCE_IMPORT = " //imported from .tstl source file";
-	
+
 	public static final String CONSTRUCT_ACTION_ARRAY_INSTANCE_VARIABLE = "actions = new Action[";	
 
 	public static final String DECLARATION_ACT_METHOD_ACTION_INTERFACE = "public void act();";	
@@ -168,22 +168,33 @@ public class TstlConstants
 	}
 	public static String excapeString(String s)
 	{
-		boolean finish = true;
-		for(int i = 0; i < s.length(); i++)
+		
+		if(s.contains("\""))
 		{
-			char c = s.charAt(i);
-			String rep = null;
-			if(c == '"')				
+			while(true)
 			{
-				rep = "\\" + c+"";
-				s.replace(c+"", rep);
-				finish = false;
+				boolean restart = false;
+				for(int i = 0; i < s.length(); i++)
+				{
+					String rep = null;
+					if(s.charAt(i) == '"')
+						System.out.println(s + " ~ " + s.charAt(i));
+					if(s.charAt(i) == '"' && !(s.charAt(i-1) == '\\'))				
+					{
+						rep = "\\" + s.charAt(i)+"";
+						s = s.replace(s.charAt(i)+"", rep);
+						restart = true;
+						break;
+					}
+				}
+				if(restart)
+					continue;
+				break;
 			}
 		}
-		if(!finish)
-			s = TstlConstants.excapeString(s);
+		
 		return s;
 	}
-	
+
 
 }

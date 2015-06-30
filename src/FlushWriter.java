@@ -63,7 +63,6 @@ public class FlushWriter extends PrintWriter {
 	@Override
 	public void print(String s)
 	{
-		s = TstlConstants.excapeString(s);
 		super.print(s);
 		this.flush();
 	}
