@@ -66,8 +66,7 @@ public class RandomTester
 					String check = sut.check();
 					if(check!= null)
 					{
-						println("Check failed! \"" + check + "\" failed to evaluate true!");
-						hasError(info);
+						throw new TstlException("Check failed! \"" + check + "\" failed to evaluate true!");						
 					}
 					else if (print && testCount +1==MAX_TESTS )
 						println(info);
@@ -76,7 +75,8 @@ public class RandomTester
 				catch(Exception ex)
 				{
 					ex.printStackTrace();
-					println("EXCEPTION!! Heres the info:");
+					println("EXCEPTION!! Message: " + ex.getMessage());
+					println("Heres the info: ");
 					hasError(info);				
 				}
 				testCount++;
