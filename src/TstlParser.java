@@ -13,7 +13,7 @@ public class TstlParser implements Runnable
 	private FlushWriter writer;
 	private String[] args;
 	private PoolEntry[] poolEntries;
-	private long countActionsPrinted;
+	private int countActionsPrinted;
 	private PropertyEntry[] propEntries;
 
 	public static void main(String[] args) throws URISyntaxException

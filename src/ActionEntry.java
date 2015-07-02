@@ -273,7 +273,7 @@ public class ActionEntry extends RepeatablesContainer
 		ret += save;
 		return ret;
 	}
-	public String createActionClass(int[] poolValues, long countActionsPrinted)
+	public String createActionClass(int[] poolValues, int countActionsPrinted)
 	{
 		String ret = TstlConstants.DECLARATION_ACTION_CLASS + "\n";
 		ret += this.makeIdMethod(countActionsPrinted);
@@ -285,9 +285,9 @@ public class ActionEntry extends RepeatablesContainer
 		return ret;
 	}
 
-	private String makeIdMethod(long countActionsPrinted) 
+	private String makeIdMethod(int countActionsPrinted) 
 	{
-		String ret = "public long id()"+"\n"
+		String ret = "public int id()"+"\n"
 				+ "{"+"\n";
 		ret += "return " + countActionsPrinted+";"+"\n";
 		ret += "}";
