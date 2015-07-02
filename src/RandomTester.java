@@ -16,7 +16,6 @@ public class RandomTester
 	private SUT sut;
 	private long[] actTrace;
 
-
 	private void go() 
 	{
 		window = new OutputWindow(this.getClass().getName());
@@ -60,25 +59,11 @@ public class RandomTester
 				if(print)
 					println(sut.getActions()[testNum].name().trim());
 				String info = sut.getActions()[testNum].getAllInfo();
-				try
-				{
-					sut.getActions()[testNum].act();
-					String check = sut.check();
-					if(check!= null)
-					{
-						throw new TstlException("Check failed! \"" + check + "\" failed to evaluate true!");						
-					}
-					else if (print && testCount +1==MAX_TESTS )
-						println(info);
-					actTrace[testCount] = sut.getActions()[testNum].id();
-				}
-				catch(Exception ex)
-				{
-					ex.printStackTrace();
-					println("EXCEPTION!! Message: " + ex.getMessage());
-					println("Heres the info: ");
-					hasError(info);				
-				}
+				boolean success = executeAct(sut.getActions()[testNum], info);
+				if(!success)
+					testFailed();
+				else if (print && testCount +1==MAX_TESTS )
+					println(info);
 				testCount++;
 			}
 			loopCount++;
@@ -88,6 +73,41 @@ public class RandomTester
 		println("-Final test only got to " + testCount + " actions.");
 	}
 
+
+	private void testFailed()
+	{
+		//TODO unimplemented
+
+	}
+
+
+	public boolean executeAct(Action action, String info)
+	{
+		try
+		{
+			action.act();
+			String check = sut.check();
+			if(check!= null)
+			{
+				throw new TstlException("Check failed! \"" + check + "\" failed to evaluate true!");						
+			}
+			return true;
+		}
+		catch(Exception ex)
+		{
+			ex.printStackTrace();
+			println("EXCEPTION!! Message: " + ex.getMessage());
+			println("Heres the info: ");
+			hasError(info);
+			return false;
+		}
+	}
+	public boolean executeAct(Action action)
+	{
+		return this.executeAct(action, action.getAllInfo());
+	}
+
+
 	private void hasError(String info) 
 	{
 		println(info);
@@ -96,7 +116,6 @@ public class RandomTester
 
 	private void println() 
 	{
-
 		println("");
 	}
 
