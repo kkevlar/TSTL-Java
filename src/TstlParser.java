@@ -272,7 +272,7 @@ public class TstlParser implements Runnable
 				public void actOnRepValues(int[] vals, RepeatablesContainer cont)
 				{
 					ActionEntry aEntry = (ActionEntry) cont;
-					writer.println(aEntry.createActionClass(vals));	
+					writer.println(aEntry.createActionClass(vals, countActionsPrinted));	
 					writer.println("actions[" + countActionsPrinted + "] = action;");
 					countActionsPrinted++;					
 				}

@@ -14,7 +14,7 @@ public class RandomTester
 
 	private OutputWindow window;
 	private SUT sut;
-	private int[] actTrace;
+	private long[] actTrace;
 
 
 	private void go() 
@@ -40,7 +40,7 @@ public class RandomTester
 		while(timeInBounds(startTime, timeout))
 		{
 			sut.reset();
-			actTrace = new int[maxTests];
+			actTrace = new long[maxTests];
 			testCount = 0;
 			boolean print = System.currentTimeMillis() - printTime > TEST_PRINT_DELAY;
 			if(print)
@@ -71,7 +71,7 @@ public class RandomTester
 					}
 					else if (print && testCount +1==MAX_TESTS )
 						println(info);
-					actTrace[testCount] = testNum;
+					actTrace[testCount] = sut.getActions()[testNum].id();
 				}
 				catch(Exception ex)
 				{

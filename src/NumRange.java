@@ -65,7 +65,19 @@ public class NumRange implements Repeatable
 	public String toString() 
 	{
 		return "NumRange [low=" + low + "- hi=" + hi + "]";
-	}	
+	}
+	public String getAsTstl()
+	{
+		String ret = "";
+		ret += TstlConstants.IDENTIFIER_TSTLVARIABLE;
+		ret += TstlConstants.IDENTIFIER_NUMRANGE_LEFT;
+		ret += this.low;
+		ret += TstlConstants.IDENTIFIER_NUMRANGE_MID;
+		ret += this.hi;
+		ret += TstlConstants.IDENTIFIER_NUMRANGE_RIGHT;
+		ret += TstlConstants.IDENTIFIER_TSTLVARIABLE;
+		return ret;
+	}
 }
 
 
