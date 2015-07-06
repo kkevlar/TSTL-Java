@@ -120,22 +120,6 @@ public class RandomTester
 	}
 
 
-	public TestResultBundle executeTest(int[] testIds)
-	{
-		sut.reset();
-		for (int i = 0; i < testIds.length; i++)
-		{
-			Action action = TstlConstants.getActionById(sut,testIds[i]);
-			boolean enabled = action.enabled();
-			if(!enabled)
-				return new TestResultBundle(TestResult.IMPOSSIBLE,testIds[i]);
-			boolean success = this.executeAct(action,false);
-			if(!success)
-				return new TestResultBundle(TestResult.FAIL, testIds[i]);
-		}
-		return new TestResultBundle(TestResult.NOFAIL,-1);
-	}
-	
 	
 	private void println() 
 	{

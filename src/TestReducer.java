@@ -5,7 +5,6 @@ public class TestReducer
 	private int[] originalTestIds;	
 	private RandomTester tester;
 	private int[] reducedTest;
-	
 	public TestReducer(SUTInterface sut, int[] originalTestIds, RandomTester tester)
 	{
 		super();
@@ -15,25 +14,33 @@ public class TestReducer
 	}
 	public int[] reduceTest()
 	{
-		reduceTest(originalTestIds);
+		//need to implement
 		return this.reducedTest;
 	}
+	
+	public boolean reduceBinarily(int numPieces)
+	{
+		//need to implement
+		return false;
+	}
+	
+	/* old code
 	private void reduceTest(int[] testIds)
 	{
 		TestResultBundle bundle = tester.executeTest(testIds);
 		if(bundle.getResult() != TestResult.FAIL)
 		{
-			System.out.println("nofail");
+			//System.out.println("nofail");
 			return;
 		}
 		else if ((reducedTest == null || testIds.length < reducedTest.length) && testIds.length > 0)
 		{
 			reducedTest = testIds;
-			System.out.println("fail and set");
+			//System.out.println("fail and set");
 		}
 		else
 		{
-			System.out.println("fail noset");
+			//System.out.println("fail noset");
 		}
 			
 		for (int x = 0; x < testIds.length; x++) 
@@ -49,7 +56,8 @@ public class TestReducer
 			reduceTest(newTestIds);
 		}
 	}
-	/* need?
+	
+	
 	private boolean isTestOk(int[] actionIds)
 	{
 		if(actionIds[actionIds.length - 1] != originalTestIds[originalTestIds.length - 1])
