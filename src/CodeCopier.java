@@ -9,7 +9,7 @@ import java.util.ArrayList;
 
 public class CodeCopier
 {
-	public void copyCode(String className) throws IOException
+	private void copyCode(String className) throws IOException
 	{
 		ArrayList<String> lines = new ArrayList<String>();
 		InputStream stream = this.getClass().getResourceAsStream("res/" + className + ".nocompile");
@@ -45,5 +45,32 @@ public class CodeCopier
 		}
 		writer.flush();
 		writer.close();
+	}
+
+	public void copyCode() throws IOException
+	{
+		ArrayList<String> lines = new ArrayList<String>();
+		InputStream stream = this.getClass().getResourceAsStream("res/" + "names");
+		if(stream == null)
+		{
+			System.out.println("null");
+			System.exit(-1);
+		}
+		BufferedReader reader = new BufferedReader(new InputStreamReader(stream));
+		while(true)
+		{
+			String line = reader.readLine();
+			if(line != null)
+				lines.add(line);
+			else
+				break;
+		}
+		reader.close();
+
+		for (int i = 0; i < lines.size(); i++) 
+		{
+			if(!lines.get(i).equals("SUT.java"))
+				this.copyCode(lines.get(i));
+		}		
 	}
 }

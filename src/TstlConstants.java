@@ -62,17 +62,7 @@ public class TstlConstants
 
 	public static final String IDENTIFIER_PROPERTY = "property:";
 
-	private static void copyCode(CodeCopier cc) throws IOException 
-	{
-		cc.copyCode("FlushWriter.java");
-		cc.copyCode("Action.java");
-		cc.copyCode("SUTInterface.java");
-		cc.copyCode("LabelFormatter.java");
-		cc.copyCode("RandomTester.java");
-		cc.copyCode("OutputWindow.java");
-		cc.copyCode("TstlConstants.java");
-		cc.copyCode("TestReducer.java");
-	}
+	
 	public static String getAppDataDir()
 	{
 		String os = System.getProperty("os.name","generic").toLowerCase(Locale.ENGLISH);
@@ -117,7 +107,7 @@ public class TstlConstants
 	{
 		CodeCopier cc = new CodeCopier();		
 		try {
-			copyCode(cc);
+			cc.copyCode();
 		} catch (IOException e) 
 		{
 			e.printStackTrace();
