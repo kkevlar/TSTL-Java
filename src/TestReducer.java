@@ -5,16 +5,16 @@ public class TestReducer
 {
 	private SUTInterface sut;
 	private int[] originalTestIds;	
-	private RandomTester tester;
+	private Tester tester;
 	private ArrayList<Integer> reducedTest;
 	private boolean shouldAppendFailingTest;
-	public TestReducer(SUTInterface sut, int[] originalTestIds, RandomTester tester)
+	public TestReducer(SUTInterface sut, int[] actTraceArray, Tester tester2)
 	{
 		super();
-		setUp(sut, originalTestIds, tester);
+		setUp(sut, actTraceArray, tester2);
 	}
 
-	public TestReducer(SUTInterface sut, ArrayList<Integer> actTrace, RandomTester tester)
+	public TestReducer(SUTInterface sut, ArrayList<Integer> actTrace, Tester tester)
 	{
 		super();
 		int[] actTraceArray = new int[actTrace.size()];
@@ -25,7 +25,7 @@ public class TestReducer
 		setUp(sut,actTraceArray,tester);
 	}
 
-	private void setUp(SUTInterface sut, int[] actTraceArray, RandomTester tester) 
+	private void setUp(SUTInterface sut, int[] actTraceArray, Tester tester) 
 	{
 		this.sut = sut;
 		this.originalTestIds = actTraceArray;
