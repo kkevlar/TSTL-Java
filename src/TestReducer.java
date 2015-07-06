@@ -75,6 +75,7 @@ public class TestReducer
 	private boolean reduceUsingPieces(int numPieces, ArrayList<Integer> test)
 	{
 		ArrayList<Integer> newTest;
+		int lastId = test.get(test.size() -1);
 		int actionCount = test.size();
 		boolean reduced = false;
 		for (int x = 0; x < numPieces; x++) 
@@ -87,6 +88,9 @@ public class TestReducer
 				if(y < cutOut || y > cutIn)
 					newTest.add(test.get(y));		
 			}
+			//System.out.println("x:" + x + " numPieces:" + numPieces+ " cutOut:" + cutOut + " cutIn:" + cutIn + " size:" + test.size());
+			if(x != numPieces-1)
+			newTest.add(lastId);
 			reduced = runTest(newTest);
 			if(reduced)
 				break;
@@ -97,6 +101,7 @@ public class TestReducer
 	private boolean runTest(ArrayList<Integer> actionIds)
 	{		
 		boolean testFailed = false;
+		int oldSize = actionIds.size();
 		ArrayList<Integer> newTest = new ArrayList<Integer>();
 		sut.reset();
 		for (int i = 0; i < actionIds.size(); i++) 
@@ -115,6 +120,9 @@ public class TestReducer
 		}
 		if(testFailed)
 			reducedTest = newTest;		
-		return testFailed;
+		if(newTest.size() != oldSize)
+			return testFailed;
+		else
+			return false;
 	}
 }

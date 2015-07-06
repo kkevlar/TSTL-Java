@@ -17,13 +17,13 @@ public class RandomTester
 	private void go() 
 	{
 		sut = new SUT();
-		println(String.format("%-65s " + "enabled:","Actions:"));
-		println();
+		//println(String.format("%-65s " + "enabled:","Actions:"));
+		//println();
 		for(int i = 0; i < sut.getActions().length; i++)
 		{
 			boolean enabled = sut.getActions()[i].enabled();
 			String name = sut.getActions()[i].name().trim();
-			println(String.format("%-65s " + enabled,name));
+			//println(String.format("%-65s " + enabled,name));
 		}
 		println("Initializing test...");
 		long startTime = System.currentTimeMillis();
@@ -38,7 +38,7 @@ public class RandomTester
 			sut.reset();
 			actTrace = new ArrayList<Integer>();
 			testCount = 0;
-			boolean print = System.currentTimeMillis() - printTime > TEST_PRINT_DELAY;
+			boolean print = false;//System.currentTimeMillis() - printTime > TEST_PRINT_DELAY;
 			if(print)
 			{
 				println(">>Test Number " + loopCount);
@@ -74,6 +74,11 @@ public class RandomTester
 
 	private void testFailed()
 	{
+		try {
+			Thread.sleep(300);
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
 		System.out.println("test failed. Reducing....");
 		TestReducer reducer = new TestReducer(sut, actTrace, this);
 		int[] actionIds = reducer.getReducedTestIds();
