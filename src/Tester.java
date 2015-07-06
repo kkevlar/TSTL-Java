@@ -2,19 +2,14 @@ import java.util.ArrayList;
 
 public abstract class Tester 
 {
-
-	private static final int MAX_TESTS = 1000;
-	private static final long TIMEOUT = 3*60*1000;
-	private static final long TEST_PRINT_DELAY = 30*1000;
-
 	private SUTInterface sut;
 	private ArrayList<Integer> actTrace;
 	private int ignoreCheckValue = 0;
 	private long testPrintDelay = 10000;
 	private int testsPerCycle = 200;
-	private long timeout;
+	private long timeout = 60000 ;
 	
-	private void go() 
+	public void go() 
 	{
 		sut = new SUT();
 		runTests(this.timeout,sut);
