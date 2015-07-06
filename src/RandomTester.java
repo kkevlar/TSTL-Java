@@ -3,7 +3,7 @@ import java.util.ArrayList;
 public class RandomTester 
 {
 
-	private static final int MAX_TESTS = 9;
+	private static final int MAX_TESTS = 1000;
 	private static final long TIMEOUT = 3*60*1000;
 	private static final long TEST_PRINT_DELAY = 30*1000;
 	public static void main(String[] args) 
@@ -11,13 +11,11 @@ public class RandomTester
 		new RandomTester().go();
 	}
 
-	private OutputWindow window;
-	private SUT sut;
+	private SUTInterface sut;
 	private ArrayList<Integer> actTrace;
 	
 	private void go() 
 	{
-		//window = new OutputWindow(this.getClass().getName());
 		sut = new SUT();
 		println(String.format("%-65s " + "enabled:","Actions:"));
 		println();
@@ -97,9 +95,9 @@ public class RandomTester
 		{
 			action.act();
 			String check = sut.check();
-			if(check!= null)
+			if(check != null)
 			{
-				throw new TstlException("Check failed! \"" + check + "\" failed to evaluate true!");						
+				throw new TstlException("Check failed! \"" + check + "\" failed to evaluate true!");
 			}
 			return true;
 		}
@@ -130,7 +128,6 @@ public class RandomTester
 
 	private void println(String string) 
 	{
-		window.println(string);
 		System.out.println(string);		
 	}
 

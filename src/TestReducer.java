@@ -44,6 +44,7 @@ public class TestReducer
 	}
 	public void reduceTest()
 	{ 
+		//System.out.println("-Starting Reduce Test. " + this.originalTestIds.length);
 		if(reducedTest == null)
 		{
 			reducedTest = new ArrayList<Integer>();
@@ -55,6 +56,7 @@ public class TestReducer
 		boolean fullyReduced = false;
 		while(!fullyReduced)
 		{
+			//System.out.println("Restarting piece count");
 			int pieceCount = 1;			
 			boolean reduced = false;
 			while(!reduced)
@@ -63,13 +65,15 @@ public class TestReducer
 				if(pieceCount > reducedTest.size())
 					pieceCount = reducedTest.size();
 				reduced = reduceUsingPieces(pieceCount, reducedTest);
-				if(pieceCount > reducedTest.size() && !reduced)
+				//System.out.println("Reduced? " + reduced + " pieceCount:" + pieceCount);
+				if(pieceCount == reducedTest.size() && !reduced)
 				{
 					fullyReduced = true;
 					break;
 				}
 			}		
 		}
+		//System.out.println(reducedTest.size());
 	}
 
 	private boolean reduceUsingPieces(int numPieces, ArrayList<Integer> test)
@@ -84,10 +88,11 @@ public class TestReducer
 			int cutIn = (int) (((x+1)+0.0)*((actionCount+0.0)/(numPieces+0.0))) -1;
 			for (int y = 0; y < actionCount; y++)
 			{
-				if(y < cutOut && y > cutIn)
-					newTest.add(y);		
+				if(y < cutOut || y > cutIn)
+					newTest.add(test.get(y));		
 			}
 			reduced = runTest(newTest);
+			//System.out.println("Attempted to runTest. reduced?" + reduced + " numPieces:" + numPieces + " x:" + x);
 			if(reduced)
 				break;
 		}
@@ -95,7 +100,7 @@ public class TestReducer
 	}
 
 	private boolean runTest(ArrayList<Integer> actionIds)
-	{
+	{		
 		boolean testFailed = false;
 		ArrayList<Integer> newTest = new ArrayList<Integer>();
 		sut.reset();
@@ -105,17 +110,20 @@ public class TestReducer
 			if(action.enabled())
 			{
 				boolean success = tester.executeAct(action, false);
+				//System.out.println(action.getAllInfo());
 				newTest.add(actionIds.get(i));
 				if(!success)
 				{
+					//System.out.println("A test has failed.");
 					testFailed = true;
 					break;
 				}
 			}
 		}
+		//System.out.println("testFailed? "+  testFailed);
 		if(testFailed)
 			reducedTest = newTest;		
-		return testFailed;		
+		return testFailed;
 	}
 
 	/* old code
