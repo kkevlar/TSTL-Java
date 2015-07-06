@@ -8,6 +8,7 @@ public class TstlException extends Exception {
 		message = string;
 	}
 
+	@Override
 	public String getMessage() 
 	{
 		return message;

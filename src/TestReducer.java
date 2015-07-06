@@ -12,7 +12,7 @@ public class TestReducer
 		super();
 		setUp(sut, originalTestIds, tester);
 	}
-	
+
 	public TestReducer(SUTInterface sut, ArrayList<Integer> actTrace, RandomTester tester)
 	{
 		super();
@@ -44,7 +44,6 @@ public class TestReducer
 	}
 	public void reduceTest()
 	{ 
-		//System.out.println("-Starting Reduce Test. " + this.originalTestIds.length);
 		if(reducedTest == null)
 		{
 			reducedTest = new ArrayList<Integer>();
@@ -56,7 +55,6 @@ public class TestReducer
 		boolean fullyReduced = false;
 		while(!fullyReduced)
 		{
-			//System.out.println("Restarting piece count");
 			int pieceCount = 1;			
 			boolean reduced = false;
 			while(!reduced)
@@ -65,7 +63,6 @@ public class TestReducer
 				if(pieceCount > reducedTest.size())
 					pieceCount = reducedTest.size();
 				reduced = reduceUsingPieces(pieceCount, reducedTest);
-				//System.out.println("Reduced? " + reduced + " pieceCount:" + pieceCount);
 				if(pieceCount == reducedTest.size() && !reduced)
 				{
 					fullyReduced = true;
@@ -73,7 +70,6 @@ public class TestReducer
 				}
 			}		
 		}
-		//System.out.println(reducedTest.size());
 	}
 
 	private boolean reduceUsingPieces(int numPieces, ArrayList<Integer> test)
@@ -92,7 +88,6 @@ public class TestReducer
 					newTest.add(test.get(y));		
 			}
 			reduced = runTest(newTest);
-			//System.out.println("Attempted to runTest. reduced?" + reduced + " numPieces:" + numPieces + " x:" + x);
 			if(reduced)
 				break;
 		}
@@ -110,74 +105,16 @@ public class TestReducer
 			if(action.enabled())
 			{
 				boolean success = tester.executeAct(action, false);
-				//System.out.println(action.getAllInfo());
 				newTest.add(actionIds.get(i));
 				if(!success)
 				{
-					//System.out.println("A test has failed.");
 					testFailed = true;
 					break;
 				}
 			}
 		}
-		//System.out.println("testFailed? "+  testFailed);
 		if(testFailed)
 			reducedTest = newTest;		
 		return testFailed;
 	}
-
-	/* old code
-	private void reduceTest(int[] testIds)
-	{
-		TestResultBundle bundle = tester.executeTest(testIds);
-		if(bundle.getResult() != TestResult.FAIL)
-		{
-			//System.out.println("nofail");
-			return;
-		}
-		else if ((reducedTest == null || testIds.length < reducedTest.length) && testIds.length > 0)
-		{
-			reducedTest = testIds;
-			//System.out.println("fail and set");
-		}
-		else
-		{
-			//System.out.println("fail noset");
-		}
-
-		for (int x = 0; x < testIds.length; x++) 
-		{
-			int[] newTestIds = new int[testIds.length-1];
-			for (int y = 0; y < testIds.length-1; y++) 
-			{
-				if(y < x)
-					newTestIds[y] = testIds[y];
-				else
-					newTestIds[y] = testIds[y+1];
-			}
-			reduceTest(newTestIds);
-		}
-	}
-
-
-	private boolean isTestOk(int[] actionIds)
-	{
-		if(actionIds[actionIds.length - 1] != originalTestIds[originalTestIds.length - 1])
-			return false;
-		sut.reset();
-		for (int i = 0; i < actionIds.length -1; i++) 
-		{
-			Action action = TstlConstants.getActionById(sut,actionIds[i]);
-			if(!(action.enabled()))
-				return false;
-			action.act();
-		}
-		if(TstlConstants.getActionById(sut,actionIds[actionIds.length-1]).enabled())
-			return true;
-		else
-			return false;
-	}	
-	 */
-
-
 }
