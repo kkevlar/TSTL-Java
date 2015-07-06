@@ -28,5 +28,8 @@ java RandomTester
 ```
 Care! The commands above will break horribly if your working directory is not set the the root of the project folder in command line
 
-Happy testing! Please report any bugs under "issues" in GitHub
+###Alternative TSTL loading:
+It might fix parsing problems or be more convienient to provide the absolute path to the .tstl source file as the first command line argument when running TstlParser.  This path will bypass the need to search in the working directory for a .tstl file.
+
+**Happy testing! Please report any bugs under "issues" in GitHub**
 
