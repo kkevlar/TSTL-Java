@@ -1,3 +1,5 @@
+import java.util.ArrayList;
+
 public class RandomTester 
 {
 
@@ -11,7 +13,7 @@ public class RandomTester
 
 	private OutputWindow window;
 	private SUT sut;
-	private int[] actTrace;
+	private ArrayList<Integer> actTrace;
 	
 	private void go() 
 	{
@@ -36,7 +38,7 @@ public class RandomTester
 		while(timeInBounds(startTime, timeout))
 		{
 			sut.reset();
-			actTrace = new int[maxTests];
+			actTrace = new ArrayList<Integer>();
 			testCount = 0;
 			boolean print = System.currentTimeMillis() - printTime > TEST_PRINT_DELAY;
 			if(print)
@@ -56,7 +58,7 @@ public class RandomTester
 				if(print)
 					println(sut.getActions()[testNum].name().trim());
 				String info = sut.getActions()[testNum].getAllInfo();
-				actTrace[testCount] = sut.getActions()[testNum].id();
+				actTrace.add(sut.getActions()[testNum].id());
 				boolean success = executeAct(sut.getActions()[testNum], info, true);
 				if(!success)
 					testFailed();
@@ -76,7 +78,7 @@ public class RandomTester
 	{
 		System.out.println("test failed. Reducing....");
 		TestReducer reducer = new TestReducer(sut, actTrace, this);
-		int[] actionIds = reducer.reduceTest();
+		int[] actionIds = reducer.getReducedTestIds();
 		System.out.println("Test reduced. Heres all info.");
 		for (int i = 0; i < actionIds.length; i++) 
 		{
