@@ -30,10 +30,8 @@ public abstract class Tester
 		System.out.println("Test reduced. Heres all info.");
 		for (int i = 0; i < actionIds.length; i++) 
 		{
-			String info = sut.getActions()[actionIds[i]].getAllInfo();
-			System.out.println("info for " + i + ":");
-			System.out.println(info);
-			System.out.println();
+			String name = sut.getActions()[actionIds[i]].name();
+			System.out.println(name.trim());
 		}
 		System.exit(-1);
 	}

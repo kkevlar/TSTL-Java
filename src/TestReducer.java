@@ -60,7 +60,7 @@ public class TestReducer
 			boolean reduced = false;
 			while(!reduced)
 			{
-				pieceCount *= 2;
+				pieceCount = reducedTest.size();// *= 2;
 				if(pieceCount > reducedTest.size())
 					pieceCount = reducedTest.size();
 				reduced = reduceUsingPieces(pieceCount, reducedTest);
@@ -89,14 +89,27 @@ public class TestReducer
 				if(y < cutOut || y > cutIn)
 					newTest.add(test.get(y));		
 			}
-			//System.out.println("x:" + x + " numPieces:" + numPieces+ " cutOut:" + cutOut + " cutIn:" + cutIn + " size:" + test.size());
+			System.out.println("x:" + x + " numPieces:" + numPieces+ " cutOut:" + cutOut + " cutIn:" + cutIn + " size:" + test.size());
 			if(x != numPieces-1 && getShouldAppendFailingTest())
 				newTest.add(lastId);
+			System.out.println("-TRIAL: " + " numpieces:" + numPieces + " pieceCount:" + x);
+			printTest(newTest);
 			reduced = runTest(newTest);
+			if(reduced)
+			System.out.println("WAS REDUCED");
 			if(reduced)
 				break;
 		}
 		return reduced;
+	}
+
+	private void printTest(ArrayList<Integer> newTest) 
+	{
+		for (int i = 0; i < newTest.size(); i++)
+		{
+			Action action = TstlConstants.getActionById(sut, newTest.get(i));
+			System.out.println("--"+action.name().trim());
+		}		
 	}
 
 	private boolean runTest(ArrayList<Integer> actionIds)
