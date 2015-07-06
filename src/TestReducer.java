@@ -110,7 +110,7 @@ public class TestReducer
 			Action action = TstlConstants.getActionById(sut, actionIds.get(i));
 			if(action.enabled())
 			{
-				boolean success = tester.executeAct(action, false);
+				boolean success = tester.executeAct(tester.getIgnoreCheckValue() < 1, action, false);
 				newTest.add(actionIds.get(i));
 				if(!success)
 				{

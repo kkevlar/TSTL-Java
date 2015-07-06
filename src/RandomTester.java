@@ -13,7 +13,7 @@ public class RandomTester
 
 	private SUTInterface sut;
 	private ArrayList<Integer> actTrace;
-	
+	private int ignoreCheckValue = 0;
 	private void go() 
 	{
 		sut = new SUT();
@@ -57,7 +57,7 @@ public class RandomTester
 					println(sut.getActions()[testNum].name().trim());
 				String info = sut.getActions()[testNum].getAllInfo();
 				actTrace.add(sut.getActions()[testNum].id());
-				boolean success = executeAct(sut.getActions()[testNum], info, true);
+				boolean success = executeAct(this.getIgnoreCheckValue() < 2, sut.getActions()[testNum], true);
 				if(!success)
 					testFailed();
 				else if (print && testCount +1==MAX_TESTS )
@@ -94,11 +94,12 @@ public class RandomTester
 	}
 
 
-	public boolean executeAct(Action action, String info, boolean print)
+	public boolean executeAct(boolean doCheck, Action action, boolean print)
 	{
 		try
 		{
 			action.act();
+			
 			String check = sut.check();
 			if(check != null)
 			{
@@ -112,18 +113,10 @@ public class RandomTester
 			{
 				ex.printStackTrace();
 				println("EXCEPTION!! Message: " + ex.getMessage());
-				println("Heres the info: ");
-				//hasError(info);
 			}
 			return false;
 		}
 	}
-	
-	public boolean executeAct(Action action, boolean print)
-	{
-		return this.executeAct(action, action.getAllInfo(), print);
-	}
-
 
 	
 	private void println() 
@@ -139,5 +132,15 @@ public class RandomTester
 	private boolean timeInBounds(long startTime, long timeout) 
 	{		
 		return System.currentTimeMillis() - startTime < timeout;
+	}
+
+
+	public int getIgnoreCheckValue() {
+		return ignoreCheckValue;
+	}
+
+
+	public void setIgnoreCheckValue(int ignoreCheckValue) {
+		this.ignoreCheckValue = ignoreCheckValue;
 	}
 }
