@@ -1,6 +1,3 @@
-
-
-
 public class RandomTester 
 {
 
@@ -15,7 +12,7 @@ public class RandomTester
 	private OutputWindow window;
 	private SUT sut;
 	private int[] actTrace;
-
+	
 	private void go() 
 	{
 		//window = new OutputWindow(this.getClass().getName());
@@ -111,22 +108,35 @@ public class RandomTester
 				ex.printStackTrace();
 				println("EXCEPTION!! Message: " + ex.getMessage());
 				println("Heres the info: ");
-				hasError(info);
+				//hasError(info);
 			}
 			return false;
 		}
 	}
+	
 	public boolean executeAct(Action action, boolean print)
 	{
 		return this.executeAct(action, action.getAllInfo(), print);
 	}
 
 
-	private void hasError(String info) 
+	public TestResultBundle executeTest(int[] testIds)
 	{
-		println(info);
+		sut.reset();
+		for (int i = 0; i < testIds.length; i++)
+		{
+			Action action = TstlConstants.getActionById(sut,testIds[i]);
+			boolean enabled = action.enabled();
+			if(!enabled)
+				return new TestResultBundle(TestResult.IMPOSSIBLE,testIds[i]);
+			boolean success = this.executeAct(action,false);
+			if(!success)
+				return new TestResultBundle(TestResult.FAIL, testIds[i]);
+		}
+		return new TestResultBundle(TestResult.NOFAIL,-1);
 	}
-
+	
+	
 	private void println() 
 	{
 		println("");

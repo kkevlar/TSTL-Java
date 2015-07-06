@@ -5,22 +5,7 @@ public class TestReducer
 	private int[] originalTestIds;	
 	private RandomTester tester;
 	private int[] reducedTest;
-	private enum TestResult {NOFAIL, FAIL, IMPOSSIBLE};
-	private class TestResultBundle
-	{
-		private TestResult result;
-		private int id;
-		public TestResultBundle(TestResult result, int id) {
-			super();
-			this.result = result;
-			this.id = id;
-		}
-		public TestResult getResult() {
-			return result;
-		}
-		
-		
-	}
+	
 	public TestReducer(SUTInterface sut, int[] originalTestIds, RandomTester tester)
 	{
 		super();
@@ -35,7 +20,7 @@ public class TestReducer
 	}
 	private void reduceTest(int[] testIds)
 	{
-		TestResultBundle bundle = this.executeTest(testIds);
+		TestResultBundle bundle = tester.executeTest(testIds);
 		if(bundle.getResult() != TestResult.FAIL)
 		{
 			System.out.println("nofail");
@@ -64,21 +49,7 @@ public class TestReducer
 			reduceTest(newTestIds);
 		}
 	}
-	private TestResultBundle executeTest(int[] testIds)
-	{
-		sut.reset();
-		for (int i = 0; i < testIds.length; i++)
-		{
-			Action action = this.getActionById(testIds[i]);
-			boolean enabled = action.enabled();
-			if(!enabled)
-				return new TestResultBundle(TestResult.IMPOSSIBLE,testIds[i]);
-			boolean success = tester.executeAct(action,false);
-			if(!success)
-				return new TestResultBundle(TestResult.FAIL, testIds[i]);
-		}
-		return new TestResultBundle(TestResult.NOFAIL,-1);
-	}
+	/* need?
 	private boolean isTestOk(int[] actionIds)
 	{
 		if(actionIds[actionIds.length - 1] != originalTestIds[originalTestIds.length - 1])
@@ -86,28 +57,17 @@ public class TestReducer
 		sut.reset();
 		for (int i = 0; i < actionIds.length -1; i++) 
 		{
-			Action action = getActionById(actionIds[i]);
+			Action action = TstlConstants.getActionById(sut,actionIds[i]);
 			if(!(action.enabled()))
 				return false;
 			action.act();
 		}
-		if(this.getActionById(actionIds[actionIds.length-1]).enabled())
+		if(TstlConstants.getActionById(sut,actionIds[actionIds.length-1]).enabled())
 			return true;
 		else
 			return false;
 	}	
+	*/
 
-	private Action getActionById(int l)
-	{
-		Action action = sut.getActions()[l];
-		if(action.id() == l)
-			return action;
-		for (int i = 0; i < sut.getActions().length; i++)
-		{
-			action = sut.getActions()[i];
-			if(action.id() == l)
-				return action;
-		}
-		return null;
-	}
+	
 }

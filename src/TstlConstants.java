@@ -70,6 +70,7 @@ public class TstlConstants
 		cc.copyCode("LabelFormatter.java");		
 		cc.copyCode("RandomTester.java");		
 		cc.copyCode("OutputWindow.java");
+		cc.copyCode("TstlConstants.java");
 	}
 	public static String getAppDataDir()
 	{
@@ -192,6 +193,19 @@ public class TstlConstants
 		}
 		
 		return s;
+	}
+	public static Action getActionById(SUTInterface sut, int id)
+	{
+		Action action = sut.getActions()[id];
+		if(action.id() == id)
+			return action;
+		for (int i = 0; i < sut.getActions().length; i++)
+		{
+			action = sut.getActions()[i];
+			if(action.id() == i)
+				return action;
+		}
+		return null;
 	}
 
 
