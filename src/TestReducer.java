@@ -7,6 +7,7 @@ public class TestReducer
 	private int[] originalTestIds;	
 	private RandomTester tester;
 	private ArrayList<Integer> reducedTest;
+	private boolean shouldAppendFailingTest;
 	public TestReducer(SUTInterface sut, int[] originalTestIds, RandomTester tester)
 	{
 		super();
@@ -89,8 +90,8 @@ public class TestReducer
 					newTest.add(test.get(y));		
 			}
 			//System.out.println("x:" + x + " numPieces:" + numPieces+ " cutOut:" + cutOut + " cutIn:" + cutIn + " size:" + test.size());
-			if(x != numPieces-1)
-			newTest.add(lastId);
+			if(x != numPieces-1 && getShouldAppendFailingTest())
+				newTest.add(lastId);
 			reduced = runTest(newTest);
 			if(reduced)
 				break;
@@ -124,5 +125,15 @@ public class TestReducer
 			return testFailed;
 		else
 			return false;
+	}
+
+	public boolean getShouldAppendFailingTest()
+	{
+		return shouldAppendFailingTest;
+	}
+
+	public void setShouldAppendFailingTest(boolean shouldAppendFailingTest)
+	{
+		this.shouldAppendFailingTest = shouldAppendFailingTest;
 	}
 }
