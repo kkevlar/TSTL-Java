@@ -13,7 +13,7 @@ public class TstlParser implements Runnable
 	private FlushWriter writer;
 	private String[] args;
 	private PoolEntry[] poolEntries;
-	private long countActionsPrinted;
+	private int countActionsPrinted;
 	private PropertyEntry[] propEntries;
 
 	public static void main(String[] args) throws URISyntaxException
@@ -272,7 +272,7 @@ public class TstlParser implements Runnable
 				public void actOnRepValues(int[] vals, RepeatablesContainer cont)
 				{
 					ActionEntry aEntry = (ActionEntry) cont;
-					writer.println(aEntry.createActionClass(vals));	
+					writer.println(aEntry.createActionClass(vals, countActionsPrinted));	
 					writer.println("actions[" + countActionsPrinted + "] = action;");
 					countActionsPrinted++;					
 				}

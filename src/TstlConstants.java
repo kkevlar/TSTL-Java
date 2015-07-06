@@ -64,12 +64,14 @@ public class TstlConstants
 
 	private static void copyCode(CodeCopier cc) throws IOException 
 	{
-		cc.copyCode("FlushWriter.java");	
-		cc.copyCode("Action.java");		
-		cc.copyCode("SUTInterface.java");		
-		cc.copyCode("LabelFormatter.java");		
-		cc.copyCode("RandomTester.java");		
+		cc.copyCode("FlushWriter.java");
+		cc.copyCode("Action.java");
+		cc.copyCode("SUTInterface.java");
+		cc.copyCode("LabelFormatter.java");
+		cc.copyCode("RandomTester.java");
 		cc.copyCode("OutputWindow.java");
+		cc.copyCode("TstlConstants.java");
+		cc.copyCode("TestReducer.java");
 	}
 	public static String getAppDataDir()
 	{
@@ -192,6 +194,19 @@ public class TstlConstants
 		}
 		
 		return s;
+	}
+	public static Action getActionById(SUTInterface sut, int id)
+	{
+		Action action = sut.getActions()[id];
+		if(action.id() == id)
+			return action;
+		for (int i = 0; i < sut.getActions().length; i++)
+		{
+			action = sut.getActions()[i];
+			if(action.id() == i)
+				return action;
+		}
+		return null;
 	}
 
 

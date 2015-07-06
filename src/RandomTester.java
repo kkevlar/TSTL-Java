@@ -1,10 +1,9 @@
-
-
+import java.util.ArrayList;
 
 public class RandomTester 
 {
 
-	private static final int MAX_TESTS = 200;
+	private static final int MAX_TESTS = 1000;
 	private static final long TIMEOUT = 3*60*1000;
 	private static final long TEST_PRINT_DELAY = 30*1000;
 	public static void main(String[] args) 
@@ -12,14 +11,11 @@ public class RandomTester
 		new RandomTester().go();
 	}
 
-	private OutputWindow window;
-	private SUT sut;
-	private int[] actTrace;
-
-
+	private SUTInterface sut;
+	private ArrayList<Integer> actTrace;
+	
 	private void go() 
 	{
-		window = new OutputWindow(this.getClass().getName());
 		sut = new SUT();
 		println(String.format("%-65s " + "enabled:","Actions:"));
 		println();
@@ -40,7 +36,7 @@ public class RandomTester
 		while(timeInBounds(startTime, timeout))
 		{
 			sut.reset();
-			actTrace = new int[maxTests];
+			actTrace = new ArrayList<Integer>();
 			testCount = 0;
 			boolean print = System.currentTimeMillis() - printTime > TEST_PRINT_DELAY;
 			if(print)
@@ -60,25 +56,12 @@ public class RandomTester
 				if(print)
 					println(sut.getActions()[testNum].name().trim());
 				String info = sut.getActions()[testNum].getAllInfo();
-				try
-				{
-					sut.getActions()[testNum].act();
-					String check = sut.check();
-					if(check!= null)
-					{
-						println("Check failed! \"" + check + "\" failed to evaluate true!");
-						hasError(info);
-					}
-					else if (print && testCount +1==MAX_TESTS )
-						println(info);
-					actTrace[testCount] = testNum;
-				}
-				catch(Exception ex)
-				{
-					ex.printStackTrace();
-					println("EXCEPTION!! Heres the info:");
-					hasError(info);				
-				}
+				actTrace.add(sut.getActions()[testNum].id());
+				boolean success = executeAct(sut.getActions()[testNum], info, true);
+				if(!success)
+					testFailed();
+				else if (print && testCount +1==MAX_TESTS )
+					println(info);
 				testCount++;
 			}
 			loopCount++;
@@ -88,21 +71,63 @@ public class RandomTester
 		println("-Final test only got to " + testCount + " actions.");
 	}
 
-	private void hasError(String info) 
+
+	private void testFailed()
 	{
-		println(info);
-		System.exit(-1);//temp
+		System.out.println("test failed. Reducing....");
+		TestReducer reducer = new TestReducer(sut, actTrace, this);
+		int[] actionIds = reducer.getReducedTestIds();
+		System.out.println("Test reduced. Heres all info.");
+		for (int i = 0; i < actionIds.length; i++) 
+		{
+			String info = sut.getActions()[actionIds[i]].getAllInfo();
+			System.out.println("info for " + i + ":");
+			System.out.println(info);
+			System.out.println();
+		}
+		System.exit(-1);
 	}
 
+
+	public boolean executeAct(Action action, String info, boolean print)
+	{
+		try
+		{
+			action.act();
+			String check = sut.check();
+			if(check != null)
+			{
+				throw new TstlException("Check failed! \"" + check + "\" failed to evaluate true!");
+			}
+			return true;
+		}
+		catch(Exception ex)
+		{
+			if(print)
+			{
+				ex.printStackTrace();
+				println("EXCEPTION!! Message: " + ex.getMessage());
+				println("Heres the info: ");
+				//hasError(info);
+			}
+			return false;
+		}
+	}
+	
+	public boolean executeAct(Action action, boolean print)
+	{
+		return this.executeAct(action, action.getAllInfo(), print);
+	}
+
+
+	
 	private void println() 
 	{
-
 		println("");
 	}
 
 	private void println(String string) 
 	{
-		window.println(string);
 		System.out.println(string);		
 	}
 

@@ -203,11 +203,22 @@ public class ActionEntry extends RepeatablesContainer
 				+"formatter.addToStorage"+"(\"MainLine/Name\",\"" + TstlConstants.excapeString(this.getActMainLine(vals)) + "\");"+ "\n"
 				+"formatter.addToStorage"+"(\"enabled()\",enabled()+\"\");"+ "\n";
 		for(int i = 0; i < this.getRepeatables().length; i++)
-		{
-			
-			String asJava = this.getRepeatables()[i].getAsJava(vals[i]);
-			ret += "formatter.addToStorage"+"(\"" + asJava+"\","+asJava+"+\"\");"+ "\n";
-		
+		{			
+			Repeatable rep = this.getRepeatables()[i];
+			String java;
+			String label;
+			if(rep instanceof NumRange)
+			{
+				NumRange numrange = (NumRange) rep;
+				java = numrange.getAsJava(vals[i]);
+				label = numrange.getAsTstl();
+			}
+			else
+			{				
+				java = rep.getAsJava(vals[i]);
+				label = rep.getAsJava(vals[i]);
+			}
+			ret += "formatter.addToStorage"+"(\"" + label+"\","+java+"+\"\");"+ "\n";		
 		}
 		ret += "return formatter.getAllFormatted();"+"\n";
 		ret += "}"+"\n";
@@ -262,9 +273,10 @@ public class ActionEntry extends RepeatablesContainer
 		ret += save;
 		return ret;
 	}
-	public String createActionClass(int[] poolValues)
+	public String createActionClass(int[] poolValues, int countActionsPrinted)
 	{
 		String ret = TstlConstants.DECLARATION_ACTION_CLASS + "\n";
+		ret += this.makeIdMethod(countActionsPrinted);
 		ret += this.makeGetNameMethod(poolValues);
 		ret += this.makeEnabledMethod(poolValues);
 		ret += this.makeActMethod(poolValues);
@@ -273,6 +285,14 @@ public class ActionEntry extends RepeatablesContainer
 		return ret;
 	}
 
+	private String makeIdMethod(int countActionsPrinted) 
+	{
+		String ret = "public int id()"+"\n"
+				+ "{"+"\n";
+		ret += "return " + countActionsPrinted+";"+"\n";
+		ret += "}";
+		return ret;
+	}
 	@Override
 	public String toString() 
 	{
