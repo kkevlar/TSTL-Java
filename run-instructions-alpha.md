@@ -5,7 +5,8 @@ Releases of Tstl-Java are best run through the included .jar archive or in an ID
 * Download the sample .tstl file included, or write your own .tstl file.
   * The .jar and the .tstl file must be in the same directory.
 * Open command prompt and set working directory to the root of the project folder.
-* Run the jar with `java -jar TSTL-Java-v3.0.1-alpha.jar`
+* Run the jar with `java -jar tstl-java.jar`
+  * Note: Depending on your version, the jar executable may be named something other than tstl-java.jar
 
 ###Generate code with eclipse:
 * Extract the source into a new project
@@ -13,7 +14,7 @@ Releases of Tstl-Java are best run through the included .jar archive or in an ID
 * Refresh the project files (Right-click project folder in Package Explorer).
 * Ensure a tstl source file can be found in the root of your project folder.
 * Run TstlParser in eclipse.
-  * Eclipse may warn you of errors. This is because RandomTester.java is dependent on SUT.java being in the /src folder. But because RandomTester is not used when parsing, just run TstlParser anyways.
+  * If eclipse complains to you about errors, ignore them
 * Navigate to the project folder in file explorer
 
 ###Running the generated code:
@@ -22,9 +23,9 @@ Releases of Tstl-Java are best run through the included .jar archive or in an ID
 * Compile and run the generated java:
 ```shell
 cd <path-to-project-folder>
-javac -d genbin -sourcepath gensrc gensrc/RandomTester.java
+javac -d genbin -sourcepath gensrc gensrc/TestRunner.java
 cd genbin
-java RandomTester
+java TestRunner
 ```
 Care! The commands above will break horribly if your working directory is not set the the root of the project folder in command line
 
