@@ -5,7 +5,8 @@ Releases of Tstl-Java are best run through the included .jar archive or in an ID
 * Download the sample .tstl file included, or write your own .tstl file.
   * The .jar and the .tstl file must be in the same directory.
 * Open command prompt and set working directory to the root of the project folder.
-* Run the jar with `java -jar TSTL-Java-v3.0.1-alpha.jar`
+* Run the jar with `java -jar tstl-java.jar`
+  * Note: Depending on your version, the jar executable may be named something other than tstl-java.jar
 
 ###Generate code with eclipse:
 * Extract the source into a new project
