@@ -14,7 +14,7 @@ Releases of Tstl-Java are best run through the included .jar archive or in an ID
 * Refresh the project files (Right-click project folder in Package Explorer).
 * Ensure a tstl source file can be found in the root of your project folder.
 * Run TstlParser in eclipse.
-  * Eclipse may warn you of errors. This is because TestRunner.java is dependent on SUT.java being in the /src folder. But because TestRunner is not used when parsing, just run TstlParser anyways.
+  * If eclipse complains to you about errors, ignore them
 * Navigate to the project folder in file explorer
 
 ###Running the generated code:
