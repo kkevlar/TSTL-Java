@@ -1,0 +1,8 @@
+pool: Integer %INT% 4
+pool: String %STRING% 5
+pool: Byte %BYTE% 1
+
+%INT% := %[1..999]%
+%STRING% := %STRING% + %INT%
+%STRING% := Integer.toString(%INT%)
+%STRING,1%.length() > 12 -> %BYTE% := Byte.parseByte(%STRING%)
