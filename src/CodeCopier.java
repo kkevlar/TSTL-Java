@@ -57,6 +57,10 @@ public class CodeCopier
 		InputStream stream = this.getClass().getResourceAsStream("res/" + "names");
 		if(stream == null)
 		{
+			 stream = this.getClass().getResourceAsStream("res/" + "names.names");
+		}		
+		if(stream == null)
+		{
 			System.out.println("null");
 			System.exit(-1);
 		}
