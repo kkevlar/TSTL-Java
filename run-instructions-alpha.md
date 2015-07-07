@@ -13,7 +13,7 @@ Releases of Tstl-Java are best run through the included .jar archive or in an ID
 * Refresh the project files (Right-click project folder in Package Explorer).
 * Ensure a tstl source file can be found in the root of your project folder.
 * Run TstlParser in eclipse.
-  * Eclipse may warn you of errors. This is because RandomTester.java is dependent on SUT.java being in the /src folder. But because RandomTester is not used when parsing, just run TstlParser anyways.
+  * Eclipse may warn you of errors. This is because TestRunner.java is dependent on SUT.java being in the /src folder. But because TestRunner is not used when parsing, just run TstlParser anyways.
 * Navigate to the project folder in file explorer
 
 ###Running the generated code:
@@ -22,9 +22,9 @@ Releases of Tstl-Java are best run through the included .jar archive or in an ID
 * Compile and run the generated java:
 ```shell
 cd <path-to-project-folder>
-javac -d genbin -sourcepath gensrc gensrc/RandomTester.java
+javac -d genbin -sourcepath gensrc gensrc/TestRunner.java
 cd genbin
-java RandomTester
+java TestRunner
 ```
 Care! The commands above will break horribly if your working directory is not set the the root of the project folder in command line
 
