@@ -256,7 +256,7 @@ public class ActionEntry extends RepeatablesContainer
 		String save = "";
 		for(int i = 0; i < this.getRepeatables().length; i++)
 		{
-			if(i == 0)
+			if(i == 0 && hasInit())
 			{
 				PoolEntry pEntry = (PoolEntry) this.getRepeatables()[i];
 				save = pEntry.getUsedVarName() + "[" + poolValues[i] + "] = false;\n";

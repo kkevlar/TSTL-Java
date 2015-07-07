@@ -3,13 +3,13 @@ public class RandomTester extends Tester
 {
 
 	@Override
-	protected void runTests(long timeout, SUTInterface sut) 
+	protected void runTests(SUTInterface sut) 
 	{
 		long startTime = System.currentTimeMillis();
 		long testCount = 0;
 		long loopCount = 0;
 		long lastPrintTime = 0;
-		while(System.currentTimeMillis() - startTime < timeout)
+		while(System.currentTimeMillis() - startTime < getTimeout())
 		{
 			sut.reset();
 			clearActTrace();
@@ -20,11 +20,11 @@ public class RandomTester extends Tester
 				println(">>Test Number " + loopCount);
 				lastPrintTime = System.currentTimeMillis();
 			}
-			while(testCount<getTestsPerCycle() && System.currentTimeMillis() - startTime < timeout)
+			while(testCount<getTestsPerCycle() && System.currentTimeMillis() - startTime <getTimeout())
 			{
 				boolean enabled = false;
 				int testNum = -1;
-				while(!enabled && System.currentTimeMillis() - startTime < timeout)
+				while(!enabled && System.currentTimeMillis() - startTime < getTimeout())
 				{
 					testNum = (int) (Math.random() * sut.getActions().length);
 					enabled = sut.getActions()[testNum].enabled();

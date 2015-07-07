@@ -12,10 +12,10 @@ public abstract class Tester
 	public void go() 
 	{
 		sut = new SUT();
-		runTests(this.timeout,sut);
+		runTests(sut);
 	}
 	
-	protected abstract void runTests(long timeout, SUTInterface sut);
+	protected abstract void runTests(SUTInterface sut);
 
 	protected void testFailed()
 	{
