@@ -15,6 +15,10 @@ public class CodeCopier
 		InputStream stream = this.getClass().getResourceAsStream("res/" + className + ".nocompile");
 		if(stream == null)
 		{
+			stream = this.getClass().getResourceAsStream("res/" + className);
+		}
+		if(stream == null)
+		{
 			System.out.println("null");
 			System.exit(-1);
 		}
