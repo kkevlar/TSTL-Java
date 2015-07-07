@@ -6,7 +6,7 @@ public abstract class Tester
 	private ArrayList<Integer> actTrace;
 	private int ignoreCheckValue = 0;
 	private long testPrintDelay = 10000;
-	private int testsPerCycle = 200;
+	private int testsPerCycle = 1000;
 	private long timeout = 60000 ;
 	
 	public void go() 

@@ -1,12 +1,9 @@
 pool: Integer %INT% 1
 pool: String %STRING% 1
-pool: String %STRING2% 1
 
 %INT% := %[-1..3]%
-%STRING2% := %STRING% + %STRING%
-%STRING% := %STRING2%
+%STRING% := %STRING% + %STRING%
 %STRING% := Integer.toString(%INT%)
 %INT% := Integer.parseInt(%STRING%)
 
 %STRING%.length();
-%STRING2%.length();

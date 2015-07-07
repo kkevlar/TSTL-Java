@@ -60,7 +60,7 @@ public class TestReducer
 			boolean reduced = false;
 			while(!reduced)
 			{
-				pieceCount = reducedTest.size();// *= 2;
+				pieceCount *= 2;
 				if(pieceCount > reducedTest.size())
 					pieceCount = reducedTest.size();
 				reduced = reduceUsingPieces(pieceCount, reducedTest);
@@ -79,6 +79,7 @@ public class TestReducer
 		int lastId = test.get(test.size() -1);
 		int actionCount = test.size();
 		boolean reduced = false;
+		System.out.println(numPieces);
 		for (int x = 0; x < numPieces; x++) 
 		{
 			newTest = new ArrayList<Integer>();
@@ -89,17 +90,13 @@ public class TestReducer
 				if(y < cutOut || y > cutIn)
 					newTest.add(test.get(y));		
 			}
-			System.out.println("x:" + x + " numPieces:" + numPieces+ " cutOut:" + cutOut + " cutIn:" + cutIn + " size:" + test.size());
 			if(x != numPieces-1 && getShouldAppendFailingTest())
 				newTest.add(lastId);
-			System.out.println("-TRIAL: " + " numpieces:" + numPieces + " pieceCount:" + x);
-			printTest(newTest);
 			reduced = runTest(newTest);
-			if(reduced)
-			System.out.println("WAS REDUCED");
 			if(reduced)
 				break;
 		}
+		System.out.println(reduced);
 		return reduced;
 	}
 
