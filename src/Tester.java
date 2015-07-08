@@ -22,9 +22,16 @@ public abstract class Tester
 	public void go() 
 	{
 		readConfiguration();
-		File logFile = new File(TstlConstants.getThisJarDir() + "/" + TstlConstants.FILE_TESTER_OUTPUT_LOG);
-		logFile.createNewFile();
-		logWriter = new FlushWriter(logFile);
+		try
+		{
+			File logFile = new File(TstlConstants.getThisJarDir() + "/" + TstlConstants.FILE_TESTER_OUTPUT_LOG);
+			logFile.createNewFile();
+			logWriter = new FlushWriter(logFile);
+		}
+		catch(Exception ex)
+		{
+
+		}
 		sut = new SUT();
 		runTests(sut);
 		logWriter.close();
@@ -141,13 +148,13 @@ public abstract class Tester
 		{
 			try
 			{
-			File reduceFile = new File(TstlConstants.getThisJarDir() + "/" + TstlConstants.FILE_TESTER_REDUCE_LOG); 
-			reduceFile.createNewFile();
-			reduceWriter = new FlushWriter(reduceFile);
+				File reduceFile = new File(TstlConstants.getThisJarDir() + "/" + TstlConstants.FILE_TESTER_REDUCE_LOG); 
+				reduceFile.createNewFile();
+				reduceWriter = new FlushWriter(reduceFile);
 			}
 			catch(Exception ex)
 			{
-				
+
 			}
 		}
 		if(reduceWriter != null)
