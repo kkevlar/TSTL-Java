@@ -41,15 +41,17 @@ public class TstlConstants
 	public static final String IDENTIFIER_NUMRANGE_MID = "..";	
 	public static final String IDENTIFIER_NUMRANGE_RIGHT = "]";			
 	public static final String IDENTIFIER_POOL = "pool:";
+	public static final String IDENTIFIER_PROPERTY = "property:";	
+
 	public static final String IDENTIFIER_TSTLVARIABLE = "%";	
-
 	public static final String IMPORT_ARRAY_LIST = "java.util.ArrayList";	
-	public static final String IMPORT_LIST = "java.util.List";	
 
+	public static final String IMPORT_LIST = "java.util.List";
 	public static final String MESSAGE_MALFORMED_POOL_DECLARATION = "Malformed pool declaration: ";
-	public static final String MESSAGE_NO_TSTL = "Please provide a path to a valid .tstl file in the command line arguments.";
+	public static final String MESSAGE_NO_TSTL = "Please provide a path to a valid .tstl file in the command line arguments.";	
 	public static final String MESSAGE_ONLY_ONE_EXPLICIT_GUARD = "Each action can only have one explicit guard.";	
-	public static final String MESSAGE_UNDEFINED_TSTL_VARIABLE = "Tstl Variable undefined in pool. ";	
+	public static final String MESSAGE_UNDEFINED_TSTL_VARIABLE = "Tstl Variable undefined in pool. ";
+
 	public static final String MESSGAGE_NONSURROUNDING_VARIABLE_IDENTIFIERS = "Variable identifiers must surround variables: ";
 
 	public static final String PREFIX_JAVA_VARIABLES = "var_";
@@ -60,104 +62,15 @@ public class TstlConstants
 
 	public static final String VISIBILITY_LEVEL_POOL_VAR = "private";
 
-	public static final String IDENTIFIER_PROPERTY = "property:";
+	public static final String LABEL_CONFIG_IGNORE_CHECK_VALUE = "ignore_check_value";
+
+	public static final String LABEL_CONFIG_TEST_PRINT_DELAY = "test_print_delay";
+
+	public static final String LABEL_CONFIG_TESTS_PER_CYCLE = "tests_per_cycle";
+
+	public static final String LABEL_CONFIG_TIMEOUT = "timeout";
 
 	
-	public static String getAppDataDir()
-	{
-		String os = System.getProperty("os.name","generic").toLowerCase(Locale.ENGLISH);
-		String home = System.getProperty("user.home");
-		if ((os.indexOf("mac") >= 0) || (os.indexOf("darwin") >= 0)) {
-			return home + "/Library/Application Support/"+ TSTL_JAVA +"/" ;
-		} else if (os.indexOf("win") >= 0) {
-			return home + "/AppData/Roaming/"+ TSTL_JAVA +"/" ;
-		} else if (os.indexOf("nux") >= 0) {
-			return home + "/."+ TSTL_JAVA +"/"  ;
-		} else {
-			return home + "/"+ TSTL_JAVA +"/"  ;
-		}
-	}
-	public static String getParserOutputSourceDir()
-	{
-		File f = new File(getParserOutputSourceDirPath());
-		f.mkdirs();
-
-		return f.getAbsolutePath() + "/";
-	}
-	private static String getParserOutputSourceDirPath()
-	{
-		File parFile = null;
-		try {
-			parFile = getThisJarDir();
-			return parFile.getAbsolutePath() + "/"+DIR_GENSRC+"/";
-		} catch (URISyntaxException e)
-		{
-
-		}
-		return "/output/";
-	}
-	public static File getThisJarDir() throws URISyntaxException
-	{
-		File f =  new File(TstlParser.class.getProtectionDomain().getCodeSource().getLocation().toURI().getPath()).getParentFile();
-		if(f == null)
-			return new File("");
-		return f;
-	}
-	public static void outputDependencies() 
-	{
-		CodeCopier cc = new CodeCopier();		
-		try {
-			cc.copyCode();
-		} catch (IOException e) 
-		{
-			e.printStackTrace();
-		}
-	}
-	public static File getGeneratedClassesFolder() 
-	{
-		String srcDir = TstlConstants.getParserOutputSourceDir();
-		String compDir = new File(srcDir).getParentFile().getAbsolutePath() + "/"+TstlConstants.DIR_GENBIN;
-		File compDirFile = new File(compDir);
-		compDirFile.mkdirs();
-		return compDirFile;
-	}
-
-	public static Repeatable getRepeatableFromVariable(String var, boolean mustBePool, PoolEntry[] entirePoolEntries, String actionLine) 
-	{
-		Repeatable rep;
-		rep = PoolEntry.getPoolEntryByVarName(entirePoolEntries,TstlConstants.PREFIX_JAVA_VARIABLES +var);
-		if(rep == null && !mustBePool)
-			rep = NumRange.getNumRange(var);
-		if(rep == null)
-			throw new MalformedTstlException(TstlConstants.MESSAGE_UNDEFINED_TSTL_VARIABLE + "Variable:" + TstlConstants.IDENTIFIER_TSTLVARIABLE + var + TstlConstants.IDENTIFIER_TSTLVARIABLE + " Line:" + actionLine);
-
-		return rep;
-	}
-	public static LineParsePacket parseVarLine(String varLine, PoolEntry[] entirePoolEntries)
-	{
-		String[] pieces = varLine.split(TstlConstants.IDENTIFIER_TSTLVARIABLE);
-		if(pieces.length % 2 != 1)
-			throw new MalformedTstlException(TstlConstants.MESSGAGE_NONSURROUNDING_VARIABLE_IDENTIFIERS + varLine);
-		String[] javaCodePieces = new String[(pieces.length+1)/2];
-		Repeatable[] reps = new Repeatable[(pieces.length-1)/2];
-		for (int i = 0; i < pieces.length; i++)
-		{
-			if(i%2==0)
-			{
-				int javaIndex = i/2;
-				javaCodePieces[javaIndex] = pieces[i];
-			}
-			else
-			{
-				Repeatable entry = TstlConstants.getRepeatableFromVariable((pieces[i]).trim(), false, entirePoolEntries, varLine);
-				if (entry == null)
-					throw new MalformedTstlException(TstlConstants.MESSAGE_UNDEFINED_TSTL_VARIABLE + "Variable:" + TstlConstants.IDENTIFIER_TSTLVARIABLE + pieces[i] + TstlConstants.IDENTIFIER_TSTLVARIABLE + " Line:" + varLine);
-				else
-					reps[(i-1)/2] = entry;
-			}
-		}
-		return new LineParsePacket(javaCodePieces, reps);
-	}
 	public static String excapeString(String s)
 	{
 		
@@ -198,6 +111,102 @@ public class TstlConstants
 		}
 		return null;
 	}
+	public static String getAppDataDir()
+	{
+		String os = System.getProperty("os.name","generic").toLowerCase(Locale.ENGLISH);
+		String home = System.getProperty("user.home");
+		if ((os.indexOf("mac") >= 0) || (os.indexOf("darwin") >= 0)) {
+			return home + "/Library/Application Support/"+ TSTL_JAVA +"/" ;
+		} else if (os.indexOf("win") >= 0) {
+			return home + "/AppData/Roaming/"+ TSTL_JAVA +"/" ;
+		} else if (os.indexOf("nux") >= 0) {
+			return home + "/."+ TSTL_JAVA +"/"  ;
+		} else {
+			return home + "/"+ TSTL_JAVA +"/"  ;
+		}
+	}
+	public static File getGeneratedClassesFolder() 
+	{
+		String srcDir = TstlConstants.getParserOutputSourceDir();
+		String compDir = new File(srcDir).getParentFile().getAbsolutePath() + "/"+TstlConstants.DIR_GENBIN;
+		File compDirFile = new File(compDir);
+		compDirFile.mkdirs();
+		return compDirFile;
+	}
+	public static String getParserOutputSourceDir()
+	{
+		File f = new File(getParserOutputSourceDirPath());
+		f.mkdirs();
+
+		return f.getAbsolutePath() + "/";
+	}
+	private static String getParserOutputSourceDirPath()
+	{
+		File parFile = null;
+		try {
+			parFile = getThisJarDir();
+			return parFile.getAbsolutePath() + "/"+DIR_GENSRC+"/";
+		} catch (URISyntaxException e)
+		{
+
+		}
+		return "/output/";
+	}
+
+	public static Repeatable getRepeatableFromVariable(String var, boolean mustBePool, PoolEntry[] entirePoolEntries, String actionLine) 
+	{
+		Repeatable rep;
+		rep = PoolEntry.getPoolEntryByVarName(entirePoolEntries,TstlConstants.PREFIX_JAVA_VARIABLES +var);
+		if(rep == null && !mustBePool)
+			rep = NumRange.getNumRange(var);
+		if(rep == null)
+			throw new MalformedTstlException(TstlConstants.MESSAGE_UNDEFINED_TSTL_VARIABLE + "Variable:" + TstlConstants.IDENTIFIER_TSTLVARIABLE + var + TstlConstants.IDENTIFIER_TSTLVARIABLE + " Line:" + actionLine);
+
+		return rep;
+	}
+	public static File getThisJarDir() throws URISyntaxException
+	{
+		File f =  new File(TstlParser.class.getProtectionDomain().getCodeSource().getLocation().toURI().getPath()).getParentFile();
+		if(f == null)
+			return new File("");
+		return f;
+	}
+	public static void outputDependencies() 
+	{
+		CodeCopier cc = new CodeCopier();		
+		try {
+			cc.copyCode();
+		} catch (IOException e) 
+		{
+			e.printStackTrace();
+		}
+	}
+	public static LineParsePacket parseVarLine(String varLine, PoolEntry[] entirePoolEntries)
+	{
+		String[] pieces = varLine.split(TstlConstants.IDENTIFIER_TSTLVARIABLE);
+		if(pieces.length % 2 != 1)
+			throw new MalformedTstlException(TstlConstants.MESSGAGE_NONSURROUNDING_VARIABLE_IDENTIFIERS + varLine);
+		String[] javaCodePieces = new String[(pieces.length+1)/2];
+		Repeatable[] reps = new Repeatable[(pieces.length-1)/2];
+		for (int i = 0; i < pieces.length; i++)
+		{
+			if(i%2==0)
+			{
+				int javaIndex = i/2;
+				javaCodePieces[javaIndex] = pieces[i];
+			}
+			else
+			{
+				Repeatable entry = TstlConstants.getRepeatableFromVariable((pieces[i]).trim(), false, entirePoolEntries, varLine);
+				if (entry == null)
+					throw new MalformedTstlException(TstlConstants.MESSAGE_UNDEFINED_TSTL_VARIABLE + "Variable:" + TstlConstants.IDENTIFIER_TSTLVARIABLE + pieces[i] + TstlConstants.IDENTIFIER_TSTLVARIABLE + " Line:" + varLine);
+				else
+					reps[(i-1)/2] = entry;
+			}
+		}
+		return new LineParsePacket(javaCodePieces, reps);
+	}
+	static final String FILE_TESTER_CONFIG = "tester.cfg";
 
 
 }

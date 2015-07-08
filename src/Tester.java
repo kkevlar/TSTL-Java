@@ -1,20 +1,64 @@
+import java.io.File;
+import java.io.FileNotFoundException;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Scanner;
 
 public abstract class Tester 
 {
+	private static final int TESTER_CONFIG_DEFAULT_TIMEOUT = 60000;
+	private static final int TESTER_CONFIG_DEFAULT_TESTS_PER_CYCLE = 1000;
+	private static final int TESTER_CONFIG_DEFAULT_TEST_PRINT_DELAY = 10000;
+	private static final int TESTER_CONFIG_DEFAULT_IGNORE_CHECK_VALUE = 0;
 	private SUTInterface sut;
 	private ArrayList<Integer> actTrace;
-	private int ignoreCheckValue = 0;
-	private long testPrintDelay = 10000;
-	private int testsPerCycle = 1000;
-	private long timeout = 60000 ;
+	private int ignoreCheckValue = TESTER_CONFIG_DEFAULT_IGNORE_CHECK_VALUE;
+	private long testPrintDelay = TESTER_CONFIG_DEFAULT_TEST_PRINT_DELAY;
+	private int testsPerCycle = TESTER_CONFIG_DEFAULT_TESTS_PER_CYCLE;
+	private long timeout = TESTER_CONFIG_DEFAULT_TIMEOUT ;
 	
 	public void go() 
 	{
+		readConfiguration();
 		sut = new SUT();
 		runTests(sut);
 	}
 	
+	private void readConfiguration() 
+	{
+		File configFile = new File(TstlConstants.FILE_TESTER_CONFIG);
+		if(configFile.exists())
+		{
+			ArrayList<String> lines = new ArrayList<String>();
+			Scanner scan = null;
+			try {
+				scan = new Scanner(configFile);
+			} catch (FileNotFoundException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			while(scan.hasNextLine())
+			{
+				lines.add(scan.nextLine());
+			}
+			HashMap<String,String> map = new HashMap<String,String>();
+			for(int i = 0; i < lines.size(); i++)
+			{
+				String name;
+				String value;
+				String line = lines.get(i);
+				line = line.replace(":", "~");
+				name = line.split("~")[0].trim();
+				value = line.split("~")[1].trim();
+				map.put(name, value);
+			}
+			ignoreCheckValue = Integer.parseInt(map.get(TstlConstants.LABEL_CONFIG_IGNORE_CHECK_VALUE));
+			testPrintDelay = Long.parseLong(map.get(TstlConstants.LABEL_CONFIG_TEST_PRINT_DELAY));
+			testsPerCycle = Integer.parseInt(map.get(TstlConstants.LABEL_CONFIG_TESTS_PER_CYCLE));
+			timeout = Long.parseLong(map.get(TstlConstants.LABEL_CONFIG_TIMEOUT));
+		}
+	}
+
 	protected abstract void runTests(SUTInterface sut);
 
 	protected void testFailed()
