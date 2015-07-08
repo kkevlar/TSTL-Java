@@ -1,5 +1,7 @@
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Scanner;
@@ -16,14 +18,14 @@ public abstract class Tester
 	private long testPrintDelay = TESTER_CONFIG_DEFAULT_TEST_PRINT_DELAY;
 	private int testsPerCycle = TESTER_CONFIG_DEFAULT_TESTS_PER_CYCLE;
 	private long timeout = TESTER_CONFIG_DEFAULT_TIMEOUT ;
-	
+
 	public void go() 
 	{
 		readConfiguration();
 		sut = new SUT();
 		runTests(sut);
 	}
-	
+
 	private void readConfiguration() 
 	{
 		File configFile = new File(TstlConstants.FILE_TESTER_CONFIG);
@@ -52,10 +54,48 @@ public abstract class Tester
 				value = line.split("~")[1].trim();
 				map.put(name, value);
 			}
-			ignoreCheckValue = Integer.parseInt(map.get(TstlConstants.LABEL_CONFIG_IGNORE_CHECK_VALUE));
-			testPrintDelay = Long.parseLong(map.get(TstlConstants.LABEL_CONFIG_TEST_PRINT_DELAY));
-			testsPerCycle = Integer.parseInt(map.get(TstlConstants.LABEL_CONFIG_TESTS_PER_CYCLE));
-			timeout = Long.parseLong(map.get(TstlConstants.LABEL_CONFIG_TIMEOUT));
+			String val = map.get(TstlConstants.LABEL_CONFIG_IGNORE_CHECK_VALUE);
+			if(val != null)
+				ignoreCheckValue = Integer.parseInt(val);
+			val = map.get(TstlConstants.LABEL_CONFIG_TEST_PRINT_DELAY);
+			if(val != null)
+				testPrintDelay = Long.parseLong(val);
+			val = map.get(TstlConstants.LABEL_CONFIG_TESTS_PER_CYCLE);
+			if(val != null)
+				testsPerCycle = Integer.parseInt(val);
+			val = map.get(TstlConstants.LABEL_CONFIG_TIMEOUT);
+			if(val != null)
+				timeout = Long.parseLong(val);
+		}
+		else
+		{
+			HashMap<String,String> map = new HashMap<String,String>();
+			map.put(TstlConstants.LABEL_CONFIG_IGNORE_CHECK_VALUE, ignoreCheckValue+"");
+			map.put(TstlConstants.LABEL_CONFIG_TEST_PRINT_DELAY, testPrintDelay+"");
+			map.put(TstlConstants.LABEL_CONFIG_TESTS_PER_CYCLE, testsPerCycle+"");
+			map.put(TstlConstants.LABEL_CONFIG_TIMEOUT, timeout+"");
+			String[] names = map.keySet().toArray(new String[map.size()]);
+			try {
+				configFile.createNewFile();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+			PrintWriter writer = null;
+			try {
+				writer = new PrintWriter(configFile);
+			} catch (FileNotFoundException e) {
+				e.printStackTrace();
+			}
+			for (int i = 0; i < names.length; i++)
+			{
+				String name;
+				String value;
+				name = names[i];
+				value = map.get(names[i]);
+				writer.println(name + ":" + value);
+			}
+			writer.flush();
+			writer.close();			
 		}
 	}
 
@@ -86,7 +126,7 @@ public abstract class Tester
 		try
 		{
 			action.act();
-			
+
 			String check = sut.check();
 			if(check != null)
 			{
