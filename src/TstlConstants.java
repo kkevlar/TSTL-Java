@@ -199,5 +199,8 @@ public class TstlConstants
 		return new LineParsePacket(javaCodePieces, reps);
 	}
 
+	public static final String FILE_TESTER_OUTPUT_LOG = "tester-output.log";
+		public static final String FILE_TESTER_REDUCE_LOG = "test-reduced.log";
+
 
 }

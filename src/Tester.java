@@ -16,12 +16,19 @@ public abstract class Tester
 	private int testsPerCycle = TstlConstants.TESTER_CONFIG_DEFAULT_TESTS_PER_CYCLE;
 	private long timeout = TstlConstants.TESTER_CONFIG_DEFAULT_TIMEOUT ;
 	private boolean shouldAppendFailingTest = TstlConstants.TESTER_CONFIG_DEFAULT_APPEND_FAILING_TEST;
+	private FlushWriter logWriter;
+	private FlushWriter reduceWriter;
 
 	public void go() 
 	{
 		readConfiguration();
+		File logFile = new File(TstlConstants.getThisJarDir() + "/" + TstlConstants.FILE_TESTER_OUTPUT_LOG);
+		logFile.createNewFile();
+		logWriter = new FlushWriter(logFile);
 		sut = new SUT();
 		runTests(sut);
+		logWriter.close();
+		reduceWriter.close();
 	}
 
 	private void readConfiguration() 
@@ -114,19 +121,38 @@ public abstract class Tester
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
-		System.out.println("test failed. Reducing....");
+		rprintln("test failed. Reducing....");
 		TestReducer reducer = new TestReducer(sut, actTrace, this);
 		reducer.setShouldAppendFailingTest(shouldAppendFailingTest );
 		int[] actionIds = reducer.getReducedTestIds();
-		System.out.println("Test reduced. Heres all info.");
+		rprintln("Test reduced. Heres main line of each steap.");
 		for (int i = 0; i < actionIds.length; i++) 
 		{
 			String name = sut.getActions()[actionIds[i]].name();
-			System.out.println(name.trim());
+			rprintln(name.trim());
 		}
-		System.exit(-1);
 	}
 
+
+	private void rprintln(String string)
+	{
+		println(string);
+		if(reduceWriter == null)
+		{
+			try
+			{
+			File reduceFile = new File(TstlConstants.getThisJarDir() + "/" + TstlConstants.FILE_TESTER_REDUCE_LOG); 
+			reduceFile.createNewFile();
+			reduceWriter = new FlushWriter(reduceFile);
+			}
+			catch(Exception ex)
+			{
+				
+			}
+		}
+		if(reduceWriter != null)
+			reduceWriter.println(string);
+	}
 
 	protected boolean executeAct(boolean doCheck, Action action, boolean print)
 	{
@@ -160,6 +186,7 @@ public abstract class Tester
 	protected void println(String string) 
 	{
 		System.out.println(string);		
+		logWriter.println(string);
 	}
 	public int getIgnoreCheckValue() 
 	{

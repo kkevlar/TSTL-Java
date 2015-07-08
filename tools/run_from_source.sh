@@ -6,6 +6,8 @@ rm -rf bin
 rm names.file
 rm -rf genbin
 rm -rf gensrc
+rm tester-output.log
+rm test-reduced.log
 mkdir src/res
 for file in src/*.java
 do

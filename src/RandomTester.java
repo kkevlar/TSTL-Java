@@ -35,7 +35,10 @@ public class RandomTester extends Tester
 				addToActTrace(sut.getActions()[testNum].id());
 				boolean success = executeAct(this.getIgnoreCheckValue() < 2, sut.getActions()[testNum], true);
 				if(!success)
+				{
 					testFailed();
+					return;
+				}
 				else if (print && testCount +1==getTestsPerCycle())
 					println(info);
 				testCount++;
