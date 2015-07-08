@@ -7,13 +7,10 @@ import java.util.Locale;
 public class TstlConstants 
 {
 	public static final String CLASS_NAME_SUT = "SUT";
-
 	public static final String COMMENT_AUTO_GEN_CODE = "//This is auto-generated code.  Changes will be overwritten.";
 	public static final String COMMENT_CORE_FUNCTIONALITY_IMPORT = " //import for SUT.java core functionality";
 	public static final String COMMENT_TSTL_SOURCE_IMPORT = " //imported from .tstl source file";
-
 	public static final String CONSTRUCT_ACTION_ARRAY_INSTANCE_VARIABLE = "actions = new Action[";	
-
 	public static final String DECLARATION_ACT_METHOD_ACTION_INTERFACE = "public void act();";	
 	public static final String DECLARATION_ACTION_ACT_METHOD = "public void act()";		
 	public static final String DECLARATION_ACTION_ARRAY_INSTANCE_VARIABLE = "private Action[] actions;";
@@ -28,49 +25,40 @@ public class TstlConstants
 	public static final String DECLARATION_NAME_METHOD_ACTION_INTERFACE = "public String name();";
 	public static final String DECLARATION_SUT_GETACTIONS_METHOD = "public Action[] getActions()";
 	public static final String DECLARATION_SUT_RESET_METHOD = "public void reset()";	
-
 	public static final String DIR_GENBIN = "genbin";	
 	public static final String DIR_GENSRC = "gensrc";
-
-	public static final String GEN_CLASS_MAIN = "RandomTester.java";	
-
+	public static final String FILE_TESTER_CONFIG = "tester.cfg";
 	public static final String IDENTIFIER_EXPLICIT_GUARD = "->";
-	public static final String IDENTIFIER_IMPORT = "@import";
-	public static final String IDENTIFIER_INITIALIZATION = ":=";	
-	public static final String IDENTIFIER_NUMRANGE_LEFT = "[";
-	public static final String IDENTIFIER_NUMRANGE_MID = "..";	
-	public static final String IDENTIFIER_NUMRANGE_RIGHT = "]";			
-	public static final String IDENTIFIER_POOL = "pool:";
+	public static final String IDENTIFIER_IMPORT = "@import";	
+	public static final String IDENTIFIER_INITIALIZATION = ":=";
+	public static final String IDENTIFIER_NUMRANGE_LEFT = "[";	
+	public static final String IDENTIFIER_NUMRANGE_MID = "..";			
+	public static final String IDENTIFIER_NUMRANGE_RIGHT = "]";
+	public static final String IDENTIFIER_POOL = "pool:";	
 	public static final String IDENTIFIER_PROPERTY = "property:";	
-
 	public static final String IDENTIFIER_TSTLVARIABLE = "%";	
-	public static final String IMPORT_ARRAY_LIST = "java.util.ArrayList";	
-
+	public static final String IMPORT_ARRAY_LIST = "java.util.ArrayList";
 	public static final String IMPORT_LIST = "java.util.List";
+	public static final String LABEL_CONFIG_APPDEND_FAILING_TEST = "append_failing_test";	
+	public static final String LABEL_CONFIG_IGNORE_CHECK_VALUE = "ignore_check_value";	
+	public static final String LABEL_CONFIG_TEST_PRINT_DELAY = "test_print_delay";
+	public static final String LABEL_CONFIG_TESTS_PER_CYCLE = "tests_per_cycle";
+	public static final String LABEL_CONFIG_TIMEOUT = "timeout";
 	public static final String MESSAGE_MALFORMED_POOL_DECLARATION = "Malformed pool declaration: ";
-	public static final String MESSAGE_NO_TSTL = "Please provide a path to a valid .tstl file in the command line arguments.";	
-	public static final String MESSAGE_ONLY_ONE_EXPLICIT_GUARD = "Each action can only have one explicit guard.";	
+	public static final String MESSAGE_NO_TSTL = "Please provide a path to a valid .tstl file in the command line arguments.";
+	public static final String MESSAGE_ONLY_ONE_EXPLICIT_GUARD = "Each action can only have one explicit guard.";
 	public static final String MESSAGE_UNDEFINED_TSTL_VARIABLE = "Tstl Variable undefined in pool. ";
-
 	public static final String MESSGAGE_NONSURROUNDING_VARIABLE_IDENTIFIERS = "Variable identifiers must surround variables: ";
-
 	public static final String PREFIX_JAVA_VARIABLES = "var_";
-
-	public static final String SUFFIX_VAR_USED = "_used";
-
+	public static final String SUFFIX_VAR_USED = "_used";	
+	public static final boolean TESTER_CONFIG_DEFAULT_APPEND_FAILING_TEST = true;
+	public static final int TESTER_CONFIG_DEFAULT_IGNORE_CHECK_VALUE = 0;
+	public static final int TESTER_CONFIG_DEFAULT_TEST_PRINT_DELAY = 10000;
+	public static final int TESTER_CONFIG_DEFAULT_TESTS_PER_CYCLE = 1000;
+	public static final int TESTER_CONFIG_DEFAULT_TIMEOUT = 60000;
 	public static final String TSTL_JAVA = "TSTL-Java";
-
 	public static final String VISIBILITY_LEVEL_POOL_VAR = "private";
 
-	public static final String LABEL_CONFIG_IGNORE_CHECK_VALUE = "ignore_check_value";
-
-	public static final String LABEL_CONFIG_TEST_PRINT_DELAY = "test_print_delay";
-
-	public static final String LABEL_CONFIG_TESTS_PER_CYCLE = "tests_per_cycle";
-
-	public static final String LABEL_CONFIG_TIMEOUT = "timeout";
-
-	
 	public static String excapeString(String s)
 	{
 		
@@ -140,6 +128,7 @@ public class TstlConstants
 
 		return f.getAbsolutePath() + "/";
 	}
+
 	private static String getParserOutputSourceDirPath()
 	{
 		File parFile = null;
@@ -164,6 +153,7 @@ public class TstlConstants
 
 		return rep;
 	}
+
 	public static File getThisJarDir() throws URISyntaxException
 	{
 		File f =  new File(TstlParser.class.getProtectionDomain().getCodeSource().getLocation().toURI().getPath()).getParentFile();
@@ -171,6 +161,7 @@ public class TstlConstants
 			return new File("");
 		return f;
 	}
+
 	public static void outputDependencies() 
 	{
 		CodeCopier cc = new CodeCopier();		
@@ -181,6 +172,7 @@ public class TstlConstants
 			e.printStackTrace();
 		}
 	}
+
 	public static LineParsePacket parseVarLine(String varLine, PoolEntry[] entirePoolEntries)
 	{
 		String[] pieces = varLine.split(TstlConstants.IDENTIFIER_TSTLVARIABLE);
@@ -206,7 +198,6 @@ public class TstlConstants
 		}
 		return new LineParsePacket(javaCodePieces, reps);
 	}
-	static final String FILE_TESTER_CONFIG = "tester.cfg";
 
 
 }

@@ -8,16 +8,13 @@ import java.util.Scanner;
 
 public abstract class Tester 
 {
-	private static final int TESTER_CONFIG_DEFAULT_TIMEOUT = 60000;
-	private static final int TESTER_CONFIG_DEFAULT_TESTS_PER_CYCLE = 1000;
-	private static final int TESTER_CONFIG_DEFAULT_TEST_PRINT_DELAY = 10000;
-	private static final int TESTER_CONFIG_DEFAULT_IGNORE_CHECK_VALUE = 0;
 	private SUTInterface sut;
 	private ArrayList<Integer> actTrace;
-	private int ignoreCheckValue = TESTER_CONFIG_DEFAULT_IGNORE_CHECK_VALUE;
-	private long testPrintDelay = TESTER_CONFIG_DEFAULT_TEST_PRINT_DELAY;
-	private int testsPerCycle = TESTER_CONFIG_DEFAULT_TESTS_PER_CYCLE;
-	private long timeout = TESTER_CONFIG_DEFAULT_TIMEOUT ;
+	private int ignoreCheckValue = TstlConstants.TESTER_CONFIG_DEFAULT_IGNORE_CHECK_VALUE;
+	private long testPrintDelay = TstlConstants.TESTER_CONFIG_DEFAULT_TEST_PRINT_DELAY;
+	private int testsPerCycle = TstlConstants.TESTER_CONFIG_DEFAULT_TESTS_PER_CYCLE;
+	private long timeout = TstlConstants.TESTER_CONFIG_DEFAULT_TIMEOUT ;
+	private boolean shouldAppendFailingTest = TstlConstants.TESTER_CONFIG_DEFAULT_APPEND_FAILING_TEST;
 
 	public void go() 
 	{
@@ -66,6 +63,9 @@ public abstract class Tester
 			val = map.get(TstlConstants.LABEL_CONFIG_TIMEOUT);
 			if(val != null)
 				timeout = Long.parseLong(val);
+			val = map.get(TstlConstants.LABEL_CONFIG_APPDEND_FAILING_TEST);
+			if(val != null)
+				this.shouldAppendFailingTest = Boolean.parseBoolean(val);
 		}
 		else
 		{
@@ -110,6 +110,7 @@ public abstract class Tester
 		}
 		System.out.println("test failed. Reducing....");
 		TestReducer reducer = new TestReducer(sut, actTrace, this);
+		reducer.setShouldAppendFailingTest(shouldAppendFailingTest );
 		int[] actionIds = reducer.getReducedTestIds();
 		System.out.println("Test reduced. Heres all info.");
 		for (int i = 0; i < actionIds.length; i++) 
