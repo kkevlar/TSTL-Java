@@ -2,6 +2,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Scanner;
@@ -25,7 +26,12 @@ public abstract class Tester
 
 	private void readConfiguration() 
 	{
-		File configFile = new File(TstlConstants.FILE_TESTER_CONFIG);
+		File configFile = null;
+		try {
+			configFile = new File(TstlConstants.getThisJarDir() + "/" + TstlConstants.FILE_TESTER_CONFIG);
+		} catch (URISyntaxException e1) {
+			configFile = new File(TstlConstants.FILE_TESTER_CONFIG);
+		}
 		if(configFile.exists())
 		{
 			ArrayList<String> lines = new ArrayList<String>();
