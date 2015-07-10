@@ -1,10 +1,25 @@
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
+import java.util.Arrays;
 
 public class TestRunner 
 {
 
-	public static void main(String[] args)
+	public static void main(String[] args) throws IOException
 	{
+		File argsFile = new File(args[0]);
+		BufferedReader reader = new BufferedReader(new FileReader(argsFile));
+		String line = reader.readLine();
+		reader.close();
+		String[] newArgs = line.split(" ");
+		System.out.println("split: " + Arrays.toString(newArgs));
 		Tester tester = new RandomTester();
+		TestRunnerArgsParser parser = new TestRunnerArgsParser(newArgs,tester);
+		parser.parse();
+		System.out.println("dir: " + TstlConstants.getPath(TstlConstants.PATHKEY_WORKINGDIR));
 		tester.go();
 	}
 

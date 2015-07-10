@@ -51,7 +51,7 @@ public class TstlConstants
 	public static final String MESSGAGE_NONSURROUNDING_VARIABLE_IDENTIFIERS = "Variable identifiers must surround variables: ";
 	public static final String PATHKEY_TESTER_OUTPUT_LOG = "tester-output.log";
 	public static final String PATHKEY_TESTER_REDUCE_LOG = "test-reduced.log";	
-	public static final String PATHKEY_TSTLFILE = "tsltfile";
+	public static final String PATHKEY_TSTLFILE = "tstlfile";
 	public static final String PATHKEY_WORKINGDIR = "workingdir";
 	private static HashMap<String, String> paths;
 	public static final String PREFIX_JAVA_VARIABLES = "var_";
@@ -65,6 +65,7 @@ public class TstlConstants
 	public static final String TSTL_JAVA = "TSTL-Java";
 
 	public static final String VISIBILITY_LEVEL_POOL_VAR = "private";
+	public static final String PATHKEY_FILE_ARGSSTORE = "args.args";
 	public static String excapeString(String s)
 	{
 
@@ -125,6 +126,7 @@ public class TstlConstants
 
 	public static String getPath(String pathKey)
 	{
+		//System.out.println("getpath. key " + pathKey + " map : " + paths);
 		if(paths == null)
 			paths = new HashMap<String,String>();
 		if(paths.containsKey(pathKey))
@@ -226,6 +228,7 @@ public class TstlConstants
 			paths = new HashMap<String,String>();
 		paths.put(pathkey,path);
 	}
+	public static final String COMMONS_CLI = "lib/commons-cli.jar";
 
 
 }

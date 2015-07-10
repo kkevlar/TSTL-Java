@@ -3,6 +3,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
 
@@ -15,11 +16,24 @@ public class TstlParser implements Runnable
 	private int countActionsPrinted;
 	private PropertyEntry[] propEntries;
 
-	public static void main(String[] args) throws URISyntaxException
+	public static void main(String[] args) throws IOException
 	{
 		TstlParserArgParser parse = new TstlParserArgParser(args);
 		parse.parse();
-		new Thread(new TstlParser()).start();		
+		String line = "";
+		for (int i = 0; i < args.length; i++) 
+		{
+			if(i != 0)
+				line += " ";
+			line += args[i];			
+		}
+		File argsFile = new File(TstlConstants.getPath(TstlConstants.PATHKEY_FILE_ARGSSTORE));
+		argsFile.createNewFile();
+		PrintWriter writer = new PrintWriter(argsFile);
+		writer.println(line);
+		writer.flush();
+		writer.close();
+		new Thread(new TstlParser()).start();
 	}
 	@Override
 	public void run()
