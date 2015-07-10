@@ -228,7 +228,7 @@ public class TstlConstants
 			paths = new HashMap<String,String>();
 		paths.put(pathkey,path);
 	}
-	public static final String COMMONS_CLI = "lib/commons-cli.jar";
+	public static final String COMMONS_CLI = "commons-cli.jar";
 
 
 }

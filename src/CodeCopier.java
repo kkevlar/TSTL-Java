@@ -88,22 +88,30 @@ public class CodeCopier
 	{
         InputStream inStream = null;
         OutputStream outStream = null;
-        String jarFolder;
+        String jarPath;
         try {
             inStream = CodeCopier.class.getResourceAsStream(dependency);
             if(inStream == null) 
             {
+            	System.out.println("cant get lib inside jar");
                 throw new RuntimeException("Cannot get resource \"" + dependency + "\" from Jar file.");
             }
 
             int readBytes;
             byte[] buffer = new byte[2048];
-            jarFolder = TstlConstants.getPath(dependency);
-            outStream = new FileOutputStream(jarFolder);
+            jarPath = TstlConstants.getPath(TstlConstants.PATHKEY_WORKINGDIR)  + "/lib/" + dependency;
+           
+            File jarFile = new File(jarPath);
+            
+            jarFile.createNewFile();
+            
+            outStream = new FileOutputStream(jarFile);
             while ((readBytes = inStream.read(buffer)) > 0)
             {
                 outStream.write(buffer, 0, readBytes);
             }
+            outStream.flush();
+           
         } catch (IOException ex) {
             throw ex;
         } finally {

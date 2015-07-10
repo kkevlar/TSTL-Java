@@ -79,7 +79,7 @@ public class TestReducer
 		int lastId = test.get(test.size() -1);
 		int actionCount = test.size();
 		boolean reduced = false;
-		System.out.println(numPieces);
+		
 		for (int x = 0; x < numPieces; x++) 
 		{
 			newTest = new ArrayList<Integer>();
@@ -96,19 +96,8 @@ public class TestReducer
 			if(reduced)
 				break;
 		}
-		System.out.println(reduced);
 		return reduced;
 	}
-
-	private void printTest(ArrayList<Integer> newTest) 
-	{
-		for (int i = 0; i < newTest.size(); i++)
-		{
-			Action action = TstlConstants.getActionById(sut, newTest.get(i));
-			System.out.println("--"+action.name().trim());
-		}		
-	}
-
 	private boolean runTest(ArrayList<Integer> actionIds)
 	{		
 		boolean testFailed = false;
