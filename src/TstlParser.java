@@ -11,26 +11,20 @@ public class TstlParser implements Runnable
 {
 	private ArrayList<String> tstl;
 	private FlushWriter writer;
-	private String[] args;
 	private PoolEntry[] poolEntries;
 	private int countActionsPrinted;
 	private PropertyEntry[] propEntries;
 
 	public static void main(String[] args) throws URISyntaxException
 	{
-		new Thread(new TstlParser(args)).start();		
-	}
-	public TstlParser(String[] args)
-	{		
-		this.args = args;
+		TstlParserArgParser parse = new TstlParserArgParser(args);
+		parse.parse();
+		new Thread(new TstlParser()).start();		
 	}
 	@Override
 	public void run()
 	{
-
-
 		TstlConstants.outputDependencies();
-
 
 		readTstl();
 
@@ -67,7 +61,7 @@ public class TstlParser implements Runnable
 	
 	private void readTstl()
 	{
-		String filePath = getInputFileFilepath();
+		String filePath = TstlConstants.getPath(TstlConstants.PATHKEY_TSTLFILE);
 		File file = new File(filePath);
 		BufferedReader reader = null;
 		try {
@@ -324,40 +318,6 @@ public class TstlParser implements Runnable
 	{
 		return TstlConstants.getParserOutputSourceDir()+ TstlConstants.CLASS_NAME_SUT+".java";
 	}	
-
-	private String getInputFileFilepath()
-	{
-		if(args.length > 0)
-			return args[0];
-		else
-		{
-			File[] list;
-			try {
-				list = TstlConstants.getThisJarDir().listFiles();
-			} 
-			catch (URISyntaxException e) 
-			{
-				throw new BadArgumentsException(TstlConstants.MESSAGE_NO_TSTL);
-			}
-			for (int i = 0; i < list.length; i++) 
-			{
-				File file = list[i];
-				String extension = null;
-				try
-				{
-					String[] pieces = file.getName().replace(".", "~").split("~");
-					extension = pieces[pieces.length -1];
-				}
-				catch(RuntimeException ex) {}
-				if(extension != null && extension.equals("tstl"))
-				{
-					return file.getAbsolutePath();
-
-				}
-			}
-		}
-		throw new BadArgumentsException(TstlConstants.MESSAGE_NO_TSTL);
-	}
 
 	private String removePercents(String line, String variablePrefix)
 	{

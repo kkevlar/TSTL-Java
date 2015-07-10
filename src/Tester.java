@@ -21,10 +21,9 @@ public abstract class Tester
 
 	public void go() 
 	{
-		readConfiguration();
 		try
 		{
-			File logFile = new File(TstlConstants.getThisJarDir() + "/" + TstlConstants.FILE_TESTER_OUTPUT_LOG);
+			File logFile = new File(TstlConstants.getPath(TstlConstants.PATHKEY_TESTER_OUTPUT_LOG));
 			logFile.createNewFile();
 			logWriter = new FlushWriter(logFile);
 		}
@@ -37,7 +36,7 @@ public abstract class Tester
 		logWriter.close();
 		reduceWriter.close();
 	}
-
+	/*
 	private void readConfiguration() 
 	{
 		File configFile = null;
@@ -118,7 +117,7 @@ public abstract class Tester
 			writer.close();			
 		}
 	}
-
+	 */
 	protected abstract void runTests(SUTInterface sut);
 
 	protected void testFailed()
@@ -148,7 +147,7 @@ public abstract class Tester
 		{
 			try
 			{
-				File reduceFile = new File(TstlConstants.getThisJarDir() + "/" + TstlConstants.FILE_TESTER_REDUCE_LOG); 
+				File reduceFile = new File(TstlConstants.getPath(TstlConstants.PATHKEY_TESTER_REDUCE_LOG)); 
 				reduceFile.createNewFile();
 				reduceWriter = new FlushWriter(reduceFile);
 			}

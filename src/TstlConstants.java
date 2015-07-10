@@ -1,7 +1,8 @@
 import java.io.File;
 import java.io.IOException;
 import java.net.URISyntaxException;
-import java.util.Locale;
+import java.nio.file.Paths;
+import java.util.HashMap;
 
 
 public class TstlConstants 
@@ -25,9 +26,8 @@ public class TstlConstants
 	public static final String DECLARATION_NAME_METHOD_ACTION_INTERFACE = "public String name();";
 	public static final String DECLARATION_SUT_GETACTIONS_METHOD = "public Action[] getActions()";
 	public static final String DECLARATION_SUT_RESET_METHOD = "public void reset()";	
-	public static final String DIR_GENBIN = "genbin";	
-	public static final String DIR_GENSRC = "gensrc";
-	public static final String FILE_TESTER_CONFIG = "tester.cfg";
+	private static final String PATHKEY_DIR_GENBIN = "genbin";	
+	private static final String PATHKEY_DIR_GENSRC = "gensrc";
 	public static final String IDENTIFIER_EXPLICIT_GUARD = "->";
 	public static final String IDENTIFIER_IMPORT = "@import";	
 	public static final String IDENTIFIER_INITIALIZATION = ":=";
@@ -49,19 +49,25 @@ public class TstlConstants
 	public static final String MESSAGE_ONLY_ONE_EXPLICIT_GUARD = "Each action can only have one explicit guard.";
 	public static final String MESSAGE_UNDEFINED_TSTL_VARIABLE = "Tstl Variable undefined in pool. ";
 	public static final String MESSGAGE_NONSURROUNDING_VARIABLE_IDENTIFIERS = "Variable identifiers must surround variables: ";
+	public static final String PATHKEY_TESTER_OUTPUT_LOG = "tester-output.log";
+	public static final String PATHKEY_TESTER_REDUCE_LOG = "test-reduced.log";	
+	public static final String PATHKEY_TSTLFILE = "tsltfile";
+	public static final String PATHKEY_WORKINGDIR = "workingdir";
+	private static HashMap<String, String> paths;
 	public static final String PREFIX_JAVA_VARIABLES = "var_";
-	public static final String SUFFIX_VAR_USED = "_used";	
+	public static final String SUFFIX_VAR_USED = "_used";
 	public static final boolean TESTER_CONFIG_DEFAULT_APPEND_FAILING_TEST = true;
 	public static final int TESTER_CONFIG_DEFAULT_IGNORE_CHECK_VALUE = 0;
 	public static final int TESTER_CONFIG_DEFAULT_TEST_PRINT_DELAY = 10000;
 	public static final int TESTER_CONFIG_DEFAULT_TESTS_PER_CYCLE = 1000;
+
 	public static final int TESTER_CONFIG_DEFAULT_TIMEOUT = 60000;
 	public static final String TSTL_JAVA = "TSTL-Java";
-	public static final String VISIBILITY_LEVEL_POOL_VAR = "private";
 
+	public static final String VISIBILITY_LEVEL_POOL_VAR = "private";
 	public static String excapeString(String s)
 	{
-		
+
 		if(s.contains("\""))
 		{
 			while(true)
@@ -83,9 +89,10 @@ public class TstlConstants
 				break;
 			}
 		}
-		
+
 		return s;
 	}
+
 	public static Action getActionById(SUTInterface sut, int id)
 	{
 		Action action = sut.getActions()[id];
@@ -99,47 +106,62 @@ public class TstlConstants
 		}
 		return null;
 	}
-	public static String getAppDataDir()
-	{
-		String os = System.getProperty("os.name","generic").toLowerCase(Locale.ENGLISH);
-		String home = System.getProperty("user.home");
-		if ((os.indexOf("mac") >= 0) || (os.indexOf("darwin") >= 0)) {
-			return home + "/Library/Application Support/"+ TSTL_JAVA +"/" ;
-		} else if (os.indexOf("win") >= 0) {
-			return home + "/AppData/Roaming/"+ TSTL_JAVA +"/" ;
-		} else if (os.indexOf("nux") >= 0) {
-			return home + "/."+ TSTL_JAVA +"/"  ;
-		} else {
-			return home + "/"+ TSTL_JAVA +"/"  ;
-		}
-	}
+
 	public static File getGeneratedClassesFolder() 
 	{
-		String srcDir = TstlConstants.getParserOutputSourceDir();
-		String compDir = new File(srcDir).getParentFile().getAbsolutePath() + "/"+TstlConstants.DIR_GENBIN;
+		String compDir = TstlConstants.getPath(PATHKEY_DIR_GENBIN);
 		File compDirFile = new File(compDir);
 		compDirFile.mkdirs();
 		return compDirFile;
 	}
+
 	public static String getParserOutputSourceDir()
 	{
-		File f = new File(getParserOutputSourceDirPath());
+		File f = new File(TstlConstants.getPath(PATHKEY_DIR_GENSRC));
 		f.mkdirs();
-
 		return f.getAbsolutePath() + "/";
 	}
 
-	private static String getParserOutputSourceDirPath()
-	{
-		File parFile = null;
-		try {
-			parFile = getThisJarDir();
-			return parFile.getAbsolutePath() + "/"+DIR_GENSRC+"/";
-		} catch (URISyntaxException e)
-		{
 
+	public static String getPath(String pathKey)
+	{
+		if(paths == null)
+			paths = new HashMap<String,String>();
+		if(paths.containsKey(pathKey))
+		{
+			return paths.get(pathKey);
 		}
-		return "/output/";
+		else if (pathKey.equals(TstlConstants.PATHKEY_TSTLFILE))
+		{
+			File[] list;
+
+			File workingDir = new File(TstlConstants.getPath((TstlConstants.PATHKEY_WORKINGDIR)));
+			list = workingDir.listFiles();
+
+			for (int i = 0; i < list.length; i++) 
+			{
+				File file = list[i];
+				String extension = null;
+				try
+				{
+					String[] pieces = file.getName().replace(".", "~").split("~");
+					extension = pieces[pieces.length -1];
+				}
+				catch(RuntimeException ex) {}
+				if(extension != null && extension.equals("tstl"))
+				{
+					return file.getAbsolutePath();
+
+				}
+			}
+			return TstlConstants.getPath("tstl.tstl");
+		}
+		else
+		{
+			File workingDir = new File(TstlConstants.getPath((TstlConstants.PATHKEY_WORKINGDIR)));
+			String newPath = workingDir.getAbsolutePath() + "/" + pathKey;
+			return newPath;
+		}
 	}
 
 	public static Repeatable getRepeatableFromVariable(String var, boolean mustBePool, PoolEntry[] entirePoolEntries, String actionLine) 
@@ -153,15 +175,15 @@ public class TstlConstants
 
 		return rep;
 	}
-
-	public static File getThisJarDir() throws URISyntaxException
+	/*
+	private static File getThisJarDir() throws URISyntaxException
 	{
 		File f =  new File(TstlParser.class.getProtectionDomain().getCodeSource().getLocation().toURI().getPath()).getParentFile();
 		if(f == null)
 			return new File("");
 		return f;
 	}
-
+	*/
 	public static void outputDependencies() 
 	{
 		CodeCopier cc = new CodeCopier();		
@@ -198,9 +220,12 @@ public class TstlConstants
 		}
 		return new LineParsePacket(javaCodePieces, reps);
 	}
-
-	public static final String FILE_TESTER_OUTPUT_LOG = "tester-output.log";
-		public static final String FILE_TESTER_REDUCE_LOG = "test-reduced.log";
+	public static void setPath(String pathkey, String path) 
+	{
+		if(paths == null)
+			paths = new HashMap<String,String>();
+		paths.put(pathkey,path);
+	}
 
 
 }
