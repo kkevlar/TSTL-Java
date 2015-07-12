@@ -68,20 +68,32 @@ public class TstlParserArgParser extends BasicParser
 		}
 
 	}
-	
+
 
 	private void help() 
 	{
 		// This prints out some help
 		HelpFormatter formater = new HelpFormatter();
 		Options helpOptions = new Options();
+
 		Collection<Option> coll = options.getOptions();
-		Option[] arr = coll.toArray(new Option[coll.size()]);
-		for (int i = 0; i < arr.length; i++) 
+		Option[] thisOptions = coll.toArray(new Option[coll.size()]);
+		for (int i = 0; i < thisOptions.length; i++) 
 		{
-			helpOptions.addOption(arr[i]);
+			helpOptions.addOption(thisOptions[i]);
 		}
-		formater.printHelp("Main", options);
+
+		Options runOptions = TestRunnerArgsParser.makeOptions();
+		Collection<Option> runColl = runOptions.getOptions();
+		Option[] runOptionArr = runColl.toArray(new Option[runColl.size()]);
+		for (int i = 0; i < runOptionArr.length; i++) 
+		{
+			Option o = runOptionArr[i];
+			if(!o.getOpt().equals("p"))
+				helpOptions.addOption(o);
+		}
+
+		formater.printHelp("Main", helpOptions);
 		System.exit(0);
 	}
 }

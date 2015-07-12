@@ -1,13 +1,9 @@
-import java.util.ArrayList;
-import java.util.Collection;
 import java.util.ListIterator;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import org.apache.commons.cli.BasicParser;
 import org.apache.commons.cli.CommandLine;
-import org.apache.commons.cli.HelpFormatter;
-import org.apache.commons.cli.Option;
 import org.apache.commons.cli.Options;
 import org.apache.commons.cli.ParseException;
 
@@ -27,6 +23,11 @@ public class TestRunnerArgsParser extends BasicParser
 	{
 		Options stat = new Options();
 		stat.addOption("p", "path", true, "[REQUIRED] Path to working directory. (should be provided by command line script)");
+		stat.addOption("m", "timeout", true, "[OPTIONAL] Timeout in milliseconds. Default is one minute (60000).");
+		stat.addOption("d", "printdelay", true, "[OPTIONAL] Delay (in millisecons) between entire tests printed. Default is 10 seconds (10000).");
+		stat.addOption("i", "ignorecheck", true, "[OPTIONAL] Should the tester ignore properties from tstl? 0=never 1=when_not_reducing 2=always. Defualt is never (0).");
+		stat.addOption("c", "tests", true, "[OPTIONAL] Tests per reset. Defualt is 1000.");
+		stat.addOption("a", "noappend", false, "[OPTIONAL] The final (failing) test will not be appended to each subtest when reducing if enabled. Default is not including this.");
 		return stat;
 	}
 
