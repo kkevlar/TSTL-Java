@@ -1,0 +1,3 @@
+#!/bin/bash
+rm /usr/bin/tstljava
+rm -rf $HOME/.tstljava

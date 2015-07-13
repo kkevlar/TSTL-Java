@@ -1,0 +1,8 @@
+#!/bin/bash
+DIR=$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )
+cd $DIR
+cp tstljava.sh /usr/bin/tstljava.sh
+mkdir $HOME/.tstljava/
+cp tstljava.jar $HOME/.tstljava/
+chmod 777 $HOME/.tstljava/tstljava.jar
+chmod 777 /usr/bin/tstljava
