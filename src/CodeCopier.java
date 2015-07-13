@@ -11,7 +11,7 @@ import java.util.ArrayList;
 
 public class CodeCopier
 {
-	private void copyCode(String className) throws IOException
+	private void copyJarClass(String className) throws IOException
 	{
 		ArrayList<String> lines = new ArrayList<String>();
 		InputStream stream = this.getClass().getResourceAsStream("res/" + className + ".nocompile");
@@ -80,10 +80,44 @@ public class CodeCopier
 		for (int i = 0; i < lines.size(); i++) 
 		{
 			if(!lines.get(i).equals("SUT.java"))
-				this.copyCode(lines.get(i));
+				this.copyJarClass(lines.get(i));
 		}	
 		copyDependency(TstlConstants.COMMONS_CLI);
+		copyClientCode();
 	}
+	private void copyClientCode() 
+	{
+		File workingDir = new File(TstlConstants.getPath(TstlConstants.PATHKEY_WORKINGDIR));
+		File srcDir = new File(workingDir.getAbsolutePath() + "/src");
+		if(srcDir.exists() && srcDir.isDirectory())
+		{
+			ArrayList<File> arrListFiles = new ArrayList<File>();
+			recursivelyGetFiles(arrListFiles, srcDir);
+			File srcFiles[] = arrListFiles.toArray(new File[arrListFiles.size()]);
+			
+		}
+	}
+
+	private void recursivelyGetFiles(ArrayList<File> files, File search)
+	{
+		File[] list = search.listFiles();
+		for (int i = 0; i < list.length; i++)
+		{
+			File file = list[i];
+			if(file.isFile())
+			{
+				if(file.isDirectory())
+				{
+					recursivelyGetFiles(files,file);
+				}
+				if(file.isFile())
+				{
+					files.add(file);
+				}
+			}
+		}
+	}
+
 	private void copyDependency(String dependency) throws IOException
 	{
         InputStream inStream = null;
