@@ -3,6 +3,7 @@ import java.io.IOException;
 import java.net.URISyntaxException;
 import java.nio.file.Paths;
 import java.util.HashMap;
+import java.util.Locale;
 
 
 public class TstlConstants 
@@ -66,6 +67,45 @@ public class TstlConstants
 
 	public static final String VISIBILITY_LEVEL_POOL_VAR = "private";
 	public static final String PATHKEY_FILE_ARGSSTORE = "args.args";
+	public static String fileInDir(File d, String s)
+	{
+		return fileInDir(d.getAbsolutePath(),s);
+	}
+	public static String fileInDir(String d, String s)
+	{
+		if(d.endsWith("/") && s.startsWith("/"))
+			return d + s.substring(1);
+		else if(d.endsWith("/") || s.startsWith("/"))
+			return (d + s);
+		else
+			return d + "/" + s;
+	}
+	public static String getTstlHomeDir()
+	{
+		String os = System.getProperty("os.name","generic").toLowerCase(Locale.ENGLISH);
+		String home = System.getProperty("user.home");
+		if ((os.indexOf("mac") >= 0) || (os.indexOf("darwin") >= 0)) 
+		{
+			return getTstlShellHomeDir(home);
+		} 
+		else if (os.indexOf("win") >= 0) 
+		{
+			return getTstlWinHomeDir(home);
+		} 
+		else
+		{
+			return getTstlShellHomeDir(home);
+		}
+	}
+	private static String getTstlShellHomeDir(String home) 
+	{
+		return fileInDir(home,"/.tstljava");
+	}
+	private static String getTstlWinHomeDir(String home) 
+	{
+		return fileInDir(home,"/AppData/Roaming/tstljava/");
+	}
+	
 	public static String excapeString(String s)
 	{
 
@@ -185,7 +225,7 @@ public class TstlConstants
 			return new File("");
 		return f;
 	}
-	*/
+	 */
 	public static void outputDependencies() 
 	{
 		CodeCopier cc = new CodeCopier();		

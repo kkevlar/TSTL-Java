@@ -7,6 +7,9 @@ import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.PrintWriter;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 
 public class CodeCopier
@@ -87,17 +90,37 @@ public class CodeCopier
 	}
 	private void copyClientCode() 
 	{
+		TstlLogger log = new TstlLogger("copyClientCode");
 		File workingDir = new File(TstlConstants.getPath(TstlConstants.PATHKEY_WORKINGDIR));
+		log.append("workingDir" , workingDir.getAbsolutePath());
 		File srcDir = new File(workingDir.getAbsolutePath() + "/src");
+		log.append("srcDir" , srcDir.getAbsolutePath());
 		if(srcDir.exists() && srcDir.isDirectory())
 		{
 			ArrayList<File> arrListFiles = new ArrayList<File>();
 			recursivelyGetFiles(arrListFiles, srcDir);
-			File srcFiles[] = arrListFiles.toArray(new File[arrListFiles.size()]);
-			
+			File[] srcFiles = arrListFiles.toArray(new File[arrListFiles.size()]);
+			log.append("srcFiles: " , Arrays.toString(srcFiles));
+			File[] relFiles = new File[srcFiles.length];
+			for(int i = 0; i < srcFiles.length; i++)
+			{
+				File file = srcFiles[i];
+				String wDirPath = workingDir.getAbsolutePath();
+				String fPath = file.getAbsolutePath();
+				if(!fPath.startsWith(wDirPath))
+					Logger.getLogger(this.getClass().getName()).log(Level.WARNING, "A src file  is not a child of working directory/src! FILE: \"" + fPath + "\"");
+				String rPath = fPath.substring(wDirPath.length());
+				File rFile = new File(TstlConstants.fileInDir(TstlConstants.getParserOutputSourceDir(), rPath));
+				relFiles[i] = rFile;
+				log.append(i + "", "fPath: " + fPath + "rPath: " + rPath + "rFile: " + rFile.getAbsolutePath());
+			}
 		}
-	}
-
+		else
+		{
+			log.append("no src dir?");
+		}
+		log.close();
+	}	
 	private void recursivelyGetFiles(ArrayList<File> files, File search)
 	{
 		File[] list = search.listFiles();
