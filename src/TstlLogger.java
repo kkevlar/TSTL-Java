@@ -84,12 +84,12 @@ public class TstlLogger
 				Logger.getLogger(this.getClass().getName()).log(Level.WARNING, "Cannot write to log file!",e);
 			}
 			if(lines.size() > 0)
-			{
-				writer.println("--");
+			{	
 				for(int i = 0; i < lines.size(); i++)
 				{
 					writer.println(lines.get(i));
 				}
+				writer.println("--");
 				writer.flush();
 			}
 			saveWriter = writer;
