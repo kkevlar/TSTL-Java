@@ -1,5 +1,3 @@
-import java.io.File;
-import java.io.PrintWriter;
 import java.util.Collection;
 import java.util.ListIterator;
 import java.util.logging.Level;
@@ -68,7 +66,7 @@ public class TstlParserArgParser extends BasicParser
 			log.log(Level.SEVERE, "Failed to parse comand line properties", e);
 			help();
 		}
-		writeHomeFile(TstlConstants.FILE_WASHELP, false +"");
+		TstlConstants.writeHomeFile(TstlConstants.FILE_WASHELP, false +"");
 
 	}
 	private void writeToClasspathStore(CommandLine cmd) 
@@ -77,28 +75,9 @@ public class TstlParserArgParser extends BasicParser
 		{
 			String cClasspath = cmd.getOptionValue("j");
 			cClasspath = ":" + cClasspath.replace(",", "~").replace("~", ":");
-			writeHomeFile(TstlConstants.FILE_CUSTOM_CLASSPATH, cClasspath);
+			TstlConstants.writeHomeFile(TstlConstants.FILE_CUSTOM_CLASSPATH, cClasspath);
 		}
 	}
-	private void writeHomeFile(String name, String text)
-	{
-		String path = TstlConstants.fileInDir(TstlConstants.getTstlHomeDir(), name);
-		try
-		{	
-			File file = new File(path);
-			file.createNewFile();
-
-			PrintWriter writer = new PrintWriter(file);
-			writer.println(text);
-			writer.flush();
-			writer.close();
-		}
-		catch (Exception ex)
-		{
-			log.log(Level.WARNING, "Writing the "+name+ " file failed. Path: \"" + path + "\"");
-		}
-	}
-
 	private void help() 
 	{
 		// This prints out some help
@@ -123,7 +102,7 @@ public class TstlParserArgParser extends BasicParser
 		}
 
 		formater.printHelp("Main", helpOptions);
-		writeHomeFile(TstlConstants.FILE_WASHELP, true +"");
+		TstlConstants.writeHomeFile(TstlConstants.FILE_WASHELP, true +"");
 		System.exit(0);
 	}
 }

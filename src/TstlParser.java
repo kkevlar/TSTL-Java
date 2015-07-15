@@ -45,6 +45,8 @@ public class TstlParser implements Runnable
 
 		readImports();
 
+		readCCSource();
+		
 		//Makes Class Declaration using the filename from the input
 		generateClassDeclaration();
 
@@ -72,6 +74,31 @@ public class TstlParser implements Runnable
 	}
 
 	
+	private void readCCSource()
+	{
+		ArrayList<String> sources = new ArrayList<String>();
+		for (int i = 0; i < tstl.size(); i++)
+		{
+			String line = tstl.get(i);
+			if(line.startsWith(TstlConstants.IDENTIFIER_CC_SOURCE))
+			{
+				String sourceInstruction = line.substring(TstlConstants.IDENTIFIER_CC_SOURCE.length());
+				sources.add(sourceInstruction);
+				i--;
+			}
+		}
+		TstlConstants.writeHomeFile(TstlConstants.FILE_WANTS_CC, (!(sources.isEmpty())) + "");
+		if(!sources.isEmpty())
+		{
+			String line = "";
+			for(int i = 0; i < sources.size(); i++)
+			{
+				line += sources.get(i) + ",";
+			}		
+			line = line.substring(0, line.length() -1);
+			TstlConstants.writeHomeFile(TstlConstants.FILE_CC_CFG, "line");
+		}		
+	}
 	private void readTstl()
 	{
 		String filePath = TstlConstants.getPath(TstlConstants.PATHKEY_TSTLFILE);

@@ -89,7 +89,8 @@ public class CodeCopier
 			if(!lines.get(i).equals("SUT.java"))
 				this.copyJarClass(lines.get(i));
 		}	
-		copyDependency(TstlConstants.COMMONS_CLI);
+		copyDependency(TstlConstants.JAR_COMMONS_CLI);
+		copyDependency(TstlConstants.JAR_EMMA);
 		copyClientCode();
 	}
 	private void copyClientCode() 
