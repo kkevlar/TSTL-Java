@@ -269,5 +269,7 @@ public class TstlConstants
 		paths.put(pathkey,path);
 	}
 
+	public  static final String FILE_WASHELP = "washelp.cfg";
+
 
 }

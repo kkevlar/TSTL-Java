@@ -43,7 +43,16 @@ public class TestRunnerArgsParser extends BasicParser
 			}
 			System.out.println("setpath " + cmd.getOptionValue("p"));
 			TstlConstants.setPath(TstlConstants.PATHKEY_WORKINGDIR,cmd.getOptionValue("p"));	
-
+			if(cmd.hasOption("m"))
+				tester.setTimeout(Long.parseLong(cmd.getOptionValue("m")));
+			if(cmd.hasOption("d"))
+				tester.setTestPrintDelay(Long.parseLong(cmd.getOptionValue("d")));
+			if(cmd.hasOption("i"))
+				tester.setIgnoreCheckValue(Integer.parseInt(cmd.getOptionValue("i")));
+			if(cmd.hasOption("c"))
+				tester.setTestsPerCycle(Integer.parseInt(cmd.getOptionValue("c")));		
+			if(cmd.hasOption("a"))
+				tester.setShouldAppendFailingTest(false);
 		} catch (ParseException e) 
 		{
 			log.log(Level.SEVERE, "Failed to parse comand line properties", e);

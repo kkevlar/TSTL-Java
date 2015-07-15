@@ -62,34 +62,42 @@ public class TstlParserArgParser extends BasicParser
 			{
 				TstlConstants.setPath(TstlConstants.PATHKEY_TSTLFILE,cmd.getOptionValue("t"));
 			} 
-			String cpFilePath = TstlConstants.fileInDir(TstlConstants.getTstlHomeDir(), TstlConstants.FILE_CUSTOM_CLASSPATH);
-			try
-			{
-				
-				File cpFile = new File(cpFilePath);
-				cpFile.createNewFile();
-				if(cmd.hasOption("j"))
-				{
-					String cClasspath = cmd.getOptionValue("j");
-					cClasspath = ":" + cClasspath.replace(",", "~").replace("~", ":");
-					PrintWriter writer = new PrintWriter(cpFile);
-					writer.println(cClasspath);
-					writer.flush();
-					writer.close();
-				}
-			}
-			catch (Exception ex)
-			{
-				log.log(Level.WARNING, "Writing the classpath file failed. Path: \"" + cpFilePath + "\"");
-			}
+			writeToClasspathStore(cmd);
 
 		} catch (ParseException e) {
 			log.log(Level.SEVERE, "Failed to parse comand line properties", e);
 			help();
 		}
+		writeHomeFile(TstlConstants.FILE_WASHELP, false +"");
 
 	}
+	private void writeToClasspathStore(CommandLine cmd) 
+	{
+		if(cmd.hasOption("j"))
+		{
+			String cClasspath = cmd.getOptionValue("j");
+			cClasspath = ":" + cClasspath.replace(",", "~").replace("~", ":");
+			writeHomeFile(TstlConstants.FILE_CUSTOM_CLASSPATH, cClasspath);
+		}
+	}
+	private void writeHomeFile(String name, String text)
+	{
+		String path = TstlConstants.fileInDir(TstlConstants.getTstlHomeDir(), name);
+		try
+		{	
+			File file = new File(path);
+			file.createNewFile();
 
+			PrintWriter writer = new PrintWriter(file);
+			writer.println(text);
+			writer.flush();
+			writer.close();
+		}
+		catch (Exception ex)
+		{
+			log.log(Level.WARNING, "Writing the "+name+ " file failed. Path: \"" + path + "\"");
+		}
+	}
 
 	private void help() 
 	{
@@ -115,6 +123,7 @@ public class TstlParserArgParser extends BasicParser
 		}
 
 		formater.printHelp("Main", helpOptions);
+		writeHomeFile(TstlConstants.FILE_WASHELP, true +"");
 		System.exit(0);
 	}
 }

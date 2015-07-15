@@ -1,6 +1,8 @@
 #!/bin/bash
-mkdir -p lib
 java -jar $HOME/.tstljava/tstljava.jar -p $PWD "$@"
+if [ $(cat $HOME/.tstljava/washelp.cfg) = true ] ; then
+exit
+fi
 CCP=$(cat $HOME/.tstljava/cp.cfg)
 echo $CCP
 echo lib/commons-cli.jar:genbin:.$CCP

@@ -232,4 +232,11 @@ public abstract class Tester
 	public void setTimeout(long timeout) {
 		this.timeout = timeout;
 	}
+	public boolean shouldAppendFailingTest() {
+		return shouldAppendFailingTest;
+	}
+	public void setShouldAppendFailingTest(boolean shouldAppendFailingTest) {
+		this.shouldAppendFailingTest = shouldAppendFailingTest;
+	}
+	
 }

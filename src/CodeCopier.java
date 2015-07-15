@@ -192,6 +192,9 @@ public class CodeCopier
 
 	private void copyDependency(String dependency) throws IOException
 	{
+		File libFolder  = new File(TstlConstants.fileInDir(TstlConstants.getPath(TstlConstants.PATHKEY_WORKINGDIR), "lib"));
+		if(!libFolder.exists() || !libFolder.isDirectory())
+			libFolder.mkdir();
 		InputStream inStream = null;
 		OutputStream outStream = null;
 		String jarPath;
