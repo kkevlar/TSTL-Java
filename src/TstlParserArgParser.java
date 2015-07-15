@@ -73,6 +73,8 @@ public class TstlParserArgParser extends BasicParser
 					cClasspath = ":" + cClasspath.replace(",", "~").replace("~", ":");
 					PrintWriter writer = new PrintWriter(cpFile);
 					writer.println(cClasspath);
+					writer.flush();
+					writer.close();
 				}
 			}
 			catch (Exception ex)
