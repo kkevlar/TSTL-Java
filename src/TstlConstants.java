@@ -66,7 +66,7 @@ public class TstlConstants
 	public static final String TSTL_JAVA = "TSTL-Java";
 
 	public static final String VISIBILITY_LEVEL_POOL_VAR = "private";
-	public static final String PATHKEY_FILE_ARGSSTORE = "args.args";
+	public static final String FILENAME_ARGSSTORE = "args.args";
 	public static String fileInDir(File d, String s)
 	{
 		return fileInDir(d.getAbsolutePath(),s);

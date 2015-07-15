@@ -131,7 +131,7 @@ public abstract class Tester
 		TestReducer reducer = new TestReducer(sut, actTrace, this);
 		reducer.setShouldAppendFailingTest(shouldAppendFailingTest );
 		int[] actionIds = reducer.getReducedTestIds();
-		rprintln("Test reduced. Heres main line of each steap.");
+		rprintln("Test reduced. Heres main line of each step.");
 		for (int i = 0; i < actionIds.length; i++) 
 		{
 			String name = sut.getActions()[actionIds[i]].name();

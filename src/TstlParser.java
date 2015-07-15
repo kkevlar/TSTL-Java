@@ -27,7 +27,7 @@ public class TstlParser implements Runnable
 				line += " ";
 			line += args[i];			
 		}
-		File argsFile = new File(TstlConstants.getPath(TstlConstants.PATHKEY_FILE_ARGSSTORE));
+		File argsFile = new File(TstlConstants.fileInDir(TstlConstants.getTstlHomeDir(),(TstlConstants.FILENAME_ARGSSTORE)));
 		argsFile.createNewFile();
 		PrintWriter writer = new PrintWriter(argsFile);
 		writer.println(line);
