@@ -1,4 +1,5 @@
-import java.util.ArrayList;
+import java.io.File;
+import java.io.PrintWriter;
 import java.util.Collection;
 import java.util.ListIterator;
 import java.util.logging.Level;
@@ -24,7 +25,7 @@ public class TstlParserArgParser extends BasicParser
 		options.addOption("h", "help", false, "[OPTIONAL] Displays help.");
 		options.addOption("p", "path", true, "[REQUIRED] Path to working directory. (should be provided by command line script)");
 		options.addOption("t", "tstl", true, "[OPTIONAL] Path to tstl file. Should work for java.io.File construciton.");
-
+		options.addOption("j", "classpath", true, "[OPTIONAL] Jars or directories to add to the classpath at compiletime and runtime. Separated by '~' '.' or ','.");
 	}
 	@Override
 	protected void processOption(final String arg, final ListIterator iterator) throws ParseException 
@@ -61,6 +62,23 @@ public class TstlParserArgParser extends BasicParser
 			{
 				TstlConstants.setPath(TstlConstants.PATHKEY_TSTLFILE,cmd.getOptionValue("t"));
 			} 
+			try
+			{
+				String cpFilePath = TstlConstants.fileInDir(TstlConstants.getTstlHomeDir(), TstlConstants.FILE_CUSTOM_CLASSPATH);
+				File cpFile = new File(cpFilePath);
+				cpFile.createNewFile();
+				if(cmd.hasOption("j"))
+				{
+					String cClasspath = cmd.getOptionValue("j");
+					cClasspath = ":" + cClasspath.replace(",", "~").replace("~", ":");
+					PrintWriter writer = new PrintWriter(cpFile);
+					writer.println(cClasspath);
+				}
+			}
+			catch (Exception ex)
+			{
+				log.log(Level.WARNING, "Writing the classpath file failed.");
+			}
 
 		} catch (ParseException e) {
 			log.log(Level.SEVERE, "Failed to parse comand line properties", e);
