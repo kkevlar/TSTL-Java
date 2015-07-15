@@ -9,6 +9,8 @@ compile.bat
 *.class
 *.tstl.old
 *~
+.classpath
+.project
 
 #Directories
 hs_err_pid*
@@ -19,3 +21,4 @@ hs_err_pid*
 /src/SUT.java
 !/tstl-samples/*.tstl
 /builds/
+/.settings/
