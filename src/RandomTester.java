@@ -39,8 +39,7 @@ public class RandomTester extends Tester
 					testFailed();
 					return;
 				}
-				else if (print && testCount +1==getTestsPerCycle())
-					println(info);
+				
 				testCount++;
 			}
 			loopCount++;
