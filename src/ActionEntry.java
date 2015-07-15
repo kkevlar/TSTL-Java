@@ -1,6 +1,8 @@
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 
 public class ActionEntry extends RepeatablesContainer
@@ -178,7 +180,15 @@ public class ActionEntry extends RepeatablesContainer
 				String inf = this.expressionVarInformation[(i-1)/2];
 				String[] split = inf.split(",");
 				PoolEntry pEntry = (PoolEntry) TstlConstants.getRepeatableFromVariable(split[0], true, entirePoolEntries, actionLine);
-				int index = Integer.parseInt(split[1])-1;//can error need throw/catch.....
+				int index;
+				try
+				{
+					index = Integer.parseInt(split[1])-1;
+				}
+				catch(Exception ex)
+				{
+					throw new MalformedTstlException("Are your pool variables in explicit guards formatted as: %INT,2%?");
+				}
 				int indexFromVals = this.repeatingPoolValues.get(pEntry)[index];
 				int giveToPoolNum = vals[indexFromVals];
 				expressionLine += pEntry.getAsJava(giveToPoolNum);

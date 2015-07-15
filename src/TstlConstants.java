@@ -1,7 +1,5 @@
 import java.io.File;
 import java.io.IOException;
-import java.net.URISyntaxException;
-import java.nio.file.Paths;
 import java.util.HashMap;
 import java.util.Locale;
 
@@ -28,7 +26,7 @@ public class TstlConstants
 	public static final String DECLARATION_NAME_METHOD_ACTION_INTERFACE = "public String name();";
 	public static final String DECLARATION_SUT_GETACTIONS_METHOD = "public Action[] getActions()";	
 	public static final String DECLARATION_SUT_RESET_METHOD = "public void reset()";	
-	public static final String FILE_CUSTOM_CLASSPATH = "custom.classpath";
+	public static final String FILE_CUSTOM_CLASSPATH = "cp.cfg";
 	public static final String FILENAME_ARGSSTORE = "args.args";
 	public static final String IDENTIFIER_EXPLICIT_GUARD = "->";	
 	public static final String IDENTIFIER_IMPORT = "@import";

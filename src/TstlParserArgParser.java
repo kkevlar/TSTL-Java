@@ -62,9 +62,10 @@ public class TstlParserArgParser extends BasicParser
 			{
 				TstlConstants.setPath(TstlConstants.PATHKEY_TSTLFILE,cmd.getOptionValue("t"));
 			} 
+			String cpFilePath = TstlConstants.fileInDir(TstlConstants.getTstlHomeDir(), TstlConstants.FILE_CUSTOM_CLASSPATH);
 			try
 			{
-				String cpFilePath = TstlConstants.fileInDir(TstlConstants.getTstlHomeDir(), TstlConstants.FILE_CUSTOM_CLASSPATH);
+				
 				File cpFile = new File(cpFilePath);
 				cpFile.createNewFile();
 				if(cmd.hasOption("j"))
@@ -79,7 +80,7 @@ public class TstlParserArgParser extends BasicParser
 			}
 			catch (Exception ex)
 			{
-				log.log(Level.WARNING, "Writing the classpath file failed.");
+				log.log(Level.WARNING, "Writing the classpath file failed. Path: \"" + cpFilePath + "\"");
 			}
 
 		} catch (ParseException e) {

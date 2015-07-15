@@ -33,8 +33,10 @@ public abstract class Tester
 		}
 		sut = new SUT();
 		runTests(sut);
-		logWriter.close();
-		reduceWriter.close();
+		if(reduceWriter != null)
+			logWriter.close();
+		if(reduceWriter != null)
+			reduceWriter.close();
 	}
 	/*
 	private void readConfiguration() 
