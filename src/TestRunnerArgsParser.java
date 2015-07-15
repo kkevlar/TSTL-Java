@@ -67,7 +67,7 @@ public class TestRunnerArgsParser extends BasicParser
 
 		if (hasOption)
 		{
-			System.out.println("setting");
+			//System.out.println("setting");
 			super.processOption(arg, iterator);
 		}
 

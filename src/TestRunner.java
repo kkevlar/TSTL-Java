@@ -14,11 +14,11 @@ public class TestRunner
 		String line = reader.readLine();
 		reader.close();
 		String[] newArgs = line.split(" ");
-		System.out.println("split: " + Arrays.toString(newArgs));
+		//System.out.println("split: " + Arrays.toString(newArgs));
 		Tester tester = new RandomTester();
 		TestRunnerArgsParser parser = new TestRunnerArgsParser(newArgs,tester);
 		parser.parse();
-		System.out.println("dir: " + TstlConstants.getPath(TstlConstants.PATHKEY_WORKINGDIR));
+		//System.out.println("dir: " + TstlConstants.getPath(TstlConstants.PATHKEY_WORKINGDIR));
 		tester.go();
 	}
 
