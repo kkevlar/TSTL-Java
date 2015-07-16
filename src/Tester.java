@@ -50,11 +50,11 @@ public abstract class Tester
 		}
 		rprintln("test failed. Reducing....");
 		TestReducer reducer = new TestReducer(sut, actTrace, this);
-		int[] metaIds = reducer.getReducedTestIds();
+		int[] actionIds = reducer.getReducedTestIds();
 		rprintln("Test reduced. Heres main line of each step.");
-		for (int i = 0; i < metaIds.length; i++) 
+		for (int i = 0; i < actionIds.length; i++) 
 		{
-			String name = sut.getActions()[metaIds[i]].name();
+			String name = sut.getActions()[actionIds[i]].name();
 			rprintln(name.trim());
 		}
 	}
