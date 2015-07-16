@@ -5,4 +5,5 @@ public interface Action
 	public void act();
 	public String getAllInfo();
 	public int id();
+	public int getParentActionId();
 }

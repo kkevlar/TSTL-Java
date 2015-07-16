@@ -131,12 +131,19 @@ public abstract class Tester
 		}
 		rprintln("test failed. Reducing....");
 		TestReducer reducer = new TestReducer(sut, actTrace, this);
-		reducer.setShouldAppendFailingTest(shouldAppendFailingTest );
-		int[] actionIds = reducer.getReducedTestIds();
+		int[] metaIds = reducer.getReducedTestIds();
 		rprintln("Test reduced. Heres main line of each step.");
-		for (int i = 0; i < actionIds.length; i++) 
+		for (int i = 0; i < metaIds.length; i++) 
 		{
-			String name = sut.getActions()[actionIds[i]].name();
+			String name = sut.getActions()[metaIds[i]].name();
+			rprintln(name.trim());
+		}
+		SmartTestReducer sReducer = new SmartTestReducer(sut,metaIds,this);
+		int[] rIds = sReducer.getReducedTestIds();
+		rprintln("Test smart reduced. Heres main line of each step.");
+		for (int i = 0; i < rIds.length; i++) 
+		{
+			String name = sut.getActions()[rIds[i]].name();
 			rprintln(name.trim());
 		}
 	}
