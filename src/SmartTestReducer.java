@@ -1,36 +1,35 @@
 import java.util.ArrayList;
 
 
-public class TestReducer 
+public class SmartTestReducer 
 {
 	private SUTInterface sut;
 	private int[] originalTestIds;	
 	private Tester tester;
 	private ArrayList<Integer> reducedTest;
 	private boolean shouldAppendFailingTest;
-	private SmartTestReducer sReducer;
-	public TestReducer(SUTInterface sut, int[] actTraceArray, Tester tester2)
+	public SmartTestReducer(SUTInterface sut, int[] test, Tester tester)
 	{
 		super();
-		setUp(sut, actTraceArray, tester2);
+		setUp(sut, test, tester);
 	}
 
-	public TestReducer(SUTInterface sut, ArrayList<Integer> actTrace, Tester tester)
+	public SmartTestReducer(SUTInterface sut, ArrayList<Integer> test, Tester tester)
 	{
 		super();
-		int[] actTraceArray = new int[actTrace.size()];
-		for (int i = 0; i < actTraceArray.length; i++) 
+		int[] testArr = new int[test.size()];
+		for (int i = 0; i < testArr.length; i++) 
 		{
-			actTraceArray[i] = actTrace.get(i);
+			testArr[i] = test.get(i);
 		}
-		setUp(sut,actTraceArray,tester);
+		setUp(sut,testArr,tester);
 	}
 
 	private void setUp(SUTInterface sut, int[] actTraceArray, Tester tester) 
 	{
 		this.sut = sut;
 		this.originalTestIds = actTraceArray;
-		this.tester = tester;	
+		this.tester = tester;		
 		this.shouldAppendFailingTest = tester.shouldAppendFailingTest();
 	}
 
@@ -43,8 +42,7 @@ public class TestReducer
 		{
 			ids[i] = reducedTest.get(i);
 		}
-		
-		return sReducer.getReducedTestIds(); //ids;
+		return ids;
 	}
 	public void reduceTest()
 	{ 
@@ -53,7 +51,8 @@ public class TestReducer
 			reducedTest = new ArrayList<Integer>();
 			for (int i = 0; i < originalTestIds.length; i++) 
 			{
-				reducedTest.add(originalTestIds[i]);
+				Action action = TstlConstants.getActionById(sut, originalTestIds[i]);
+				reducedTest.add(action.getParentActionId());
 			}
 		}
 		boolean fullyReduced = false;
@@ -74,9 +73,7 @@ public class TestReducer
 				}
 			}		
 		}
-		sReducer = new SmartTestReducer(sut, reducedTest, tester);
 	}
-	
 
 	private boolean reduceUsingPieces(int numPieces, ArrayList<Integer> test)
 	{

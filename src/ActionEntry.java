@@ -302,7 +302,7 @@ public class ActionEntry extends RepeatablesContainer
 		String ret = "public int id()"+"\n"
 				+ "{"+"\n";
 		ret += "return " + countActionsPrinted+";"+"\n";
-		ret += "}";
+		ret += "}" + "\n";
 		return ret;
 	}
 	private String makeParentIdMethod(int[] poolValues,int countActionsPrinted) 
@@ -316,18 +316,18 @@ public class ActionEntry extends RepeatablesContainer
 				break;
 			}
 		}
-		String ret = "public int getParentId()"+"\n"
+		String ret = "public int getParentActionId()"+"\n"
 				+ "{"+"\n";
 		if(isZero)
 		{
-			ret += "return getId();" + "\n";
+			ret += "return id();" + "\n";
 			this.parentId = countActionsPrinted;
 		}
 		else
 		{
 		ret += "return " + parentId+";"+"\n";
 		}
-		ret += "}";
+		ret += "}" +  "\n";
 		return ret;
 	}
 	@Override
