@@ -8,7 +8,6 @@ public class TestReducer
 	private Tester tester;
 	private ArrayList<Integer> reducedTest;
 	private boolean shouldAppendFailingTest;
-	private SmartTestReducer sReducer;
 	public TestReducer(SUTInterface sut, int[] actTraceArray, Tester tester2)
 	{
 		super();
@@ -43,8 +42,7 @@ public class TestReducer
 		{
 			ids[i] = reducedTest.get(i);
 		}
-		
-		return sReducer.getReducedTestIds(); //ids;
+		return ids;
 	}
 	public void reduceTest()
 	{ 
@@ -74,7 +72,6 @@ public class TestReducer
 				}
 			}		
 		}
-		sReducer = new SmartTestReducer(sut, reducedTest, tester);
 	}
 	
 
