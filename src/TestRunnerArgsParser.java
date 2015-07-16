@@ -41,7 +41,7 @@ public class TestRunnerArgsParser extends BasicParser
 				log.log(Level.SEVERE, "No path to working directory! Are you running with the instal script?");
 				System.exit(-1);
 			}
-			System.out.println("setpath " + cmd.getOptionValue("p"));
+			//System.out.println("setpath " + cmd.getOptionValue("p"));
 			TstlConstants.setPath(TstlConstants.PATHKEY_WORKINGDIR,cmd.getOptionValue("p"));	
 			if(cmd.hasOption("m"))
 				tester.setTimeout(Long.parseLong(cmd.getOptionValue("m")));

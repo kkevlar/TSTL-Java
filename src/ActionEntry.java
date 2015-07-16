@@ -300,7 +300,7 @@ public class ActionEntry extends RepeatablesContainer
 		String ret = "public int id()"+"\n"
 				+ "{"+"\n";
 		ret += "return " + countActionsPrinted+";"+"\n";
-		ret += "}";
+		ret += "}" + "\n";
 		return ret;
 	}
 	@Override

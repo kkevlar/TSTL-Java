@@ -16,8 +16,12 @@ import java.util.logging.Logger;
 
 public class CodeCopier
 {
-	private TstlLogger log;
-
+	private TstlLogger ccLog;
+	private Logger log;
+	public CodeCopier()
+	{
+		log = Logger.getLogger(this.getClass().getName());
+	}
 	private void copyJarClass(String className) throws IOException
 	{
 		ArrayList<String> lines = new ArrayList<String>();
@@ -28,8 +32,8 @@ public class CodeCopier
 		}
 		if(stream == null)
 		{
-			System.out.println("null");
-			System.exit(-1);
+			log.log(Level.SEVERE, "Unable to copy " + className + " from witin jar resources!");
+			return;
 		}
 		BufferedReader reader = new BufferedReader(new InputStreamReader(stream));
 		while(true)
@@ -70,8 +74,8 @@ public class CodeCopier
 		}		
 		if(stream == null)
 		{
-			System.out.println("null");
-			System.exit(-1);
+			log.log(Level.SEVERE, "Unable to copy " + "names.names" + " from witin jar resources! No SUT depencies can be written!");
+			return;
 		}
 		BufferedReader reader = new BufferedReader(new InputStreamReader(stream));
 		while(true)
@@ -95,17 +99,17 @@ public class CodeCopier
 	}
 	private void copyClientCode() 
 	{
-		log = new TstlLogger("copyClientCode");
+		ccLog = new TstlLogger("copyClientCode");
 		File workingDir = new File(TstlConstants.getPath(TstlConstants.PATHKEY_WORKINGDIR));
-		log.append("workingDir" , workingDir.getAbsolutePath());
+		ccLog.append("workingDir" , workingDir.getAbsolutePath());
 		File srcDir = new File(workingDir.getAbsolutePath() + "/src");
-		log.append("srcDir" , srcDir.getAbsolutePath());
+		ccLog.append("srcDir" , srcDir.getAbsolutePath());
 		if(srcDir.exists() && srcDir.isDirectory())
 		{
 			ArrayList<File> arrListFiles = new ArrayList<File>();
 			recursivelyGetFiles(arrListFiles, srcDir);
 			File[] srcFiles = arrListFiles.toArray(new File[arrListFiles.size()]);
-			log.append("srcFiles: " , Arrays.toString(srcFiles));
+			ccLog.append("srcFiles: " , Arrays.toString(srcFiles));
 			File[] relFiles = new File[srcFiles.length];
 			for(int i = 0; i < srcFiles.length; i++)
 			{
@@ -117,7 +121,7 @@ public class CodeCopier
 				String rPath = fPath.substring(srcDirPath.length());
 				File rFile = new File(TstlConstants.fileInDir(TstlConstants.getParserOutputSourceDir(), rPath));
 				relFiles[i] = rFile;
-				log.append(i + "", "fPath: " + fPath + "rPath: " + rPath + "rFile: " + rFile.getAbsolutePath());
+				ccLog.append(i + "", "fPath: " + fPath + "rPath: " + rPath + "rFile: " + rFile.getAbsolutePath());
 			}
 			for(int x = 0; x < relFiles.length; x++)
 			{
@@ -125,7 +129,7 @@ public class CodeCopier
 				try {
 					file.createNewFile();
 				} catch (IOException e2) {
-					log.append("COULD NOT CREATE FILE FOR: " + file.getAbsolutePath());
+					ccLog.append("COULD NOT CREATE FILE FOR: " + file.getAbsolutePath());
 				}
 				constructDirectories(file.getParentFile());
 				ArrayList<String> lines = new ArrayList<String>();
@@ -133,7 +137,7 @@ public class CodeCopier
 				try {
 					scanner = new Scanner(srcFiles[x]);
 				} catch (FileNotFoundException e1) {
-					log.append("COULD NOT SCAN FOR: " + srcFiles[x].getAbsolutePath());
+					ccLog.append("COULD NOT SCAN FOR: " + srcFiles[x].getAbsolutePath());
 				}
 				while(scanner != null && scanner.hasNextLine())
 					lines.add(scanner.nextLine());
@@ -141,7 +145,7 @@ public class CodeCopier
 				try {
 					writer = new PrintWriter(file);
 				} catch (FileNotFoundException e) {
-					log.append("COULD NOT CREATE WRITER FOR: " + file.getAbsolutePath());
+					ccLog.append("COULD NOT CREATE WRITER FOR: " + file.getAbsolutePath());
 				}
 				for(int y = 0; y < lines.size() && writer != null; y++)
 				{
@@ -157,9 +161,9 @@ public class CodeCopier
 		}
 		else
 		{
-			log.append("no src dir?");
+			ccLog.append("no src dir?");
 		}
-		log.close();
+		ccLog.close();
 	}	
 	private void constructDirectories(File parentFile) 
 	{
@@ -171,7 +175,7 @@ public class CodeCopier
 
 	private void recursivelyGetFiles(ArrayList<File> files, File search)
 	{
-		log.append("RGF", search.getAbsolutePath());
+		ccLog.append("RGF", search.getAbsolutePath());
 		File[] list = search.listFiles();
 		for (int i = 0; i < list.length; i++)
 		{
@@ -179,12 +183,12 @@ public class CodeCopier
 
 			if(file.isDirectory())
 			{
-				log.append("RGF", "gotdir " + file.getAbsolutePath());
+				ccLog.append("RGF", "gotdir " + file.getAbsolutePath());
 				recursivelyGetFiles(files,file);
 			}
 			if(file.isFile())
 			{
-				log.append("RGF", "gotfile " + file.getAbsolutePath());
+				ccLog.append("RGF", "gotfile " + file.getAbsolutePath());
 				files.add(file);
 			}
 

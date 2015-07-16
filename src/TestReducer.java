@@ -29,7 +29,8 @@ public class TestReducer
 	{
 		this.sut = sut;
 		this.originalTestIds = actTraceArray;
-		this.tester = tester;		
+		this.tester = tester;	
+		this.shouldAppendFailingTest = tester.shouldAppendFailingTest();
 	}
 
 	public int[] getReducedTestIds()
@@ -72,6 +73,7 @@ public class TestReducer
 			}		
 		}
 	}
+	
 
 	private boolean reduceUsingPieces(int numPieces, ArrayList<Integer> test)
 	{
