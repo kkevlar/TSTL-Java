@@ -29,7 +29,6 @@ public class ActionEntry extends RepeatablesContainer
 	private HashMap<Repeatable, int[]> repeatingPoolValues;
 	private String[] javaExpressionPieces;
 	private String[] expressionVarInformation;
-	private int parentId;
 
 	public ActionEntry(String explicitGuardUnparsed, String actionLine, PoolEntry[] entirePoolEntries) 
 	{
@@ -292,7 +291,6 @@ public class ActionEntry extends RepeatablesContainer
 		ret += this.makeEnabledMethod(poolValues);
 		ret += this.makeActMethod(poolValues);
 		ret += this.makeGetAllInfoMethod(poolValues);
-		ret += this.makeParentIdMethod(poolValues, countActionsPrinted);
 		ret += "};";
 		return ret;
 	}
@@ -303,31 +301,6 @@ public class ActionEntry extends RepeatablesContainer
 				+ "{"+"\n";
 		ret += "return " + countActionsPrinted+";"+"\n";
 		ret += "}" + "\n";
-		return ret;
-	}
-	private String makeParentIdMethod(int[] poolValues,int countActionsPrinted) 
-	{
-		boolean isZero = true;
-		for(int i = 0; i < poolValues.length; i++)
-		{
-			if(poolValues[i] != 0)
-			{
-				isZero = false;
-				break;
-			}
-		}
-		String ret = "public int getParentActionId()"+"\n"
-				+ "{"+"\n";
-		if(isZero)
-		{
-			ret += "return id();" + "\n";
-			this.parentId = countActionsPrinted;
-		}
-		else
-		{
-		ret += "return " + parentId+";"+"\n";
-		}
-		ret += "}" +  "\n";
 		return ret;
 	}
 	@Override
