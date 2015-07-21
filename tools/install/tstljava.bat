@@ -8,7 +8,7 @@ set /p CCP=<%TJHOME%\cp.cfg
 javac -cp lib/commons-cli.jar%CCP% -d genbin -sourcepath gensrc gensrc/TestRunner.java
 set /p WANTSCC=<%TJHOME%\wantscc.yes
 if %WANTSCC%==true goto GIVECC
-java -cp lib/commons-cli.jar:genbin:.$CCP TestRunner
+java -cp lib/commons-cli.jar:genbin:.%CCP% TestRunner
 goto EXIT
 
 :GIVECC
