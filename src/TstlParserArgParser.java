@@ -73,7 +73,9 @@ public class TstlParserArgParser extends BasicParser
 		if(cmd.hasOption("j"))
 		{
 			String cClasspath = cmd.getOptionValue("j");
-			cClasspath = ":" + cClasspath.replace(",", "~").replace("~", ":");
+			cClasspath = ":" + cClasspath.replace(",", "~").replace(";", ":").replace("~", ":");
+			if(TstlConstants.isOnWindows())
+				cClasspath = cClasspath.replace(":", ";");
 			TstlConstants.writeHomeFile(TstlConstants.FILE_CUSTOM_CLASSPATH, cClasspath);
 		}
 	}

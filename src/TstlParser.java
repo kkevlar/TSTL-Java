@@ -78,14 +78,18 @@ public class TstlParser implements Runnable
 	
 	private void readCCSource ()
 	{
+		TstlConstants.getLogger().log(Level.FINEST,"Starting readCCSource");
 		ArrayList<String> sources = new ArrayList<String>();
 		for (int i = 0; i < tstl.size(); i++)
 		{
 			String line = tstl.get(i);
+			TstlConstants.getLogger().log(Level.FINEST,"i:" + i + " line:\"" + line + "\"");
 			if(line.startsWith(TstlConstants.IDENTIFIER_CC_SOURCE))
 			{
 				String sourceInstruction = line.substring(TstlConstants.IDENTIFIER_CC_SOURCE.length());
 				sources.add(sourceInstruction);
+				tstl.remove(i); //newly added. remove if fails.
+				TstlConstants.getLogger().log(Level.FINEST,"true, removed");				
 				i--;
 			}
 		}
@@ -100,7 +104,7 @@ public class TstlParser implements Runnable
 			line = line.substring(0, line.length() -1);
 			TstlConstants.writeHomeFile(TstlConstants.FILE_CC_CFG, "line");
 		}		
-	}	
+	}
 	private void readTstl()
 	{
 		String filePath = TstlConstants.getPath(TstlConstants.PATHKEY_TSTLFILE);

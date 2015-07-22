@@ -70,13 +70,13 @@ public class TstlConstants
 	public static final boolean TESTER_CONFIG_DEFAULT_APPEND_FAILING_TEST = true;
 	public static final int TESTER_CONFIG_DEFAULT_IGNORE_CHECK_VALUE = 0;
 	public static final int TESTER_CONFIG_DEFAULT_TEST_PRINT_DELAY = 10000;
-	
+
 	public static final int TESTER_CONFIG_DEFAULT_TESTS_PER_CYCLE = 1000;
 	public static final int TESTER_CONFIG_DEFAULT_TIMEOUT = 60000;
 	public static final String TSTL_JAVA = "TSTL-Java";
-	
+
 	public static final String VISIBILITY_LEVEL_POOL_VAR = "private";
-	
+
 	public static String excapeString(String s)
 	{
 
@@ -203,22 +203,31 @@ public class TstlConstants
 	}
 	public static String getTstlHomeDir()
 	{
-		String os = System.getProperty("os.name","generic").toLowerCase(Locale.ENGLISH);
 		String home = System.getProperty("user.home");
+		if(isOnWindows())
+		{
+			return 	getTstlWinHomeDir(home);
+		}
+		return getTstlShellHomeDir(home);
+	}
+
+	public static boolean isOnWindows() 
+	{
+		String os = System.getProperty("os.name","generic").toLowerCase(Locale.ENGLISH);
 		if ((os.indexOf("mac") >= 0) || (os.indexOf("darwin") >= 0)) 
 		{
-			return getTstlShellHomeDir(home);
+			return false;
 		} 
 		else if (os.indexOf("win") >= 0) 
 		{
-			return getTstlWinHomeDir(home);
+			return true;
 		} 
 		else
 		{
-			return getTstlShellHomeDir(home);
+			return false;
 		}
 	}
-	
+
 	private static String getTstlShellHomeDir(String home) 
 	{
 		return fileInDir(home,"/.tstljava");
@@ -278,7 +287,7 @@ public class TstlConstants
 			paths = new HashMap<String,String>();
 		paths.put(pathkey,path);
 	}
-	
+
 	public static void writeHomeFile(String name, String text)
 	{
 		String path = fileInDir(getTstlHomeDir(), name);
@@ -286,7 +295,7 @@ public class TstlConstants
 		{	
 			File file = new File(path);
 			file.createNewFile();
-	
+
 			PrintWriter writer = new PrintWriter(file);
 			writer.println(text);
 			writer.flush();
