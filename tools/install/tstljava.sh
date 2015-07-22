@@ -4,8 +4,6 @@ if [ $(cat $HOME/.tstljava/washelp.yes) = true ] ; then
 exit
 fi
 CCP=$(cat $HOME/.tstljava/cp.cfg)
-echo $CCP
-echo lib/commons-cli.jar:genbin:.$CCP
 javac -cp lib/commons-cli.jar$CCP -d genbin -sourcepath gensrc gensrc/TestRunner.java
 if [ $(cat $HOME/.tstljava/wantscc.yes) = true ] ; then
 java -noverify -jar lib/emma.jar -cp lib/commons-cli.jar:genbin:.$CCP -ix $(cat $HOME/.tstljava/cc.cfg) TestRunner

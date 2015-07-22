@@ -14,7 +14,7 @@ public class RandomTester extends Tester
 			sut.reset();
 			clearActTrace();
 			testCount = 0;
-			boolean print = System.currentTimeMillis() - lastPrintTime > getTestPrintDelay();
+			boolean print = System.currentTimeMillis() - lastPrintTime > getTestPrintDelay() && this.getTestPrintDelay() > -1;
 			if(print)
 			{
 				println(">>Test Number " + loopCount);

@@ -53,7 +53,7 @@ public class TstlConstants
 	public static final String LABEL_CONFIG_TESTS_PER_CYCLE = "tests_per_cycle";
 	public static final String LABEL_CONFIG_TIMEOUT = "timeout";
 	private static Logger logger;
-	private static final Level LOGGER_LEVEL = Level.OFF;
+	private static final Level LOGGER_LEVEL = Level.ALL;
 	public static final String MESSAGE_MALFORMED_POOL_DECLARATION = "Malformed pool declaration: ";	
 	public static final String MESSAGE_NO_TSTL = "Please provide a path to a valid .tstl file in the command line arguments.";
 	public static final String MESSAGE_ONLY_ONE_EXPLICIT_GUARD = "Each action can only have one explicit guard.";
