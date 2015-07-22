@@ -9,43 +9,42 @@ import java.util.logging.Logger;
 
 public class TstlConstants 
 {
-	private static final Level LOGGER_LEVEL = Level.OFF;
 	public static final String CLASS_NAME_SUT = "SUT";
 	public static final String COMMENT_AUTO_GEN_CODE = "//This is auto-generated code.  Changes will be overwritten.";
 	public static final String COMMENT_CORE_FUNCTIONALITY_IMPORT = " //import for SUT.java core functionality";
 	public static final String COMMENT_TSTL_SOURCE_IMPORT = " //imported from .tstl source file";
-	public static final String CONSTRUCT_ACTION_ARRAY_INSTANCE_VARIABLE = "actions = new Action[";	
+	public static final String CONSTRUCT_ACTION_ARRAY_INSTANCE_VARIABLE = "actions = new Action[";
 	public static final String DECLARATION_ACT_METHOD_ACTION_INTERFACE = "public void act();";	
 	public static final String DECLARATION_ACTION_ACT_METHOD = "public void act()";	
-	public static final String DECLARATION_ACTION_ARRAY_INSTANCE_VARIABLE = "private Action[] actions;";		
-	public static final String DECLARATION_ACTION_CLASS = "action = new Action() {";
+	public static final String DECLARATION_ACTION_ARRAY_INSTANCE_VARIABLE = "private Action[] actions;";	
+	public static final String DECLARATION_ACTION_CLASS = "action = new Action() {";		
 	public static final String DECLARATION_ACTION_ENABLED_METHOD = "public boolean enabled()";
 	public static final String DECLARATION_ACTION_INTERFACE = "public interface Action";
-	public static final String DECLARATION_ACTION_LOCAL_VARIABLE = "Action action;";	
-	public static final String DECLARATION_ACTION_NAME_METHOD = "public String name()";
-	public static final String DECLARATION_ACTIONS_INIT_METHOD = "private void actionsInit()";	
+	public static final String DECLARATION_ACTION_LOCAL_VARIABLE = "Action action;";
+	public static final String DECLARATION_ACTION_NAME_METHOD = "public String name()";	
+	public static final String DECLARATION_ACTIONS_INIT_METHOD = "private void actionsInit()";
 	public static final String DECLARATION_CLEAR_POOL_METHOD = "public void clearPool() {";	
-	public static final String DECLARATION_ENABLED_METHOD_ACTION_INTERFACE = "public boolean enabled();";
+	public static final String DECLARATION_ENABLED_METHOD_ACTION_INTERFACE = "public boolean enabled();";	
 	public static final String DECLARATION_NAME_METHOD_ACTION_INTERFACE = "public String name();";
 	public static final String DECLARATION_SUT_GETACTIONS_METHOD = "public Action[] getActions()";
 	public static final String DECLARATION_SUT_RESET_METHOD = "public void reset()";
-	public static final String FILE_CC_CFG = "cc.cfg";	
+	public static final String FILE_CC_CFG = "cc.cfg";
 	public static final String FILE_CUSTOM_CLASSPATH = "cp.cfg";	
-	public static final String FILE_WANTS_CC = "wantscc.yes";
+	public static final String FILE_WANTS_CC = "wantscc.yes";	
 	public static final String FILE_WASHELP = "washelp.yes";
-	public static final String FILENAME_ARGSSTORE = "args.args";	
-	public static final String IDENTIFIER_CC_SOURCE = "source:";
-	public static final String IDENTIFIER_EXPLICIT_GUARD = "->";	
-	public static final String IDENTIFIER_IMPORT = "@import";			
-	public static final String IDENTIFIER_INITIALIZATION = ":=";
-	public static final String IDENTIFIER_NUMRANGE_LEFT = "[";	
+	public static final String FILENAME_ARGSSTORE = "args.args";
+	public static final String IDENTIFIER_CC_SOURCE = "source:";	
+	public static final String IDENTIFIER_EXPLICIT_GUARD = "->";
+	public static final String IDENTIFIER_IMPORT = "@import";	
+	public static final String IDENTIFIER_INITIALIZATION = ":=";			
+	public static final String IDENTIFIER_NUMRANGE_LEFT = "[";
 	public static final String IDENTIFIER_NUMRANGE_MID = "..";	
 	public static final String IDENTIFIER_NUMRANGE_RIGHT = "]";	
-	public static final String IDENTIFIER_POOL = "pool:";
+	public static final String IDENTIFIER_POOL = "pool:";	
 	public static final String IDENTIFIER_PROPERTY = "property:";
-	public static final String IDENTIFIER_TSTLVARIABLE = "%";	
+	public static final String IDENTIFIER_TSTLVARIABLE = "%";
 	public static final String IMPORT_ARRAY_LIST = "java.util.ArrayList";	
-	public static final String IMPORT_LIST = "java.util.List";
+	public static final String IMPORT_LIST = "java.util.List";	
 	public static final String JAR_COMMONS_CLI = "commons-cli.jar";
 	public static final String JAR_EMMA = "emma.jar";
 	public static final String LABEL_CONFIG_APPDEND_FAILING_TEST = "append_failing_test";
@@ -53,8 +52,10 @@ public class TstlConstants
 	public static final String LABEL_CONFIG_TEST_PRINT_DELAY = "test_print_delay";
 	public static final String LABEL_CONFIG_TESTS_PER_CYCLE = "tests_per_cycle";
 	public static final String LABEL_CONFIG_TIMEOUT = "timeout";
-	public static final String MESSAGE_MALFORMED_POOL_DECLARATION = "Malformed pool declaration: ";
-	public static final String MESSAGE_NO_TSTL = "Please provide a path to a valid .tstl file in the command line arguments.";	
+	private static Logger logger;
+	private static final Level LOGGER_LEVEL = Level.OFF;
+	public static final String MESSAGE_MALFORMED_POOL_DECLARATION = "Malformed pool declaration: ";	
+	public static final String MESSAGE_NO_TSTL = "Please provide a path to a valid .tstl file in the command line arguments.";
 	public static final String MESSAGE_ONLY_ONE_EXPLICIT_GUARD = "Each action can only have one explicit guard.";
 	public static final String MESSAGE_UNDEFINED_TSTL_VARIABLE = "Tstl Variable undefined in pool. ";
 	public static final String MESSGAGE_NONSURROUNDING_VARIABLE_IDENTIFIERS = "Variable identifiers must surround variables: ";
@@ -69,10 +70,11 @@ public class TstlConstants
 	public static final String SUFFIX_VAR_USED = "_used";
 	public static final boolean TESTER_CONFIG_DEFAULT_APPEND_FAILING_TEST = true;
 	public static final int TESTER_CONFIG_DEFAULT_IGNORE_CHECK_VALUE = 0;
-	public static final int TESTER_CONFIG_DEFAULT_TEST_PRINT_DELAY = 10000;
 
+	public static final int TESTER_CONFIG_DEFAULT_TEST_PRINT_DELAY = 10000;
 	public static final int TESTER_CONFIG_DEFAULT_TESTS_PER_CYCLE = 1000;
 	public static final int TESTER_CONFIG_DEFAULT_TIMEOUT = 60000;
+
 	public static final String TSTL_JAVA = "TSTL-Java";
 
 	public static final String VISIBILITY_LEVEL_POOL_VAR = "private";
@@ -110,6 +112,7 @@ public class TstlConstants
 		return fileInDir(d.getAbsolutePath(),s);
 	}
 
+
 	public static String fileInDir(String d, String s)
 	{
 		if(d.endsWith("/") && s.startsWith("/"))
@@ -119,7 +122,6 @@ public class TstlConstants
 		else
 			return d + "/" + s;
 	}
-
 
 	public static Action getActionById(SUTInterface sut, int id)
 	{
@@ -134,7 +136,6 @@ public class TstlConstants
 		}
 		return null;
 	}
-
 	public static File getGeneratedClassesFolder() 
 	{
 		String compDir = TstlConstants.getPath(PATHKEY_DIR_GENBIN);
@@ -142,13 +143,19 @@ public class TstlConstants
 		compDirFile.mkdirs();
 		return compDirFile;
 	}
+
+	public static Logger getLogger()
+	{
+		if(logger == null)
+			makeLogger();
+		return logger;
+	}
 	public static String getParserOutputSourceDir()
 	{
 		File f = new File(TstlConstants.getPath(PATHKEY_DIR_GENSRC));
 		f.mkdirs();
 		return f.getAbsolutePath() + "/";
 	}
-
 	public static String getPath(String pathKey)
 	{
 		//System.out.println("getpath. key " + pathKey + " map : " + paths);
@@ -190,6 +197,7 @@ public class TstlConstants
 			return newPath;
 		}
 	}
+
 	public static Repeatable getRepeatableFromVariable(String var, boolean mustBePool, PoolEntry[] entirePoolEntries, String actionLine) 
 	{
 		Repeatable rep;
@@ -201,6 +209,7 @@ public class TstlConstants
 
 		return rep;
 	}
+
 	public static String getTstlHomeDir()
 	{
 		String home = System.getProperty("user.home");
@@ -211,6 +220,14 @@ public class TstlConstants
 		return getTstlShellHomeDir(home);
 	}
 
+	private static String getTstlShellHomeDir(String home) 
+	{
+		return fileInDir(home,"/.tstljava");
+	}
+	private static String getTstlWinHomeDir(String home) 
+	{
+		return fileInDir(home,"/AppData/Roaming/tstljava/");
+	}
 	public static boolean isOnWindows() 
 	{
 		String os = System.getProperty("os.name","generic").toLowerCase(Locale.ENGLISH);
@@ -227,16 +244,12 @@ public class TstlConstants
 			return false;
 		}
 	}
-
-	private static String getTstlShellHomeDir(String home) 
+	private static void makeLogger() 
 	{
-		return fileInDir(home,"/.tstljava");
+		logger = Logger.getLogger(TstlConstants.class.getName());
+		logger.setLevel(LOGGER_LEVEL);
 	}
 
-	private static String getTstlWinHomeDir(String home) 
-	{
-		return fileInDir(home,"/AppData/Roaming/tstljava/");
-	}
 	/*
 	private static File getThisJarDir() throws URISyntaxException
 	{
@@ -256,6 +269,7 @@ public class TstlConstants
 			e.printStackTrace();
 		}
 	}
+
 	public static LineParsePacket parseVarLine(String varLine, PoolEntry[] entirePoolEntries)
 	{
 		String[] pieces = varLine.split(TstlConstants.IDENTIFIER_TSTLVARIABLE);
@@ -287,7 +301,6 @@ public class TstlConstants
 			paths = new HashMap<String,String>();
 		paths.put(pathkey,path);
 	}
-
 	public static void writeHomeFile(String name, String text)
 	{
 		String path = fileInDir(getTstlHomeDir(), name);
@@ -305,19 +318,6 @@ public class TstlConstants
 		{
 			getLogger().log(Level.WARNING, "Writing the "+name+ " file failed. Path: \"" + path + "\"");
 		}
-	}
-
-	private static Logger logger;
-	private static void makeLogger() 
-	{
-		logger = Logger.getLogger(TstlConstants.class.getName());
-		logger.setLevel(LOGGER_LEVEL);
-	}
-	public static Logger getLogger()
-	{
-		if(logger == null)
-			makeLogger();
-		return logger;
 	}
 
 

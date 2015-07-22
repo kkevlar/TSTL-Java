@@ -1,8 +1,6 @@
 import java.util.Collection;
 import java.util.ListIterator;
 import java.util.logging.Level;
-import java.util.logging.Logger;
-
 import org.apache.commons.cli.BasicParser;
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.HelpFormatter;
