@@ -17,11 +17,7 @@ import java.util.logging.Logger;
 public class CodeCopier
 {
 	private TstlLogger ccLog;
-	private Logger log;
-	public CodeCopier()
-	{
-		log = Logger.getLogger(this.getClass().getName());
-	}
+	
 	private void copyJarClass(String className) throws IOException
 	{
 		ArrayList<String> lines = new ArrayList<String>();
@@ -32,7 +28,7 @@ public class CodeCopier
 		}
 		if(stream == null)
 		{
-			log.log(Level.SEVERE, "Unable to copy " + className + " from witin jar resources!");
+			TstlConstants.getLogger().log(Level.SEVERE, "Unable to copy " + className + " from witin jar resources!");
 			return;
 		}
 		BufferedReader reader = new BufferedReader(new InputStreamReader(stream));
@@ -74,7 +70,7 @@ public class CodeCopier
 		}		
 		if(stream == null)
 		{
-			log.log(Level.SEVERE, "Unable to copy " + "names.names" + " from witin jar resources! No SUT depencies can be written!");
+			TstlConstants.getLogger().log(Level.SEVERE, "Unable to copy " + "names.names" + " from witin jar resources! No SUT depencies can be written!");
 			return;
 		}
 		BufferedReader reader = new BufferedReader(new InputStreamReader(stream));

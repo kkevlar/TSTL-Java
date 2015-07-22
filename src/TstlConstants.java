@@ -9,6 +9,7 @@ import java.util.logging.Logger;
 
 public class TstlConstants 
 {
+	private static final Level LOGGER_LEVEL = Level.OFF;
 	public static final String CLASS_NAME_SUT = "SUT";
 	public static final String COMMENT_AUTO_GEN_CODE = "//This is auto-generated code.  Changes will be overwritten.";
 	public static final String COMMENT_CORE_FUNCTIONALITY_IMPORT = " //import for SUT.java core functionality";
@@ -293,8 +294,21 @@ public class TstlConstants
 		}
 		catch (Exception ex)
 		{
-			Logger.getLogger(TstlConstants.class.getName()).log(Level.WARNING, "Writing the "+name+ " file failed. Path: \"" + path + "\"");
+			getLogger().log(Level.WARNING, "Writing the "+name+ " file failed. Path: \"" + path + "\"");
 		}
+	}
+
+	private static Logger logger;
+	private static void makeLogger() 
+	{
+		logger = Logger.getLogger(TstlConstants.class.getName());
+		logger.setLevel(LOGGER_LEVEL);
+	}
+	public static Logger getLogger()
+	{
+		if(logger == null)
+			makeLogger();
+		return logger;
 	}
 
 

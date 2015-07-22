@@ -5,7 +5,6 @@ import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Scanner;
 import java.util.logging.Level;
-import java.util.logging.Logger;
 
 public class TstlLogger 
 {
@@ -81,7 +80,7 @@ public class TstlLogger
 				writer = new PrintWriter(logFile);
 			} catch (FileNotFoundException e)
 			{
-				Logger.getLogger(this.getClass().getName()).log(Level.WARNING, "Cannot write to log file!",e);
+				TstlConstants.getLogger().log(Level.WARNING, "Cannot write to log file!",e);
 			}
 			if(lines.size() > 0)
 			{	

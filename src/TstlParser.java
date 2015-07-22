@@ -5,6 +5,8 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 
 public class TstlParser implements Runnable
@@ -14,7 +16,7 @@ public class TstlParser implements Runnable
 	private PoolEntry[] poolEntries;
 	private int countActionsPrinted;
 	private PropertyEntry[] propEntries;
-
+	
 	public static void main(String[] args) throws IOException
 	{
 		TstlParserArgParser parse = new TstlParserArgParser(args);
@@ -74,7 +76,7 @@ public class TstlParser implements Runnable
 	}
 
 	
-	private void readCCSource()
+	private void readCCSource ()
 	{
 		ArrayList<String> sources = new ArrayList<String>();
 		for (int i = 0; i < tstl.size(); i++)
@@ -98,7 +100,7 @@ public class TstlParser implements Runnable
 			line = line.substring(0, line.length() -1);
 			TstlConstants.writeHomeFile(TstlConstants.FILE_CC_CFG, "line");
 		}		
-	}
+	}	
 	private void readTstl()
 	{
 		String filePath = TstlConstants.getPath(TstlConstants.PATHKEY_TSTLFILE);
@@ -385,131 +387,5 @@ public class TstlParser implements Runnable
 	{
 		return removePercents(line,TstlConstants.PREFIX_JAVA_VARIABLES);
 	}
-
-
-	/* obsolete in this version- kept around because its parsing may be useful in later versions
-	private void constructBodyMethod(int num, int tstlLineAfterImport)
-	{
-		writer.println("private void body" + num + "() throws TstlException {");
-		//pool creation
-		int lastPool = -1;
-		for(int i =0 ; i < tstl.length; i++)
-		{
-			String s = tstl[i];
-			if(s.startsWith("pool:"))
-			{				
-
-				s= s.substring(5);
-				s = removePercents(s, "p_", i) + ";";
-				writer.println(s);
-				lastPool = i;
-			}
-		}
-		//defining start and end lines
-		int bodyStartLine = lastPool+1;
-		bodyEndLine = -1;
-		for(int i =0 ; i < tstl.length; i++)
-		{
-			String s = tstl[i];
-
-			if(s.startsWith("ENDBODY"))
-				bodyEndLine = i;
-		}
-		//writing method body
-		for(int x = bodyStartLine; x < bodyEndLine; x++)
-		{
-
-			String line = tstl[x];
-			//handles random number generation from TSTL ie [1..25] is random # 1-25
-			//in the future an AI could decide the most valid test pool value from 1-25
-			line = line.replace("%[", "~");
-			line = line.replace("]%", "~");
-			String[] pieces = line.split("~");
-			ArrayList<Integer> numPiecesNums = new ArrayList<Integer>();
-			for(int y = 0; y < pieces.length; y++)
-			{
-				String piece = pieces[y].replace("..", "~");
-				if(piece.contains("~"))
-				{
-					String[] numPieces = piece.split("~");
-					int low = Integer.parseInt(numPieces[0]);
-					int hi = Integer.parseInt(numPieces[1]);
-					numPiecesNums.add(this.randFrom(low, hi));
-				}
-			}
-			String newLine = "";
-			boolean copyMode = true;
-
-			for(int y = 0; y < line.length(); y++)
-			{
-
-				int numPieceIndex = 0;
-				char c = line.charAt(y);
-
-				boolean isBreakChar = c=='~';
-				//if there is no random number generation, copyMode will always be true, while isBreakChar will always be false: the next expression will always evaluate true
-				if(copyMode)
-				{
-					if(isBreakChar)
-					{
-						copyMode = false;
-						newLine = newLine + numPiecesNums.get(numPieceIndex);
-						numPieceIndex++;
-						//System.out.println(line + "   " + c + "  =copymode");
-					}
-					else
-					{
-						newLine = newLine + c;
-						//System.out.println(line + "   " + c + "  !=");
-					}
-				}
-				else
-				{
-					if(isBreakChar)
-					{
-						copyMode = true;
-						//System.out.println(line + "   " + c + "  =else");
-					}
-
-				}
-			}
-			newLine = removePercents(newLine, "p_", x);
-			writer.println(newLine);
-		}		
-		writer.println("}"); //body method end brace		
-	}
-
-	private String removePercents(String line, String variablePrefix, int lineCount)
-	{
-		//used to replace TSTL variables in a line with ones that would compile in java]
-		//ie "int %INT% = 5" becomes "int p_INT = 5"
-		line = " " + line + " ";
-		boolean asserted = false;
-		String[] percentBlocks = line.split("%");
-		if(percentBlocks.length % 2 == 0)
-			throw new MalformedTstlException("Percent signs must surround variables.  There is an odd number of percent signs at line " + lineCount + ".");
-		for(int i = 1; i < percentBlocks.length; i+= 2)
-		{
-			String block = percentBlocks[i];
-			if(block.equals("assert"))
-			{
-				percentBlocks[i] = "if (!";
-				asserted = true;
-			}
-			else
-				percentBlocks[i] = variablePrefix + block;
-
-		}
-		String newLine = "";
-		for(int i = 0; i < percentBlocks.length; i++)
-		{
-			newLine += percentBlocks[i];
-		}
-		if(asserted)
-			newLine = newLine + ")\n throw new TstlException();";
-		newLine.substring(1, newLine.length() - 2);
-		return newLine;
-	}
-	 */
 
 }
