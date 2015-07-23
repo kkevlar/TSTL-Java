@@ -309,6 +309,7 @@ public class TstlParser implements Runnable
 		writer.println(TstlConstants.DECLARATION_ACTION_LOCAL_VARIABLE);
 		for(int i = 0; i < actionLines.size(); i++)
 		{			
+			final int index = i;
 			ActionEntry entry = this.makeActionEntry(actionLines.get(i));
 			RepeatablesAction action = new RepeatablesAction()
 			{
@@ -316,7 +317,7 @@ public class TstlParser implements Runnable
 				public void actOnRepValues(int[] vals, RepeatablesContainer cont)
 				{
 					ActionEntry aEntry = (ActionEntry) cont;
-					writer.println(aEntry.createActionClass(vals, countActionsPrinted));	
+					writer.println(aEntry.createActionClass(vals, countActionsPrinted,index));	
 					writer.println("actions[" + countActionsPrinted + "] = action;");
 					countActionsPrinted++;					
 				}
