@@ -61,7 +61,7 @@ public class TestRunnerArgsParser extends BasicParser
 
 	}
 	@Override
-	protected void processOption(final String arg, final ListIterator iterator) throws ParseException 
+	protected void processOption(final String arg, final ListIterator<String> iterator) throws ParseException 
 	{
 		boolean hasOption = options.hasOption(arg);
 
