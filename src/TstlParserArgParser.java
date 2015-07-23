@@ -48,7 +48,7 @@ public class TstlParserArgParser extends BasicParser
 			} 
 			if(!cmd.hasOption("p"))
 			{
-				TstlConstants.getLogger().log(Level.SEVERE, "No path to working directory! Are you running with the instal script?");
+				TstlConstants.log(Level.SEVERE, "No path to working directory! Are you running with the instal script?");
 				help();
 			}
 			TstlConstants.setPath(TstlConstants.PATHKEY_WORKINGDIR,cmd.getOptionValue("p"));			
@@ -60,7 +60,7 @@ public class TstlParserArgParser extends BasicParser
 			writeToClasspathStore(cmd);
 
 		} catch (ParseException e) {
-			TstlConstants.getLogger().log(Level.SEVERE, "Failed to parse comand line properties", e);
+			TstlConstants.log(Level.SEVERE, "Failed to parse comand line properties", e);
 			help();
 		}
 		TstlConstants.writeHomeFile(TstlConstants.FILE_WASHELP, false +"");

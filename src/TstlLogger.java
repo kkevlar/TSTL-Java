@@ -80,7 +80,7 @@ public class TstlLogger
 				writer = new PrintWriter(logFile);
 			} catch (FileNotFoundException e)
 			{
-				TstlConstants.getLogger().log(Level.WARNING, "Cannot write to log file!",e);
+				TstlConstants.log(Level.WARNING, "Cannot write to log file!",e);
 			}
 			if(lines.size() > 0)
 			{	

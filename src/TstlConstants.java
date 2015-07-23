@@ -1,6 +1,10 @@
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.logging.Level;
@@ -30,21 +34,22 @@ public class TstlConstants
 	public static final String DECLARATION_SUT_RESET_METHOD = "public void reset()";
 	public static final String FILE_CC_CFG = "cc.cfg";
 	public static final String FILE_CUSTOM_CLASSPATH = "cp.cfg";	
-	public static final String FILE_WANTS_CC = "wantscc.yes";	
+	private static final String FILE_LOGGER_LOG = "log.log";	
+	public static final String FILE_WANTS_CC = "wantscc.yes";
 	public static final String FILE_WASHELP = "washelp.yes";
-	public static final String FILENAME_ARGSSTORE = "args.args";
-	public static final String IDENTIFIER_CC_SOURCE = "source:";	
-	public static final String IDENTIFIER_EXPLICIT_GUARD = "->";
-	public static final String IDENTIFIER_IMPORT = "@import";	
-	public static final String IDENTIFIER_INITIALIZATION = ":=";			
-	public static final String IDENTIFIER_NUMRANGE_LEFT = "[";
+	public static final String FILENAME_ARGSSTORE = "args.args";	
+	public static final String IDENTIFIER_CC_SOURCE = "source:";
+	public static final String IDENTIFIER_EXPLICIT_GUARD = "->";	
+	public static final String IDENTIFIER_IMPORT = "@import";			
+	public static final String IDENTIFIER_INITIALIZATION = ":=";
+	public static final String IDENTIFIER_NUMRANGE_LEFT = "[";	
 	public static final String IDENTIFIER_NUMRANGE_MID = "..";	
 	public static final String IDENTIFIER_NUMRANGE_RIGHT = "]";	
-	public static final String IDENTIFIER_POOL = "pool:";	
+	public static final String IDENTIFIER_POOL = "pool:";
 	public static final String IDENTIFIER_PROPERTY = "property:";
-	public static final String IDENTIFIER_TSTLVARIABLE = "%";
+	public static final String IDENTIFIER_TSTLVARIABLE = "%";	
 	public static final String IMPORT_ARRAY_LIST = "java.util.ArrayList";	
-	public static final String IMPORT_LIST = "java.util.List";	
+	public static final String IMPORT_LIST = "java.util.List";
 	public static final String JAR_COMMONS_CLI = "commons-cli.jar";
 	public static final String JAR_EMMA = "emma.jar";
 	public static final String LABEL_CONFIG_APPDEND_FAILING_TEST = "append_failing_test";
@@ -52,9 +57,11 @@ public class TstlConstants
 	public static final String LABEL_CONFIG_TEST_PRINT_DELAY = "test_print_delay";
 	public static final String LABEL_CONFIG_TESTS_PER_CYCLE = "tests_per_cycle";
 	public static final String LABEL_CONFIG_TIMEOUT = "timeout";
+	private static PrintWriter logFileWriter;
+	private static boolean logFileWriterCreationFailed;	
 	private static Logger logger;
 	private static final Level LOGGER_LEVEL = Level.ALL;
-	public static final String MESSAGE_MALFORMED_POOL_DECLARATION = "Malformed pool declaration: ";	
+	public static final String MESSAGE_MALFORMED_POOL_DECLARATION = "Malformed pool declaration: ";
 	public static final String MESSAGE_NO_TSTL = "Please provide a path to a valid .tstl file in the command line arguments.";
 	public static final String MESSAGE_ONLY_ONE_EXPLICIT_GUARD = "Each action can only have one explicit guard.";
 	public static final String MESSAGE_UNDEFINED_TSTL_VARIABLE = "Tstl Variable undefined in pool. ";
@@ -70,14 +77,18 @@ public class TstlConstants
 	public static final String SUFFIX_VAR_USED = "_used";
 	public static final boolean TESTER_CONFIG_DEFAULT_APPEND_FAILING_TEST = true;
 	public static final int TESTER_CONFIG_DEFAULT_IGNORE_CHECK_VALUE = 0;
-
 	public static final int TESTER_CONFIG_DEFAULT_TEST_PRINT_DELAY = 10000;
 	public static final int TESTER_CONFIG_DEFAULT_TESTS_PER_CYCLE = 1000;
 	public static final int TESTER_CONFIG_DEFAULT_TIMEOUT = 60000;
-
 	public static final String TSTL_JAVA = "TSTL-Java";
-
 	public static final String VISIBILITY_LEVEL_POOL_VAR = "private";
+
+	public static void closeLogger()
+	{
+		if(logFileWriter != null)
+			logFileWriter.close();
+		logFileWriter = null;
+	}
 
 	public static String excapeString(String s)
 	{
@@ -107,11 +118,11 @@ public class TstlConstants
 		return s;
 	}
 
+
 	public static String fileInDir(File d, String s)
 	{
 		return fileInDir(d.getAbsolutePath(),s);
 	}
-
 
 	public static String fileInDir(String d, String s)
 	{
@@ -122,7 +133,6 @@ public class TstlConstants
 		else
 			return d + "/" + s;
 	}
-
 	public static Action getActionById(SUTInterface sut, int id)
 	{
 		Action action = sut.getActions()[id];
@@ -143,8 +153,7 @@ public class TstlConstants
 		compDirFile.mkdirs();
 		return compDirFile;
 	}
-
-	public static Logger getLogger()
+	private static Logger getLogger()
 	{
 		if(logger == null)
 			makeLogger();
@@ -156,6 +165,7 @@ public class TstlConstants
 		f.mkdirs();
 		return f.getAbsolutePath() + "/";
 	}
+
 	public static String getPath(String pathKey)
 	{
 		//System.out.println("getpath. key " + pathKey + " map : " + paths);
@@ -197,7 +207,6 @@ public class TstlConstants
 			return newPath;
 		}
 	}
-
 	public static Repeatable getRepeatableFromVariable(String var, boolean mustBePool, PoolEntry[] entirePoolEntries, String actionLine) 
 	{
 		Repeatable rep;
@@ -209,7 +218,6 @@ public class TstlConstants
 
 		return rep;
 	}
-
 	public static String getTstlHomeDir()
 	{
 		String home = System.getProperty("user.home");
@@ -219,15 +227,16 @@ public class TstlConstants
 		}
 		return getTstlShellHomeDir(home);
 	}
-
 	private static String getTstlShellHomeDir(String home) 
 	{
 		return fileInDir(home,"/.tstljava");
 	}
+
 	private static String getTstlWinHomeDir(String home) 
 	{
 		return fileInDir(home,"/AppData/Roaming/tstljava/");
 	}
+
 	public static boolean isOnWindows() 
 	{
 		String os = System.getProperty("os.name","generic").toLowerCase(Locale.ENGLISH);
@@ -243,6 +252,70 @@ public class TstlConstants
 		{
 			return false;
 		}
+	}
+
+	public static void log(Level level, String msg)
+	{
+		log(level,msg,null);
+	}
+	public static void log(Level level, String msg, Throwable caught)
+	{
+		if(caught != null)
+			getLogger().log(level, msg, caught);
+		else
+			getLogger().log(level, msg);
+		if(!logFileWriterCreationFailed && logFileWriter == null)
+		{
+			File loggerFile = new File(fileInDir(TstlConstants.getTstlHomeDir(),FILE_LOGGER_LOG));
+			ArrayList<String> lines = new ArrayList<String>();
+			if(loggerFile.exists())
+			{
+				BufferedReader reader = null;
+				try {
+					reader = new BufferedReader(new FileReader(loggerFile));
+				} catch (FileNotFoundException e) {
+					getLogger().log(Level.WARNING, "Failed to read logger log in homedir.", e);
+				}
+				while(true)
+				{
+					String line = null;
+					try {
+						line = reader.readLine();
+					} catch (IOException e) {
+						getLogger().log(Level.WARNING, "Failed to read logger log in homedir.", e);
+					}
+					if(line == null)
+						break;
+					lines.add(line);
+				}
+				try {
+					reader.close();
+				} catch (IOException e) {
+					getLogger().log(Level.WARNING, "Failed to read logger log in homedir.", e);
+				}
+			}
+			try {
+				logFileWriter = new PrintWriter(loggerFile);
+			} catch (FileNotFoundException e) {
+				getLogger().log(Level.WARNING, "Cannot make logger log in homedir.", e);
+				logFileWriterCreationFailed = true;
+			}
+			for(int i = 0; (!(lines.isEmpty()))&&i<lines.size(); i++)
+			{
+				logFileWriter.println(lines.get(i));
+			}
+			logFileWriter.println("--");
+			logFileWriter.flush();
+		}
+		if(logFileWriter != null)
+		{
+			logFileWriter.println(level.getName()+ ": " + msg);
+			logFileWriter.flush();
+		}
+	}
+	public static void log(String msg)
+	{
+		log(Level.INFO,msg);
 	}
 	private static void makeLogger() 
 	{
@@ -316,7 +389,7 @@ public class TstlConstants
 		}
 		catch (Exception ex)
 		{
-			getLogger().log(Level.WARNING, "Writing the "+name+ " file failed. Path: \"" + path + "\"");
+			log(Level.WARNING, "Writing the "+name+ " file failed. Path: \"" + path + "\"");
 		}
 	}
 

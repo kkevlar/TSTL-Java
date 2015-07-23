@@ -77,19 +77,19 @@ public class TstlParser implements Runnable
 	
 	private void readCCSource ()
 	{
-		TstlConstants.getLogger().log(Level.INFO,"Starting readCCSource");
+		TstlConstants.log(Level.INFO,"Starting readCCSource");
 		ArrayList<String> sources = new ArrayList<String>();
 		for (int i = 0; i < tstl.size(); i++)
 		{
 			String line = tstl.get(i);
-			TstlConstants.getLogger().log(Level.INFO,"i:" + i + " line:\"" + line + "\"");
+			TstlConstants.log(Level.INFO,"i:" + i + " line:\"" + line + "\"");
 			if(line.startsWith(TstlConstants.IDENTIFIER_CC_SOURCE))
 			{
 				String sourceInstruction = line.substring(TstlConstants.IDENTIFIER_CC_SOURCE.length()).trim();
-				TstlConstants.getLogger().log(Level.INFO,"sourceinstruction " + sourceInstruction);
+				TstlConstants.log(Level.INFO,"sourceinstruction " + sourceInstruction);
 				sources.add(sourceInstruction);
 				tstl.remove(i); //newly added. remove if fails.
-				TstlConstants.getLogger().log(Level.INFO,"true, removed");				
+				TstlConstants.log(Level.INFO,"true, removed");				
 				i--;
 			}
 		}
@@ -99,13 +99,13 @@ public class TstlParser implements Runnable
 			String line = "";
 			for(int i = 0; i < sources.size(); i++)
 			{
-				line += sources.get(i) + ",";
+				line += "+" + sources.get(i) + ",";
+				TstlConstants.log(Level.INFO,"heres the cccfg line: " + line);
 			}		
-			TstlConstants.getLogger().log(Level.INFO,"heres the cccfg line: " + line);
+			TstlConstants.log(Level.INFO,"heres the cccfg line: " + line);
 			line = line.substring(0, line.length() -1);
-			TstlConstants.getLogger().log(Level.INFO,"heres the cccfg line, again: " + line);
+			TstlConstants.log(Level.INFO,"heres the cccfg line, again: " + line);
 			TstlConstants.writeHomeFile(TstlConstants.FILE_CC_CFG, line);
-			//TstlConstants.writeHomeFile("icecream", line);
 		}		
 	}
 	private void readTstl()
@@ -355,6 +355,7 @@ public class TstlParser implements Runnable
 	{
 		writer.println("}//class close brace"); 
 		writer.close();
+		TstlConstants.closeLogger();
 		System.out.println("finished");	
 	}	
 

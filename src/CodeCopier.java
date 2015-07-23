@@ -28,7 +28,7 @@ public class CodeCopier
 		}
 		if(stream == null)
 		{
-			TstlConstants.getLogger().log(Level.SEVERE, "Unable to copy " + className + " from witin jar resources!");
+			TstlConstants.log(Level.SEVERE, "Unable to copy " + className + " from witin jar resources!");
 			return;
 		}
 		BufferedReader reader = new BufferedReader(new InputStreamReader(stream));
@@ -70,7 +70,7 @@ public class CodeCopier
 		}		
 		if(stream == null)
 		{
-			TstlConstants.getLogger().log(Level.SEVERE, "Unable to copy " + "names.names" + " from witin jar resources! No SUT depencies can be written!");
+			TstlConstants.log(Level.SEVERE, "Unable to copy " + "names.names" + " from witin jar resources! No SUT depencies can be written!");
 			return;
 		}
 		BufferedReader reader = new BufferedReader(new InputStreamReader(stream));

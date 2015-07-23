@@ -19,6 +19,7 @@ public class TestRunner
 		parser.parse();
 		//System.out.println("dir: " + TstlConstants.getPath(TstlConstants.PATHKEY_WORKINGDIR));
 		tester.go();
+		TstlConstants.closeLogger();
 	}
 
 }
