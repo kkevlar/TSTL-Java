@@ -138,6 +138,7 @@ public class TstlParser implements Runnable
 				else
 					break;
 			}
+			TstlConstants.log("line: \"" + line + "\"");
 			lines.add(line.replace(";", ""));
 		}
 		tstl = new ArrayList<String>();

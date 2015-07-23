@@ -60,7 +60,7 @@ public class TstlConstants
 	private static PrintWriter logFileWriter;
 	private static boolean logFileWriterCreationFailed;	
 	private static Logger logger;
-	private static final Level LOGGER_LEVEL = Level.ALL;
+	private static final Level LOGGER_LEVEL = Level.WARNING;
 	public static final String MESSAGE_MALFORMED_POOL_DECLARATION = "Malformed pool declaration: ";
 	public static final String MESSAGE_NO_TSTL = "Please provide a path to a valid .tstl file in the command line arguments.";
 	public static final String MESSAGE_ONLY_ONE_EXPLICIT_GUARD = "Each action can only have one explicit guard.";
@@ -192,10 +192,9 @@ public class TstlConstants
 					extension = pieces[pieces.length -1];
 				}
 				catch(RuntimeException ex) {}
-				if(extension != null && extension.equals("tstl"))
+				if((!file.getName().contains("~")) && extension != null && extension.equals("tstl"))
 				{
 					return file.getAbsolutePath();
-
 				}
 			}
 			return TstlConstants.getPath("tstl.tstl");
