@@ -133,19 +133,7 @@ public class TstlConstants
 		else
 			return d + "/" + s;
 	}
-	public static Action getActionById(SUTInterface sut, int id)
-	{
-		Action action = sut.getActions()[id];
-		if(action.id() == id)
-			return action;
-		for (int i = 0; i < sut.getActions().length; i++)
-		{
-			action = sut.getActions()[i];
-			if(action.id() == i)
-				return action;
-		}
-		return null;
-	}
+	
 	public static File getGeneratedClassesFolder() 
 	{
 		String compDir = TstlConstants.getPath(PATHKEY_DIR_GENBIN);
