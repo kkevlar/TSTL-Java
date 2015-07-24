@@ -67,6 +67,7 @@ public abstract class TestReducer
 		if(testFailed)
 			reducedTest = newTest;		
 		return testFailed;
+
 	}
 	protected boolean runTest(int[] actionIds)
 	{		
@@ -76,6 +77,7 @@ public abstract class TestReducer
 			arrList.add(actionIds[i]);
 		}
 		return runTest(arrList);
+
 	}
 
 	public boolean getShouldAppendFailingTest()
