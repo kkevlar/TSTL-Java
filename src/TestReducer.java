@@ -1,7 +1,7 @@
 import java.util.ArrayList;
 
 
-public class TestReducer 
+public abstract class TestReducer 
 {
 	private SUTInterface sut;
 	private int[] originalTestIds;	
@@ -13,7 +13,6 @@ public class TestReducer
 		super();
 		setUp(sut, actTraceArray, tester2);
 	}
-
 	public TestReducer(SUTInterface sut, ArrayList<Integer> actTrace, Tester tester)
 	{
 		super();
@@ -24,7 +23,6 @@ public class TestReducer
 		}
 		setUp(sut,actTraceArray,tester);
 	}
-
 	private void setUp(SUTInterface sut, int[] actTraceArray, Tester tester) 
 	{
 		this.sut = sut;
@@ -32,7 +30,6 @@ public class TestReducer
 		this.tester = tester;	
 		this.shouldAppendFailingTest = tester.shouldAppendFailingTest();
 	}
-
 	public int[] getReducedTestIds()
 	{
 		if(reducedTest == null)
@@ -44,66 +41,13 @@ public class TestReducer
 		}
 		return ids;
 	}
-	public void reduceTest()
-	{ 
-		if(reducedTest == null)
-		{
-			reducedTest = new ArrayList<Integer>();
-			for (int i = 0; i < originalTestIds.length; i++) 
-			{
-				reducedTest.add(originalTestIds[i]);
-			}
-		}
-		boolean fullyReduced = false;
-		while(!fullyReduced)
-		{
-			int pieceCount = 1;			
-			boolean reduced = false;
-			while(!reduced)
-			{
-				pieceCount *= 2;
-				if(pieceCount > reducedTest.size())
-					pieceCount = reducedTest.size();
-				reduced = reduceUsingPieces(pieceCount, reducedTest);
-				if(pieceCount == reducedTest.size() && !reduced)
-				{
-					fullyReduced = true;
-					break;
-				}
-			}		
-		}
-	}
 	
+	public abstract void reduceTest();
 
-	private boolean reduceUsingPieces(int numPieces, ArrayList<Integer> test)
-	{
-		ArrayList<Integer> newTest;
-		int lastId = test.get(test.size() -1);
-		int actionCount = test.size();
-		boolean reduced = false;
-		
-		for (int x = 0; x < numPieces; x++) 
-		{
-			newTest = new ArrayList<Integer>();
-			int cutOut = (int) ((x+0.0)*((actionCount+0.0)/(numPieces+0.0)));
-			int cutIn = (int) (((x+1)+0.0)*((actionCount+0.0)/(numPieces+0.0))) -1;
-			for (int y = 0; y < actionCount; y++)
-			{
-				if(y < cutOut || y > cutIn)
-					newTest.add(test.get(y));		
-			}
-			if(x != numPieces-1 && getShouldAppendFailingTest())
-				newTest.add(lastId);
-			reduced = runTest(newTest);
-			if(reduced)
-				break;
-		}
-		return reduced;
-	}
-	private boolean runTest(ArrayList<Integer> actionIds)
+
+	protected boolean runTest(ArrayList<Integer> actionIds)
 	{		
 		boolean testFailed = false;
-		int oldSize = actionIds.size();
 		ArrayList<Integer> newTest = new ArrayList<Integer>();
 		sut.reset();
 		for (int i = 0; i < actionIds.size(); i++) 
@@ -123,6 +67,17 @@ public class TestReducer
 		if(testFailed)
 			reducedTest = newTest;		
 		return testFailed;
+
+	}
+	protected boolean runTest(int[] actionIds)
+	{		
+		ArrayList<Integer> arrList = new ArrayList<Integer>();
+		for(int i = 0; i < actionIds.length; i++)
+		{
+			arrList.add(actionIds[i]);
+		}
+		return runTest(arrList);
+
 	}
 
 	public boolean getShouldAppendFailingTest()
@@ -134,4 +89,27 @@ public class TestReducer
 	{
 		this.shouldAppendFailingTest = shouldAppendFailingTest;
 	}
+	public SUTInterface getSut() 
+	{
+		return sut;
+	}
+	
+	public int[] getOriginalTestIds() 
+	{
+		return originalTestIds;
+	}
+	
+	public Tester getTester() 
+	{
+		return tester;
+	}
+	public ArrayList<Integer> getReducedTest()
+	{
+		return reducedTest;
+	}
+	public void setReducedTest(ArrayList<Integer> reducedTest)
+	{
+		this.reducedTest = reducedTest;
+	}
+	
 }
