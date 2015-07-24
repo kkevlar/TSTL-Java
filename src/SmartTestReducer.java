@@ -21,27 +21,40 @@ public class SmartTestReducer extends TestReducer
 		
 		//make family Dictionary
 		familyDictionary = new ArrayList<FamilyDictionaryEntry>();
-		for (int x = 0; x < this.getSut().getActions().length; x++) 
+		for (int x = 0; x < getOriginalTestIds().length; x++) 
 		{
+			int sutIndexFromOriginalTest = getOriginalTestIds()[x];
 			boolean set = false;
 			for (int y = 0; y < familyDictionary.size(); y++) 
 			{
-				if(getSut().getActions()[x].actionFamilyId() == familyDictionary.get(y).getFamilyId())
+				if(getSut().getActions()[sutIndexFromOriginalTest].actionFamilyId() == familyDictionary.get(y).getFamilyId())
 				{
-					familyDictionary.get(y).getActionIndices().add(x);
+					familyDictionary.get(y).getActionIndices().add(sutIndexFromOriginalTest);
 					set = true;
 					break;
 				}
 			}
 			if(!set)
 			{
-				FamilyDictionaryEntry entry = new FamilyDictionaryEntry(getSut().getActions()[x].actionFamilyId());
-				entry.getActionIndices().add(x);
+				FamilyDictionaryEntry entry = new FamilyDictionaryEntry(getSut().getActions()[sutIndexFromOriginalTest].actionFamilyId());
+				entry.getActionIndices().add(sutIndexFromOriginalTest);
 				familyDictionary.add(entry);
 			}
 		}
 		
+		//note: right now timeout cannot kill running tests
 		
+		long startTime = System.currentTimeMillis();
+		while (System.currentTimeMillis() - startTime < getTimeout())
+		{
+			for (int x = 0; x < getOriginalTestIds().length; x++) 
+			{
+				int testIndex = getOriginalTestIds()[x];
+				Action originalAction = getSut().getActions()[testIndex];
+				int familyId = originalAction.actionFamilyId();
+				//int[] siblingTests = familyDictionary.
+			}
+		}
 		
 		logger.close();
 	}
@@ -53,7 +66,6 @@ public class SmartTestReducer extends TestReducer
 	{
 		this.timeout = timeout;
 	}
-	public class 
 	public class FamilyDictionaryEntry
 	{
 		private int familyId;
