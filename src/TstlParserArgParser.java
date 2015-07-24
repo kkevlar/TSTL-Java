@@ -23,7 +23,7 @@ public class TstlParserArgParser extends BasicParser
 		options.addOption("j", "classpath", true, "[OPTIONAL] Jars or directories to add to the classpath at compiletime and runtime. Separated by '~' '.' or ','.");
 	}
 	@Override
-	protected void processOption(final String arg, final ListIterator iterator) throws ParseException 
+	protected void processOption(final String arg, final ListIterator<String> iterator) throws ParseException 
 	{
 		boolean hasOption = options.hasOption(arg);
 
