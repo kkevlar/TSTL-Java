@@ -2,7 +2,8 @@ import java.util.ArrayList;
 
 public class SmartTestReducer extends TestReducer
 {
-	ArrayList<FamilyDictionaryEntry> familyDictionary;
+	private long timeout;
+	private ArrayList<FamilyDictionaryEntry> familyDictionary;
 	public SmartTestReducer(SUTInterface sut, int[] actTraceArray, Tester tester2) 
 	{
 		super(sut, actTraceArray, tester2);
@@ -17,6 +18,8 @@ public class SmartTestReducer extends TestReducer
 	public void reduceTest() 
 	{		
 		TstlLogger logger = new TstlLogger("smartTestReduce");
+		
+		//make family Dictionary
 		familyDictionary = new ArrayList<FamilyDictionaryEntry>();
 		for (int x = 0; x < this.getSut().getActions().length; x++) 
 		{
@@ -37,8 +40,20 @@ public class SmartTestReducer extends TestReducer
 				familyDictionary.add(entry);
 			}
 		}
+		
+		
+		
 		logger.close();
 	}
+	public long getTimeout() 
+	{
+		return timeout;
+	}
+	public void setTimeout(long timeout) 
+	{
+		this.timeout = timeout;
+	}
+	public class 
 	public class FamilyDictionaryEntry
 	{
 		private int familyId;
@@ -69,6 +84,11 @@ public class SmartTestReducer extends TestReducer
 				arr[i] = getActionIndices().get(i);				
 			}
 			return arr;
-		}		
+		}
+		@Override
+		public String toString() 
+		{
+			return "FamilyDictionaryEntry [familyId=" + familyId + ", actionIndices=" + actionIndices + "]";
+		}			
 	}
 }
