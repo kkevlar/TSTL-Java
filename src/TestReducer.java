@@ -122,10 +122,7 @@ public class TestReducer
 		}
 		if(testFailed)
 			reducedTest = newTest;		
-		if(newTest.size() != oldSize)
-			return testFailed;
-		else
-			return false;
+		return testFailed;
 	}
 
 	public boolean getShouldAppendFailingTest()
