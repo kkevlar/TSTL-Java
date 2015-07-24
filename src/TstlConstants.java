@@ -32,6 +32,7 @@ public class TstlConstants
 	public static final String DECLARATION_NAME_METHOD_ACTION_INTERFACE = "public String name();";
 	public static final String DECLARATION_SUT_GETACTIONS_METHOD = "public Action[] getActions()";
 	public static final String DECLARATION_SUT_RESET_METHOD = "public void reset()";
+	public static final String DECLARATION_ACTION_ACTION_FAMILY_ID_METHOD = "actionFamilyId";
 	public static final String FILE_CC_CFG = "cc.cfg";
 	public static final String FILE_CUSTOM_CLASSPATH = "cp.cfg";	
 	private static final String FILE_LOGGER_LOG = "log.log";	
@@ -52,11 +53,6 @@ public class TstlConstants
 	public static final String IMPORT_LIST = "java.util.List";
 	public static final String JAR_COMMONS_CLI = "commons-cli.jar";
 	public static final String JAR_EMMA = "emma.jar";
-	public static final String LABEL_CONFIG_APPDEND_FAILING_TEST = "append_failing_test";
-	public static final String LABEL_CONFIG_IGNORE_CHECK_VALUE = "ignore_check_value";
-	public static final String LABEL_CONFIG_TEST_PRINT_DELAY = "test_print_delay";
-	public static final String LABEL_CONFIG_TESTS_PER_CYCLE = "tests_per_cycle";
-	public static final String LABEL_CONFIG_TIMEOUT = "timeout";
 	private static PrintWriter logFileWriter;
 	private static boolean logFileWriterCreationFailed;	
 	private static Logger logger;
