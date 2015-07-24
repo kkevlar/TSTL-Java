@@ -26,7 +26,7 @@ public class SmartTestReducer extends TestReducer
 			}
 		}
 		
-		ArrayList<ArrayList<Integer>> familyDictionary = new ArrayList<ArrayList<Integer>>();
+		ArrayList<FamilyDictionaryEntry> familyDictionary = new ArrayList<FamilyDictionaryEntry>();
 		for (int x = 0; x < this.getSut().getActions().length; x++) 
 		{
 			for (int y = 0; y < familyDictionary.size(); y++) 
@@ -35,10 +35,28 @@ public class SmartTestReducer extends TestReducer
 			}
 		}
 	}
-	private class FamilyDictionaryEntry
+	public class FamilyDictionaryEntry
 	{
 		private int familyId;
-		private int[] actionIds;
+		private int[] actionIndices;
+		public FamilyDictionaryEntry(int familyId, int[] actionIndices)
+		{
+			super();
+			this.familyId = familyId;
+			this.actionIndices = actionIndices;
+		}
+		public int getFamilyId() {
+			return familyId;
+		}
+		public void setFamilyId(int familyId) {
+			this.familyId = familyId;
+		}
+		public int[] getActionIndices() {
+			return actionIndices;
+		}
+		public void setActionIndices(int[] actionIndices) {
+			this.actionIndices = actionIndices;
+		}
+		
 	}
-
 }
