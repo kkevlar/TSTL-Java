@@ -1,4 +1,4 @@
-@echo off
+@echo on
 set WDIR=%cd%
 set TJHOME=%USERPROFILE%\AppData\Roaming\tstljava
 java -jar %TJHOME%\tstljava.jar -p %WDIR% %*
@@ -13,13 +13,16 @@ java -cp lib\commons-cli.jar;genbin;.%CCP% TestRunner
 goto EXIT
 
 :GIVECC
-set /p CCCFG =<%TJHOME%\cc.cfg.yes
-java -noverify -jar lib/emma.jar -cp lib/commons-cli.jar;genbin;.%CCP% -ix %CCCFG% TestRunner
-exit
+set /p CFG=<%TJHOME%\cc.cfg
+java -noverify -jar lib\emma.jar -cp lib\commons-cli.jar;genbin;.%CCP% -ix %CFG% TestRunner
+goto EXIT
 
 :EXIT
 pause
-goto HELP
+echo done
+exit
 
 :HELP
+pause
 echo done
+exit
