@@ -48,7 +48,6 @@ public abstract class TestReducer
 	protected boolean runTest(ArrayList<Integer> actionIds)
 	{		
 		boolean testFailed = false;
-		int oldSize = actionIds.size();
 		ArrayList<Integer> newTest = new ArrayList<Integer>();
 		sut.reset();
 		for (int i = 0; i < actionIds.size(); i++) 
@@ -67,10 +66,7 @@ public abstract class TestReducer
 		}
 		if(testFailed)
 			reducedTest = newTest;		
-		if(newTest.size() != oldSize)
-			return testFailed;
-		else
-			return false;
+		return testFailed;
 	}
 	protected boolean runTest(int[] actionIds)
 	{		

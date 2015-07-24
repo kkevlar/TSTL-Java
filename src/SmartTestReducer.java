@@ -37,8 +37,9 @@ public class SmartTestReducer extends TestReducer
 				newTestIds[x] = families[familyId][randNum];
 			}
 			boolean testFailed = this.runTest(newTestIds);
+			//if test failed, then run through binarytestreducer
 		}
-		
+		//need to find a way to assign reduced test to reduced test field in testreducer
 		logger.close();
 	}
 
