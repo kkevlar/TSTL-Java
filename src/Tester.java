@@ -51,6 +51,7 @@ public abstract class Tester
 			String name = sut.getActions()[actionIds[i]].name();
 			rprintln(name.trim());
 		}
+		//smart test reducer currently is unused.
 	}
 	
 	private void rprintln(String string)

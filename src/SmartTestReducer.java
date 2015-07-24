@@ -7,23 +7,24 @@ public class SmartTestReducer extends TestReducer
 	public SmartTestReducer(SUTInterface sut, int[] actTraceArray, Tester tester2) 
 	{
 		super(sut, actTraceArray, tester2);
+		timeout = TstlConstants.SMART_REDUCER_DEFAULT_TIMEOUT;
 	}
 
 	public SmartTestReducer(SUTInterface sut, ArrayList<Integer> actTrace, Tester tester) 
 	{
 		super(sut, actTrace, tester);
+		timeout = TstlConstants.SMART_REDUCER_DEFAULT_TIMEOUT;
 	}
 
 	@Override
 	public void reduceTest() 
 	{		
-		TstlLogger logger = new TstlLogger("smartTestReduce");
-		
+		//TstlLogger logger = new TstlLogger("smartTestReduce");
+
 		makeFamilyDictionary();
 		
-		//note: right now timeout cannot kill running tests
-		
 		long startTime = System.currentTimeMillis();
+		int[] reducedTestIds = null;
 		while (System.currentTimeMillis() - startTime < getTimeout())
 		{
 			int[] newTestIds = new int[getOriginalTestIds().length];
@@ -37,10 +38,24 @@ public class SmartTestReducer extends TestReducer
 				newTestIds[x] = families[familyId][randNum];
 			}
 			boolean testFailed = this.runTest(newTestIds);
-			//if test failed, then run through binarytestreducer
+			if(testFailed)
+			{
+				BinaryTestReducer reducer = new BinaryTestReducer(getSut(), getReducedTestIds(), getTester());
+				ArrayList<Integer> binReducedTest = reducer.getReducedTest();
+				if(reducedTestIds == null || reducedTestIds.length > binReducedTest.size())
+				{
+					int[] newArray = new int[binReducedTest.size()];
+					for (int i = 0; i < newArray.length; i++)
+					{
+						newArray[i] = binReducedTest.get(i);					
+					}
+					reducedTestIds = newArray;
+				}
+			}
 		}
-		//need to find a way to assign reduced test to reduced test field in testreducer
-		logger.close();
+		if(reducedTestIds != null && reducedTestIds.length < getOriginalTestIds().length)
+			setReducedTest(reducedTestIds);
+		//logger.close();
 	}
 
 	private void makeFamilyDictionary() 
