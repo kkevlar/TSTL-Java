@@ -52,7 +52,7 @@ public abstract class TestReducer
 		sut.reset();
 		for (int i = 0; i < actionIds.size(); i++) 
 		{
-			Action action = TstlConstants.getActionById(sut, actionIds.get(i));
+			Action action = sut.getActions()[actionIds.get(i)];
 			if(action.enabled())
 			{
 				boolean success = tester.executeAct(tester.getIgnoreCheckValue() < 1, action, false);

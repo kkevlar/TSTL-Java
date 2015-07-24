@@ -32,7 +32,7 @@ public class RandomTester extends Tester
 				if(print)
 					println(sut.getActions()[testNum].name().trim());
 				String info = sut.getActions()[testNum].getAllInfo();
-				addToActTrace(sut.getActions()[testNum].id());
+				addToActTrace(testNum);
 				boolean success = executeAct(this.getIgnoreCheckValue() < 2, sut.getActions()[testNum], true);
 				if(!success)
 				{
