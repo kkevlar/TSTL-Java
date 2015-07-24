@@ -16,6 +16,7 @@ public class SmartTestReducer extends TestReducer
 	@Override
 	public void reduceTest() 
 	{		
+		TstlLogger logger = new TstlLogger("smartTestReduce");
 		familyDictionary = new ArrayList<FamilyDictionaryEntry>();
 		for (int x = 0; x < this.getSut().getActions().length; x++) 
 		{
@@ -36,6 +37,7 @@ public class SmartTestReducer extends TestReducer
 				familyDictionary.add(entry);
 			}
 		}
+		logger.close();
 	}
 	public class FamilyDictionaryEntry
 	{
