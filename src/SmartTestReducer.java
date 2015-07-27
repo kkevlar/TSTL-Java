@@ -42,7 +42,7 @@ public class SmartTestReducer extends TestReducer
 			{
 				BinaryTestReducer reducer = new BinaryTestReducer(getSut(), getReducedTestIds(), getTester());
 				ArrayList<Integer> binReducedTest = reducer.getReducedTest();
-				if(reducedTestIds == null || reducedTestIds.length > binReducedTest.size())
+				if(binReducedTest != null && (reducedTestIds == null || reducedTestIds.length > binReducedTest.size()))
 				{
 					int[] newArray = new int[binReducedTest.size()];
 					for (int i = 0; i < newArray.length; i++)
@@ -86,10 +86,10 @@ public class SmartTestReducer extends TestReducer
 				familyDictionary.add(entry);
 			}
 		}
-		families = new int[maxFamilyId][];
+		families = new int[maxFamilyId+1][];
 		for (int x = 0; x < familyDictionary.size(); x++)
 		{
-			FamilyDictionaryEntry famEntry =familyDictionary.get(x); 
+			FamilyDictionaryEntry famEntry = familyDictionary.get(x); 
 			int famId = famEntry.getFamilyId();
 			families[famId] = famEntry.getIndeciesAsArray();			
 		}
