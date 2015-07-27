@@ -1,6 +1,6 @@
 @import com.github.flipturnapps.tstljava.testprojects.fruit.*
 pool: Integer %RED% 3
-pool: Integer %GREEEN% 3
+pool: Integer %GREEN% 3
 pool: Integer %BLUE% 3
 pool: String %FRUITNAME% 3
 pool: java.awt.Color %COLOR% 3
