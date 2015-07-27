@@ -2,4 +2,4 @@
 
 This is branch containing projects to test the capabilities of TSTL-Java.
 
-It is never meant to be pulled to master.
+It is never meant to be pulled to master. Please do not create a pull request.
