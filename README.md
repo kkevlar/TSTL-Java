@@ -1,4 +1,5 @@
-# TSTL-Java
-A version of TSTL written for java.
+# Welcome to the testprojects branch
 
-The current implementation for TSTL is written in Python.  It can be found [here](https://github.com/agroce/tstl).  
+This is branch containing projects to test the capabilities of TSTL-Java.
+
+It is never meant to be pulled to master.
