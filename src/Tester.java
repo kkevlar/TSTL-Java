@@ -55,6 +55,8 @@ public abstract class Tester
 			String name = sut.getActions()[actionIds[i]].name();
 			rprintln(name.trim());
 		}
+		SmartTestReducer smartReduce = new SmartTestReducer(sut, actTrace, this);
+		
 		//smart test reducer currently is unused.
 	}
 	
