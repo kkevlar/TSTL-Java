@@ -55,7 +55,18 @@ public abstract class Tester
 			String name = sut.getActions()[actionIds[i]].name();
 			rprintln(name.trim());
 		}
-		SmartTestReducer smartReduce = new SmartTestReducer(sut, actTrace, this);
+		SmartTestReducer smartReduce = new SmartTestReducer(sut, actionIds, this);
+		int[] smartActionIds = smartReduce.getReducedTestIds();
+		rprintln("Test smart reduced. Heres main line of each step.");
+		for (int i = 0; i < smartActionIds.length; i++) 
+		{
+			String name = sut.getActions()[smartActionIds[i]].name();
+			rprintln(name.trim());
+		}
+		rprintln("Stepcounts:");
+		rprintln("--" + "Original: " + actTrace.size());
+		rprintln("--" + "Reduced : " + actionIds.length);		
+		rprintln("--" + "S-Reduce: " + smartActionIds.length);
 		
 		//smart test reducer currently is unused.
 	}
