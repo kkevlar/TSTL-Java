@@ -1,0 +1,25 @@
+@import com.github.flipturnapps.tstljava.testprojects.fruit.*
+pool: Integer %RED% 3
+pool: Integer %GREEEN% 3
+pool: Integer %BLUE% 3
+pool: String %FRUITNAME% 3
+pool: java.awt.Color %COLOR% 3
+pool: ComplicatedFruit %FRUIT% 1
+
+%RED% := %[0..255]%
+%GREEN% := %[0..255]%
+%BLUE% := %[0..255]%
+%GREEN,1% + %BLUE,1% < 256 -> %RED% := %GREEN% + %BLUE%
+%RED,1% + %BLUE,1% < 256 -> %GREEN% := %RED% + %BLUE%
+%GREEN,1% + %RED,1% < 256 -> %BLUE% := %GREEN% + %RED%
+%RED%.intValue();
+%GREEN%.intValue();
+%BLUE%.intValue();
+%FRUITNAME% := %RED% + %BLUE% + %GREEN% + ""
+%FRUITNAME%.length();
+%COLOR% := new java.awt.Color(%RED%,%BLUE%,%GREEN%);
+%COLOR%.getRed();
+%FRUIT% := new ComplicatedFruit(%FRUITNAME%,%RED%,%COLOR%);
+%FRUIT% := new ComplicatedFruit(%FRUITNAME%,%GREEN%,%COLOR%);
+%FRUIT% := new ComplicatedFruit(%FRUITNAME%,%BLUE%,%COLOR%);
+%FRUIT%.throwError();

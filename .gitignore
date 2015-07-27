@@ -4,10 +4,7 @@
 *.war
 *.ear
 *.log
-compile.bat
-*.tstl
 *.class
-*.tstl.old
 *~
 .classpath
 .project
@@ -19,6 +16,5 @@ hs_err_pid*
 /genbin/
 /gensrc/
 /src/SUT.java
-!/tstl-samples/*.tstl
 /builds/
 /.settings/
