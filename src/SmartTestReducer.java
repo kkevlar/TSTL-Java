@@ -22,7 +22,7 @@ public class SmartTestReducer extends TestReducer
 		//TstlLogger logger = new TstlLogger("smartTestReduce");
 
 		makeFamilyDictionary();
-		
+
 		long startTime = System.currentTimeMillis();
 		int[] reducedTestIds = null;
 		while (System.currentTimeMillis() - startTime < getTimeout())
@@ -37,12 +37,24 @@ public class SmartTestReducer extends TestReducer
 				int randNum = (int) (Math.random() * siblingCount);
 				newTestIds[x] = families[familyId][randNum];
 			}
+			//start output (can delete)
 			boolean testFailed = this.runTest(newTestIds);
+			if(testFailed)
+			{
+				System.out.println("Test failed. Heres main line of each step.");
+				for (int i = 0; i < newTestIds.length; i++) 
+				{
+					String name = getSut().getActions()[newTestIds[i]].name();
+					System.out.println(name.trim());
+				}
+			}
+			//end output
+			
 			if(testFailed)
 			{
 				BinaryTestReducer reducer = new BinaryTestReducer(getSut(), getReducedTestIds(), getTester());
 				ArrayList<Integer> binReducedTest = reducer.getReducedTest();
-				if(reducedTestIds == null || reducedTestIds.length > binReducedTest.size())
+				if(binReducedTest != null && (reducedTestIds == null || reducedTestIds.length > binReducedTest.size()))
 				{
 					int[] newArray = new int[binReducedTest.size()];
 					for (int i = 0; i < newArray.length; i++)
@@ -86,10 +98,10 @@ public class SmartTestReducer extends TestReducer
 				familyDictionary.add(entry);
 			}
 		}
-		families = new int[maxFamilyId][];
+		families = new int[maxFamilyId+1][];
 		for (int x = 0; x < familyDictionary.size(); x++)
 		{
-			FamilyDictionaryEntry famEntry =familyDictionary.get(x); 
+			FamilyDictionaryEntry famEntry = familyDictionary.get(x); 
 			int famId = famEntry.getFamilyId();
 			families[famId] = famEntry.getIndeciesAsArray();			
 		}
