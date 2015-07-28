@@ -32,7 +32,7 @@ public class TstlConstants
 	public static final String DECLARATION_NAME_METHOD_ACTION_INTERFACE = "public String name();";
 	public static final String DECLARATION_SUT_GETACTIONS_METHOD = "public Action[] getActions()";
 	public static final String DECLARATION_SUT_RESET_METHOD = "public void reset()";
-	public static final String DECLARATION_ACTION_ACTION_FAMILY_ID_METHOD = "actionFamilyId";
+	public static final String DECLARATION_ACTION_INITID_METHOD = "initId";
 	public static final String FILE_CC_CFG = "cc.cfg";
 	public static final String FILE_CUSTOM_CLASSPATH = "cp.cfg";	
 	private static final String FILE_LOGGER_LOG = "log.log";	
