@@ -24,6 +24,7 @@ public class SmartTestReducer extends TestReducer
 
 		long startTime = System.currentTimeMillis();
 		int[] reducedTestIds = this.getOriginalTestIds();
+		long lastPrintTime = 0;
 		while (System.currentTimeMillis() - startTime < getTimeout())
 		{
 			int[] newTestIds = new int[reducedTestIds.length];
@@ -53,9 +54,19 @@ public class SmartTestReducer extends TestReducer
 			//logger.append("testFailed",testFailed+"");
 			if(testFailed)
 			{
-				
+				if(System.currentTimeMillis() - lastPrintTime > 5000)
+				{
+					logger.append("A TEST FAILED");
+					for (int i = 0; i < getReducedTest().size(); i++) 
+					{
+						String name = getSut().getActions()[getReducedTest().get(i)].name();
+						logger.append("--"+name.trim());
+					}
+					lastPrintTime = System.currentTimeMillis();
+				}
 				BinaryTestReducer reducer = new BinaryTestReducer(getSut(), this.getReducedTest(), getTester());
 				int[] binReducedTest = reducer.getReducedTestIds();
+				
 				if(binReducedTest != null && (reducedTestIds == null || reducedTestIds.length > binReducedTest.length))
 				{
 					int[] newArray = new int[binReducedTest.length];
