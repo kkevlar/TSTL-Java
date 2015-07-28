@@ -19,7 +19,7 @@ public class SmartTestReducer extends TestReducer
 	@Override
 	public void reduceTest() 
 	{		
-		//TstlLogger logger = new TstlLogger("smartTestReduce");
+		TstlLogger logger = new TstlLogger("smartTestReduce");
 
 		makeFamilyDictionary();
 
@@ -37,8 +37,9 @@ public class SmartTestReducer extends TestReducer
 				int randNum = (int) (Math.random() * siblingCount);
 				newTestIds[x] = families[familyId][randNum];
 			}
-			//start output (can delete)
+			
 			boolean testFailed = this.runTest(newTestIds);
+			/*start output (can delete)
 			if(testFailed)
 			{
 				System.out.println("Test failed. Heres main line of each step.");
@@ -48,7 +49,7 @@ public class SmartTestReducer extends TestReducer
 					System.out.println(name.trim());
 				}
 			}
-			//end output
+			end output */
 			
 			if(testFailed)
 			{
@@ -67,7 +68,7 @@ public class SmartTestReducer extends TestReducer
 		}
 		if(reducedTestIds != null && reducedTestIds.length < getOriginalTestIds().length)
 			setReducedTest(reducedTestIds);
-		//logger.close();
+		logger.close();
 	}
 
 	private void makeFamilyDictionary() 
