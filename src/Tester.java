@@ -12,6 +12,7 @@ public abstract class Tester
 	private boolean shouldAppendFailingTest = TstlConstants.TESTER_CONFIG_DEFAULT_APPEND_FAILING_TEST;
 	private FlushWriter logWriter;
 	private FlushWriter reduceWriter;
+	private long smartTestReduceTimeout = TstlConstants.SMART_REDUCER_DEFAULT_TIMEOUT;	
 
 	public void go() 
 	{
@@ -56,7 +57,7 @@ public abstract class Tester
 			rprintln(name.trim());
 		}
 		SmartTestReducer smartReduce = new SmartTestReducer(sut, actionIds, this);
-		smartReduce.setTimeout(1 * 60 * 1000);
+		smartReduce.setTimeout(this.getSmartTestReduceTimeout());
 		int[] smartActionIds = smartReduce.getReducedTestIds();
 		rprintln("Test smart reduced. Heres main line of each step.");
 		for (int i = 0; i < smartActionIds.length; i++) 
@@ -68,8 +69,6 @@ public abstract class Tester
 		rprintln("--" + "Original: " + actTrace.size());
 		rprintln("--" + "Reduced : " + actionIds.length);		
 		rprintln("--" + "S-Reduce: " + smartActionIds.length);
-		
-		//smart test reducer currently is unused.
 	}
 	
 	private void rprintln(String string)
@@ -167,6 +166,16 @@ public abstract class Tester
 	}
 	public void setShouldAppendFailingTest(boolean shouldAppendFailingTest) {
 		this.shouldAppendFailingTest = shouldAppendFailingTest;
+	}
+
+	public long getSmartTestReduceTimeout() 
+	{
+		return smartTestReduceTimeout;
+	}
+
+	public void setSmartTestReduceTimeout(long smartTestReduceTimeout) 
+	{
+		this.smartTestReduceTimeout = smartTestReduceTimeout;
 	}
 	
 }

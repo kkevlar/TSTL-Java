@@ -2,18 +2,17 @@ import java.util.ArrayList;
 
 public class SmartTestReducer extends TestReducer
 {
-	private long timeout;
 	private int[][] families;
+	private long smartTestReduceTimeout;
+	
 	public SmartTestReducer(SUTInterface sut, int[] actTraceArray, Tester tester2) 
 	{
 		super(sut, actTraceArray, tester2);
-		timeout = TstlConstants.SMART_REDUCER_DEFAULT_TIMEOUT;
 	}
 
 	public SmartTestReducer(SUTInterface sut, ArrayList<Integer> actTrace, Tester tester) 
 	{
 		super(sut, actTrace, tester);
-		timeout = TstlConstants.SMART_REDUCER_DEFAULT_TIMEOUT;
 	}
 
 	@Override
@@ -50,11 +49,12 @@ public class SmartTestReducer extends TestReducer
 				}
 			}
 			end output */
-			
+			logger.append("testFailed",testFailed+"");
 			if(testFailed)
 			{
 				BinaryTestReducer reducer = new BinaryTestReducer(getSut(), getReducedTestIds(), getTester());
 				ArrayList<Integer> binReducedTest = reducer.getReducedTest();
+				logger.append("reducedTest", binReducedTest+"");
 				if(binReducedTest != null && (reducedTestIds == null || reducedTestIds.length > binReducedTest.size()))
 				{
 					int[] newArray = new int[binReducedTest.size()];
@@ -63,6 +63,7 @@ public class SmartTestReducer extends TestReducer
 						newArray[i] = binReducedTest.get(i);					
 					}
 					reducedTestIds = newArray;
+					logger.append("RESET REDUCED TEST");
 				}
 			}
 		}
@@ -109,11 +110,11 @@ public class SmartTestReducer extends TestReducer
 	}
 	public long getTimeout() 
 	{
-		return timeout;
+		return smartTestReduceTimeout;		
 	}
 	public void setTimeout(long timeout) 
 	{
-		this.timeout = timeout;
+		this.smartTestReduceTimeout = timeout;
 	}
 	public class FamilyDictionaryEntry
 	{
