@@ -232,7 +232,7 @@ public class ActionEntry extends RepeatablesContainer
 		ret += "}"+"\n";
 		return ret;
 	}
-	public String makeGetPoolValueIdMethod()
+	public String makeGetInitIdMethod()
 	{
 		String ret = "public int "+TstlConstants.DECLARATION_ACTION_INITID_METHOD+"()"+"\n"
 				+ "{"+"\n";
@@ -299,7 +299,7 @@ public class ActionEntry extends RepeatablesContainer
 		ret += this.makeEnabledMethod(poolValues);
 		ret += this.makeActMethod(poolValues);
 		ret += this.makeGetAllInfoMethod(poolValues);
-		ret += this.makeGetPoolValueIdMethod();
+		ret += this.makeGetInitIdMethod();
 		ret += "};";
 		return ret;
 	}
