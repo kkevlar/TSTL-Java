@@ -26,10 +26,15 @@ public class SmartTestReducer extends TestReducer
 		int[] reducedTestIds = null;
 		while (System.currentTimeMillis() - startTime < getTimeout())
 		{
-			int[] newTestIds = new int[getOriginalTestIds().length];
-			for (int x = 0; x < getOriginalTestIds().length; x++) 
+			int[] copyTestIds;
+			if(reducedTestIds == null)
+				copyTestIds = getOriginalTestIds();
+			else
+				copyTestIds = reducedTestIds;
+			int[] newTestIds = new int[copyTestIds.length];
+			for (int x = 0; x <  copyTestIds.length; x++) 
 			{
-				int testIndex = getOriginalTestIds()[x];
+				int testIndex = copyTestIds[x];
 				Action originalAction = getSut().getActions()[testIndex];
 				int familyId = originalAction.actionFamilyId();
 				int siblingCount = families[familyId].length;
@@ -52,7 +57,7 @@ public class SmartTestReducer extends TestReducer
 			logger.append("testFailed",testFailed+"");
 			if(testFailed)
 			{
-				BinaryTestReducer reducer = new BinaryTestReducer(getSut(), getReducedTestIds(), getTester());
+				BinaryTestReducer reducer = new BinaryTestReducer(getSut(), newTestIds, getTester());
 				ArrayList<Integer> binReducedTest = reducer.getReducedTest();
 				logger.append("reducedTest", binReducedTest+"");
 				if(binReducedTest != null && (reducedTestIds == null || reducedTestIds.length > binReducedTest.size()))
