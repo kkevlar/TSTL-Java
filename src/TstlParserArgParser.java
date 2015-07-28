@@ -63,7 +63,7 @@ public class TstlParserArgParser extends BasicParser
 			TstlConstants.log(Level.SEVERE, "Failed to parse comand line properties", e);
 			help();
 		}
-		TstlConstants.writeHomeFile(TstlConstants.FILE_WASHELP, false +"");
+		
 
 	}
 	private void writeToClasspathStore(CommandLine cmd) 
