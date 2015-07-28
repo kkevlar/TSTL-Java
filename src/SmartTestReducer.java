@@ -4,7 +4,7 @@ public class SmartTestReducer extends TestReducer
 {
 	private int[][] families;
 	private long smartTestReduceTimeout;
-	
+
 	public SmartTestReducer(SUTInterface sut, int[] actTraceArray, Tester tester2) 
 	{
 		super(sut, actTraceArray, tester2);
@@ -23,26 +23,22 @@ public class SmartTestReducer extends TestReducer
 		makeFamilyDictionary();
 
 		long startTime = System.currentTimeMillis();
-		int[] reducedTestIds = null;
+		int[] reducedTestIds = this.getOriginalTestIds();
 		while (System.currentTimeMillis() - startTime < getTimeout())
 		{
-			int[] copyTestIds;
-			if(reducedTestIds == null)
-				copyTestIds = getOriginalTestIds();
-			else
-				copyTestIds = reducedTestIds;
-			int[] newTestIds = new int[copyTestIds.length];
-			for (int x = 0; x <  copyTestIds.length; x++) 
+			int[] newTestIds = new int[reducedTestIds.length];
+			for (int x = 0; x <  reducedTestIds.length; x++) 
 			{
-				int testIndex = copyTestIds[x];
+				int testIndex = reducedTestIds[x];
 				Action originalAction = getSut().getActions()[testIndex];
 				int familyId = originalAction.actionFamilyId();
 				int siblingCount = families[familyId].length;
 				int randNum = (int) (Math.random() * siblingCount);
 				newTestIds[x] = families[familyId][randNum];
 			}
-			
+
 			boolean testFailed = this.runTest(newTestIds);
+			
 			/*start output (can delete)
 			if(testFailed)
 			{
@@ -54,24 +50,31 @@ public class SmartTestReducer extends TestReducer
 				}
 			}
 			end output */
-			logger.append("testFailed",testFailed+"");
+			//logger.append("testFailed",testFailed+"");
 			if(testFailed)
 			{
-				BinaryTestReducer reducer = new BinaryTestReducer(getSut(), newTestIds, getTester());
-				ArrayList<Integer> binReducedTest = reducer.getReducedTest();
-				logger.append("reducedTest", binReducedTest+"");
-				if(binReducedTest != null && (reducedTestIds == null || reducedTestIds.length > binReducedTest.size()))
+				
+				BinaryTestReducer reducer = new BinaryTestReducer(getSut(), this.getReducedTest(), getTester());
+				int[] binReducedTest = reducer.getReducedTestIds();
+				if(binReducedTest != null && (reducedTestIds == null || reducedTestIds.length > binReducedTest.length))
 				{
-					int[] newArray = new int[binReducedTest.size()];
+					int[] newArray = new int[binReducedTest.length];
 					for (int i = 0; i < newArray.length; i++)
 					{
-						newArray[i] = binReducedTest.get(i);					
+						newArray[i] = binReducedTest[i];					
 					}
 					reducedTestIds = newArray;
 					logger.append("RESET REDUCED TEST");
+
+					for (int i = 0; i < binReducedTest.length; i++) 
+					{
+						String name = getSut().getActions()[binReducedTest[i]].name();
+						logger.append("--"+name.trim());
+					}
 				}
 			}
 		}
+		logger.append(reducedTestIds.length + "");
 		if(reducedTestIds != null && reducedTestIds.length < getOriginalTestIds().length)
 			setReducedTest(reducedTestIds);
 		logger.close();
