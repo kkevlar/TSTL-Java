@@ -16,40 +16,39 @@ public class SmartTestReducer extends TestReducer
 	@Override
 	public void reduceTest() 
 	{		
-		TstlLogger logger = new TstlLogger("newSmartTestReduce");
+		removeReInitializations(this.getOriginalTestIds());
+	}
 
-		long startTime = System.currentTimeMillis();
-		int[] reducedTestIds = this.getOriginalTestIds();
-		long lastPrintTime = 0;
-		while (System.currentTimeMillis() - startTime < getTimeout())
+	private void removeReInitializations(int[] testToReduce)
+	{
+		boolean shouldRunAgain = false;
+		for(int x = 0; x < testToReduce.length; x++)
 		{
-			int[] newTestIds = new int[reducedTestIds.length];
-			for (int x = 0; x <  reducedTestIds.length; x++) 
+			int[] newTestIds = new int[testToReduce.length];
+			int initId = this.getSut().getActions()[x].initId();
+			if(initId == -1)
+				newTestIds = testToReduce;
+			else
 			{
-				int testIndex = reducedTestIds[x];
-				Action originalAction = getSut().getActions()[testIndex];
-				int familyId = originalAction.actionFamilyId();
-				int siblingCount = families[familyId].length;
-				int randNum = (int) (Math.random() * siblingCount);
-				newTestIds[x] = families[familyId][randNum];
-			}
-
-			boolean testFailed = this.runTest(newTestIds);
-			
-			/*start output (can delete)
-			if(testFailed)
-			{
-				System.out.println("Test failed. Heres main line of each step.");
-				for (int i = 0; i < newTestIds.length; i++) 
+				for (int y = 0; y <  testToReduce.length; y++) 
 				{
-					String name = getSut().getActions()[newTestIds[i]].name();
-					System.out.println(name.trim());
+					newTestIds[y] = testToReduce[y];
+					if(x == y)
+					{
+						for(int z = 0; z < testToReduce.length; z++)
+						{
+							int trialId = this.getSut().getActions()[z].initId();
+							if(trialId == initId && y != z)
+								newTestIds[y] = newTestIds[z];
+						}
+					}
 				}
 			}
-			end output */
-			//logger.append("testFailed",testFailed+"");
+			boolean testFailed = this.runTest(newTestIds);
+
 			if(testFailed)
 			{
+				/*
 				if(System.currentTimeMillis() - lastPrintTime > 5000)
 				{
 					logger.append("A TEST FAILED");
@@ -60,30 +59,31 @@ public class SmartTestReducer extends TestReducer
 					}
 					lastPrintTime = System.currentTimeMillis();
 				}
+				*/
 				BinaryTestReducer reducer = new BinaryTestReducer(getSut(), this.getReducedTest(), getTester());
 				int[] binReducedTest = reducer.getReducedTestIds();
-				
-				if(binReducedTest != null && (reducedTestIds == null || reducedTestIds.length > binReducedTest.length))
+
+				if(binReducedTest != null && (this.getReducedTest() == null || this.getReducedTest().size() > binReducedTest.length))
 				{
 					int[] newArray = new int[binReducedTest.length];
 					for (int i = 0; i < newArray.length; i++)
 					{
 						newArray[i] = binReducedTest[i];					
 					}
-					reducedTestIds = newArray;
-					logger.append("RESET REDUCED TEST");
+					this.setReducedTest(newArray);
+					//logger.append("RESET REDUCED TEST");
 
 					for (int i = 0; i < binReducedTest.length; i++) 
 					{
 						String name = getSut().getActions()[binReducedTest[i]].name();
-						logger.append("--"+name.trim());
+						//logger.append("--"+name.trim());
 					}
+					shouldRunAgain = true;
+					break;
 				}
 			}
 		}
-		logger.append(reducedTestIds.length + "");
-		if(reducedTestIds != null && reducedTestIds.length < getOriginalTestIds().length)
-			setReducedTest(reducedTestIds);
-		logger.close();
+		if(shouldRunAgain)		
+			this.removeReInitializations(this.getReducedTestIds());
 	}
 }
