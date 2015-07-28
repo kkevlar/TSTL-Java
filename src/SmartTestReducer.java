@@ -22,7 +22,7 @@ public class SmartTestReducer extends TestReducer
 		//TstlLogger logger = new TstlLogger("smartTestReduce");
 
 		makeFamilyDictionary();
-		
+
 		long startTime = System.currentTimeMillis();
 		int[] reducedTestIds = null;
 		while (System.currentTimeMillis() - startTime < getTimeout())
@@ -37,7 +37,19 @@ public class SmartTestReducer extends TestReducer
 				int randNum = (int) (Math.random() * siblingCount);
 				newTestIds[x] = families[familyId][randNum];
 			}
+			//start output (can delete)
 			boolean testFailed = this.runTest(newTestIds);
+			if(testFailed)
+			{
+				System.out.println("Test failed. Heres main line of each step.");
+				for (int i = 0; i < newTestIds.length; i++) 
+				{
+					String name = getSut().getActions()[newTestIds[i]].name();
+					System.out.println(name.trim());
+				}
+			}
+			//end output
+			
 			if(testFailed)
 			{
 				BinaryTestReducer reducer = new BinaryTestReducer(getSut(), getReducedTestIds(), getTester());

@@ -56,6 +56,7 @@ public abstract class Tester
 			rprintln(name.trim());
 		}
 		SmartTestReducer smartReduce = new SmartTestReducer(sut, actionIds, this);
+		smartReduce.setTimeout(1 * 60 * 1000);
 		int[] smartActionIds = smartReduce.getReducedTestIds();
 		rprintln("Test smart reduced. Heres main line of each step.");
 		for (int i = 0; i < smartActionIds.length; i++) 
