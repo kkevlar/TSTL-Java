@@ -20,6 +20,7 @@ public class SmartTestReducer extends TestReducer
 	{		
 		logger = new TstlLogger("smartTestReduce");
 		removeReInitializations(this.getOriginalTestIds());
+		logger.close();
 		
 	}
 
@@ -77,12 +78,12 @@ public class SmartTestReducer extends TestReducer
 						newArray[i] = binReducedTest[i];					
 					}
 					this.setReducedTest(newArray);
-					//logger.append("RESET REDUCED TEST");
+					logger.append("RESET REDUCED TEST");
 
 					for (int i = 0; i < binReducedTest.length; i++) 
 					{
 						String name = getSut().getActions()[binReducedTest[i]].name();
-						//logger.append("--"+name.trim());
+						logger.append("--"+name.trim());
 					}
 					shouldRunAgain = true;
 					break;
@@ -91,5 +92,6 @@ public class SmartTestReducer extends TestReducer
 		}
 		if(shouldRunAgain)		
 			this.removeReInitializations(this.getReducedTestIds());
+	
 	}
 }
