@@ -203,7 +203,7 @@ public class CodeCopier
 			inStream = CodeCopier.class.getResourceAsStream(dependency);
 			if(inStream == null) 
 			{
-				Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, "Couldn't get a depedency from within the jar!");
+				TstlConstants.log(Level.SEVERE, "Couldn't get the depedency \""+ dependency +"\" from within the jar!");
 				return;
 			}
 
