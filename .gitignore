@@ -22,3 +22,6 @@ hs_err_pid*
 !/tstl-samples/*.tstl
 /build/
 /.settings/
+/lib/
+!/lib/emma.jar
+!/lib/commons-cli.jar
