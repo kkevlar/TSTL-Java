@@ -3,6 +3,8 @@ import java.util.ArrayList;
 public class SmartTestReducer extends TestReducer
 {
 
+	private TstlLogger logger;
+
 	public SmartTestReducer(SUTInterface sut, int[] actTraceArray, Tester tester2) 
 	{
 		super(sut, actTraceArray, tester2);
@@ -16,12 +18,15 @@ public class SmartTestReducer extends TestReducer
 	@Override
 	public void reduceTest() 
 	{		
+		logger = new TstlLogger("smartTestReduce");
 		removeReInitializations(this.getOriginalTestIds());
+		
 	}
 
 	private void removeReInitializations(int[] testToReduce)
 	{
 		boolean shouldRunAgain = false;
+		long lastPrintTime = 0;
 		for(int x = 0; x < testToReduce.length; x++)
 		{
 			int[] newTestIds = new int[testToReduce.length];
@@ -35,20 +40,21 @@ public class SmartTestReducer extends TestReducer
 					newTestIds[y] = testToReduce[y];
 					if(x == y)
 					{
+						logger.append("x==y");
 						for(int z = 0; z < testToReduce.length; z++)
 						{
 							int trialId = this.getSut().getActions()[z].initId();
 							if(trialId == initId && y != z)
-								newTestIds[y] = newTestIds[z];
+								newTestIds[y] = testToReduce[z];
 						}
 					}
 				}
 			}
 			boolean testFailed = this.runTest(newTestIds);
-
+			
 			if(testFailed)
 			{
-				/*
+				
 				if(System.currentTimeMillis() - lastPrintTime > 5000)
 				{
 					logger.append("A TEST FAILED");
@@ -59,7 +65,7 @@ public class SmartTestReducer extends TestReducer
 					}
 					lastPrintTime = System.currentTimeMillis();
 				}
-				*/
+				
 				BinaryTestReducer reducer = new BinaryTestReducer(getSut(), this.getReducedTest(), getTester());
 				int[] binReducedTest = reducer.getReducedTestIds();
 

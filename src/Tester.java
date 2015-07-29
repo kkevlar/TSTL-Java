@@ -56,9 +56,7 @@ public abstract class Tester
 			String name = sut.getActions()[actionIds[i]].name();
 			rprintln(name.trim());
 		}
-		//need to replace eventually
-		SmartTestReducerOld smartReduce = new SmartTestReducerOld(sut, actionIds, this);
-		smartReduce.setTimeout(this.getSmartTestReduceTimeout());
+		SmartTestReducer smartReduce = new SmartTestReducer(sut, actionIds, this);
 		int[] smartActionIds = smartReduce.getReducedTestIds();
 		rprintln("Test smart reduced. Heres main line of each step.");
 		for (int i = 0; i < smartActionIds.length; i++) 
