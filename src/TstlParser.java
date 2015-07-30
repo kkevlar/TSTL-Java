@@ -33,6 +33,9 @@ public class TstlParser implements Runnable
 		writer.println(line);
 		writer.flush();
 		writer.close();
+		
+		TstlConstants.writeHomeFile(TstlConstants.FILE_WASHELP, true +"");
+		
 		new Thread(new TstlParser()).start();
 	}
 	@Override
@@ -360,6 +363,7 @@ public class TstlParser implements Runnable
 		writer.println("}//class close brace"); 
 		writer.close();
 		TstlConstants.closeLogger();
+		TstlConstants.writeHomeFile(TstlConstants.FILE_WASHELP, false +"");
 		System.out.println("finished");	
 	}	
 
