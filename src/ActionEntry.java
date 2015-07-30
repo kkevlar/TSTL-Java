@@ -339,6 +339,8 @@ public class ActionEntry extends RepeatablesContainer
 		ret += this.makeGetAllInfoMethod(poolValues);
 		ret += this.makeGetInitIdMethod();
 		ret += this.makeGetFamilyIdMethod(familyId);
+		ret += this.makeGetRepValsMethod(poolValues);
+		ret += this.makeGetRepIdsMethod();
 		ret += "};";
 		return ret;
 	}
