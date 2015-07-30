@@ -8,11 +8,17 @@ public class TestRunner
 
 	public static void main(String[] args) throws IOException
 	{
-		File argsFile = new File(TstlConstants.fileInDir(TstlConstants.getTstlHomeDir(),(TstlConstants.FILENAME_ARGSSTORE)));
-		BufferedReader reader = new BufferedReader(new FileReader(argsFile));
-		String line = reader.readLine();
-		reader.close();
-		String[] newArgs = line.split(" ");
+		String[] newArgs;
+		if(args == null || args.length == 0)
+		{
+			File argsFile = new File(TstlConstants.fileInDir(TstlConstants.getTstlHomeDir(),(TstlConstants.FILENAME_ARGSSTORE)));
+			BufferedReader reader = new BufferedReader(new FileReader(argsFile));
+			String line = reader.readLine();
+			reader.close();
+			newArgs = line.split(" ");
+		}
+		else
+			newArgs = args;
 		//System.out.println("split: " + Arrays.toString(newArgs));
 		Tester tester = new RandomTester();
 		TestRunnerArgsParser parser = new TestRunnerArgsParser(newArgs,tester);
