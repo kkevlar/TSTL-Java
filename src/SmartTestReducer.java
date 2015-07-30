@@ -31,6 +31,8 @@ public class SmartTestReducer extends TestReducer
 		for(int x = 0; x < testToReduce.length; x++)
 		{
 			boolean didReplace = false;
+			int replacedInitActionIndex = -1;
+			int removedInitActionIndex = -1;
 			int[] newTestIds = new int[testToReduce.length];
 			int initId = this.getSut().getActions()[testToReduce[x]].initId();
 			if(initId == -1)
@@ -49,6 +51,8 @@ public class SmartTestReducer extends TestReducer
 							if(trialId == initId && y != z)
 							{
 								newTestIds[y] = testToReduce[z];
+								replacedInitActionIndex = testToReduce[z];
+								removedInitActionIndex = testToReduce[y];
 								outputTheReplace(testToReduce, y, z);
 								logger.append("initId", initId+"");
 								logger.append("trialId", trialId + "");
@@ -58,7 +62,9 @@ public class SmartTestReducer extends TestReducer
 					}
 				}
 			}
-			boolean testFailed = this.runTest(newTestIds);
+			if(!didReplace)
+				continue;
+			boolean testFailed = runTest(newTestIds, removedInitActionIndex, replacedInitActionIndex);
 			
 			if(testFailed)
 			{
@@ -107,7 +113,84 @@ public class SmartTestReducer extends TestReducer
 		}
 		if(shouldRunAgain)		
 			this.removeReInitializations(this.getReducedTestIds());
-	
+
+	}
+
+	protected boolean runTest(int[] actionIds, int removedInitActionIndex, int replacedInitActionIndex)
+	{		
+		boolean testFailed = false;
+		getSut().reset();
+		for (int i = 0; i < actionIds.length; i++) 
+		{
+			Action action = getSut().getActions()[actionIds[i]];
+			if(!action.enabled())
+			{
+				action = findRelatedEnabledAction(removedInitActionIndex, replacedInitActionIndex, actionIds[i]);
+				if(action == null || (!(action.enabled())))
+					return false;
+			}
+			boolean success = getTester().executeAct(getTester().getIgnoreCheckValue() < 1, action, false);
+			if(!success)
+			{
+				testFailed = true;
+				break;
+			}
+		}
+		if(testFailed)
+			setReducedTest(actionIds);		
+		return testFailed;
+
+	}
+	private Action findRelatedEnabledAction(int removedInitActionIndex, int replacedInitActionIndex, int disabledActionIndex)
+	{
+		Action removedInitAction = getSut().getActions()[removedInitActionIndex];
+		Action replacedInitAction = getSut().getActions()[replacedInitActionIndex];
+		Action disabledAction = getSut().getActions()[disabledActionIndex];
+		ArrayList<Integer> repValsIndeciesToChange = new ArrayList<Integer>();
+		int[] disabledActionRepIds = disabledAction.repIds();
+		for (int i = 0; i < disabledActionRepIds.length; i++) 
+		{
+			if(disabledActionRepIds[i] == removedInitAction.initId())
+			{
+				repValsIndeciesToChange.add(i);
+				break;
+			}
+		}
+		int repValShouldChangeTo = replacedInitAction.repVals()[0];
+		int[] comarableRepIds = new int[disabledAction.repVals().length];
+		for (int i = 0; i < comarableRepIds.length; i++)
+		{
+			if(!(repValsIndeciesToChange.contains(new Integer(i))))
+				comarableRepIds[i] = disabledAction.repVals()[i];
+			else
+				comarableRepIds[i] = repValShouldChangeTo;
+		}
+		int changeId = -1;
+		for (int x = 0; x < getSut().getActions().length; x++)
+		{
+			boolean sameFamily = getSut().getActions()[x].familyId() == disabledAction.familyId();
+			if(sameFamily && getSut().getActions()[x].repVals().length == comarableRepIds.length)
+			{
+				boolean exactlyCompare = true;
+				for (int y = 0; y < getSut().getActions()[x].repVals().length; y++)
+				{
+					if(getSut().getActions()[x].repVals()[y] != comarableRepIds[y])
+					{
+						exactlyCompare = false;
+						break;
+					}
+				}
+				if(exactlyCompare)
+				{
+					changeId = x;
+					break;
+				}
+			}
+		}
+		if(changeId >= 0)
+			return getSut().getActions()[changeId];
+		else
+			return null;
 	}
 
 	private void outputTheReplace(int[] testToReduce, int y, int z) 
