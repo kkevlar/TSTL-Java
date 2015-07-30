@@ -6,4 +6,5 @@ public interface Action
 	public String getAllInfo();
 	public int initId();
 	public int familyId();
+	public int[] repVals();
 }
