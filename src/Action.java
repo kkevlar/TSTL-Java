@@ -7,4 +7,5 @@ public interface Action
 	public int initId();
 	public int familyId();
 	public int[] repVals();
+	public int[] repIds();
 }

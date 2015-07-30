@@ -7,6 +7,6 @@ More tools need to be written to help Smart Test Reducer.  To finish smart test 
 ###Branch Checklist
 - [x] Bring back families
 - [x] Have actions hang on to their poolvals
-- [ ] Have actions carry repIds for each of their corosponding poolvals
+- [x] Have actions carry repIds for each of their corosponding poolvals
 - [ ] Init Actions carry what index of the repId they set
 - [ ] Delete this readme file

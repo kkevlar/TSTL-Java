@@ -258,6 +258,21 @@ public class ActionEntry extends RepeatablesContainer
 		ret += "}" + "\n";
 		return ret;
 	}
+	public String makeGetRepIdsMethod()
+	{
+		String array = "new int[] {";
+		for (int i = 0; i < this.getRepeatables().length; i++) 
+		{
+			array += this.getRepeatables()[i].getId() + ",";
+		}
+		array = array.substring(0,array.length()-1);
+		array += "}";
+		String ret = "public int[] "+TstlConstants.DECLARATION_ACTION_REPID_METHOD+"()"+"\n"
+				+ "{"+"\n";
+		ret += "return " + array +";"+"\n";
+		ret += "}" + "\n";
+		return ret;
+	}
 	public String makeGetFamilyIdMethod(int familyId)
 	{
 		String ret = "public int "+TstlConstants.DECLARATION_ACTION_FAMILY_ID_METHOD+"()"+"\n"
