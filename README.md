@@ -1,4 +1,4 @@
-# TSTL-Java
-A version of TSTL written for java.
+# SmartReduce3
 
-The current implementation for TSTL is written in Python.  It can be found [here](https://github.com/agroce/tstl).  
+Awaiting pulls from the fix_STR branch to fix SmartTestReducer, then will be pulled to master
+
