@@ -4,7 +4,6 @@
 *.war
 *.ear
 *.log
-compile.bat
 *.tstl
 *.class
 *.tstl.old
