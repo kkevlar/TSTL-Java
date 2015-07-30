@@ -93,7 +93,6 @@ public abstract class TestReducer
 	{
 		return sut;
 	}
-	
 	public int[] getOriginalTestIds() 
 	{
 		return originalTestIds;
@@ -103,13 +102,22 @@ public abstract class TestReducer
 	{
 		return tester;
 	}
-	public ArrayList<Integer> getReducedTest()
+	protected ArrayList<Integer> getReducedTest()
 	{
 		return reducedTest;
 	}
 	public void setReducedTest(ArrayList<Integer> reducedTest)
 	{
 		this.reducedTest = reducedTest;
+	}
+	public void setReducedTest(int[] reducedTestIds) 
+	{
+		ArrayList<Integer> reducedTestArrList = new ArrayList<Integer>();
+		for (int i = 0; i < reducedTestIds.length; i++) 
+		{
+			reducedTestArrList.add(reducedTestIds[i]);
+		}
+		setReducedTest(reducedTestArrList);
 	}
 	
 }

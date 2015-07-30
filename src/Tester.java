@@ -37,11 +37,15 @@ public abstract class Tester
 
 	protected void testFailed()
 	{
-		try {
+		//why is this delay here.....??? commenting.. if issues should uncomment
+		/*
+		try 
+		{
 			Thread.sleep(300);
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
+		*/
 		rprintln("test failed. Reducing....");
 		TestReducer reducer = new BinaryTestReducer(sut, actTrace, this);
 		int[] actionIds = reducer.getReducedTestIds();
@@ -51,6 +55,28 @@ public abstract class Tester
 			String name = sut.getActions()[actionIds[i]].name();
 			rprintln(name.trim());
 		}
+		SmartTestReducer smartReduce = new SmartTestReducer(sut, actionIds, this);
+		int[] smartActionIds = smartReduce.getReducedTestIds();
+
+		int prevSize = actionIds.length;
+		int smartSize = smartActionIds.length;
+		while(smartSize < prevSize)
+		{
+			prevSize = smartSize;
+			smartReduce = new SmartTestReducer(sut, smartActionIds, this);
+			smartActionIds = smartReduce.getReducedTestIds();
+			smartSize = smartActionIds.length;
+		}
+		rprintln("Test smart reduced. Heres main line of each step.");
+		for (int i = 0; i < smartActionIds.length; i++) 
+		{
+			String name = sut.getActions()[smartActionIds[i]].name();
+			rprintln(name.trim());
+		}
+		rprintln("Stepcounts:");
+		rprintln("--" + "Original: " + actTrace.size());
+		rprintln("--" + "Reduced : " + actionIds.length);		
+		rprintln("--" + "S-Reduce: " + smartActionIds.length);
 	}
 	
 	private void rprintln(String string)
@@ -149,5 +175,4 @@ public abstract class Tester
 	public void setShouldAppendFailingTest(boolean shouldAppendFailingTest) {
 		this.shouldAppendFailingTest = shouldAppendFailingTest;
 	}
-	
 }

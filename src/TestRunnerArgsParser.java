@@ -28,6 +28,7 @@ public class TestRunnerArgsParser extends BasicParser
 		stat.addOption("i", "ignorecheck", true, "[OPTIONAL] Should the tester ignore properties from tstl? 0=never 1=when_not_reducing 2=always. Defualt is never (0).");
 		stat.addOption("c", "tests", true, "[OPTIONAL] Tests per reset. Defualt is 1000.");
 		stat.addOption("a", "noappend", false, "[OPTIONAL] The final (failing) test will not be appended to each subtest when reducing if enabled. Default is not including this.");
+
 		return stat;
 	}
 

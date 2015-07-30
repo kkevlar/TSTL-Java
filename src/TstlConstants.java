@@ -32,7 +32,7 @@ public class TstlConstants
 	public static final String DECLARATION_NAME_METHOD_ACTION_INTERFACE = "public String name();";
 	public static final String DECLARATION_SUT_GETACTIONS_METHOD = "public Action[] getActions()";
 	public static final String DECLARATION_SUT_RESET_METHOD = "public void reset()";
-	public static final String DECLARATION_ACTION_ACTION_FAMILY_ID_METHOD = "actionFamilyId";
+	public static final String DECLARATION_ACTION_INITID_METHOD = "initId";
 	public static final String FILE_CC_CFG = "cc.cfg";
 	public static final String FILE_CUSTOM_CLASSPATH = "cp.cfg";	
 	private static final String FILE_LOGGER_LOG = "log.log";	
@@ -78,6 +78,9 @@ public class TstlConstants
 	public static final int TESTER_CONFIG_DEFAULT_TIMEOUT = 60000;
 	public static final String TSTL_JAVA = "TSTL-Java";
 	public static final String VISIBILITY_LEVEL_POOL_VAR = "private";
+	public static final String DECLARATION_ACTION_FAMILY_ID_METHOD = "familyId";
+	public static final String DECLARATION_ACTION_REPVAL_METHOD = "repVals";
+	public static final String DECLARATION_ACTION_REPID_METHOD = "repIds";
 
 	public static void closeLogger()
 	{
