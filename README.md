@@ -2,12 +2,4 @@
 The Smart Test Reducer in the master and smartreduce3 branches is defunct.  Smart Test Reducer is being rewritten in this branch to target unnessesary initializations and remove them from the already reduced branch.  This branch is intended to be pulled to smartreduce3, and after tests check out, eventually pulled to master.
 
 ###Branch Checklist
-- [x] Remove /build folder and the build jar
-- [x] Update .gitignore
-- [x] Remove/comment out code of defunct STR
-- [x] Remove family id's from the Action interface and ActionEntry
-- [x] Give each repeatable a unique id
-- [x] Add method initId() to Action - corrosponds to PoolEntry id, -1 for an action without initialization
-- [x] New smart test reducer will look for duplicate actions with the same initId() in a reduced test; will attempt to remove all but one
-- [ ] Test New Smart Test reducer before pulling changes
-- [ ] Revert this file so the master readme remains unchanged
+- [ ] Change actions dependent on the (removed) re-initializations to those in the same family, with their poolvals the same as the previous action, except poolval[repId] = what index the (old) initialization action set
