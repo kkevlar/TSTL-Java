@@ -4,7 +4,6 @@
 *.war
 *.ear
 *.log
-compile.bat
 *.tstl
 *.class
 *.tstl.old
@@ -20,5 +19,8 @@ hs_err_pid*
 /gensrc/
 /src/SUT.java
 !/tstl-samples/*.tstl
-/builds/
+/build/
 /.settings/
+/lib/
+!/lib/emma.jar
+!/lib/commons-cli.jar

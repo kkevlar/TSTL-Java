@@ -1,9 +1,12 @@
 
-public class PoolEntry implements Repeatable
+public class PoolEntry extends Repeatable
 {
+	
 	private String className;
 	private String varName;
 	private int listSize;
+	
+	
 	
 	public PoolEntry(String className, String varName, int listSize)
 	{

@@ -113,18 +113,18 @@ public class ActionEntry extends RepeatablesContainer
 		this.javaCodePieces = packet.getJavaCodePieces();
 		this.repeatables = entries.toArray(new Repeatable[entries.size()]);
 	}
-	
+
 	protected String[] getJavaPieces() 
 	{
 		return this.javaCodePieces;
 	}
-	
+
 	@Override
 	public Repeatable[] getRepeatables()
 	{
 		return this.repeatables;
 	}
-	
+
 	protected boolean hasInit()
 	{
 		return this.getRepeatables().length == this.getJavaPieces().length;
@@ -232,11 +232,52 @@ public class ActionEntry extends RepeatablesContainer
 		ret += "}"+"\n";
 		return ret;
 	}
-	public String makeGetActionFamilyIdMethod(int familyId)
+	public String makeGetInitIdMethod()
 	{
-		String ret = "public int "+TstlConstants.DECLARATION_ACTION_ACTION_FAMILY_ID_METHOD+"()"+"\n"
+		String ret = "public int "+TstlConstants.DECLARATION_ACTION_INITID_METHOD+"()"+"\n"
 				+ "{"+"\n";
-		ret += "return " + familyId+";"+"\n";
+		if(this.hasInit())
+			ret += "return " + getRepeatables()[0].getId() +";"+"\n";
+		else
+			ret += "return " + -1 +";"+"\n";
+		ret += "}" + "\n";
+		return ret;
+	}
+	public String makeGetRepValsMethod(int[] repVals)
+	{
+		String array = "new int[] {";
+		for (int i = 0; i < repVals.length; i++) 
+		{
+			array += repVals[i] + ",";
+		}
+		array = array.substring(0,array.length()-1);
+		array += "}";
+		String ret = "public int[] "+TstlConstants.DECLARATION_ACTION_REPVAL_METHOD+"()"+"\n"
+				+ "{"+"\n";
+		ret += "return " + array +";"+"\n";
+		ret += "}" + "\n";
+		return ret;
+	}
+	public String makeGetRepIdsMethod()
+	{
+		String array = "new int[] {";
+		for (int i = 0; i < this.getRepeatables().length; i++) 
+		{
+			array += this.getRepeatables()[i].getId() + ",";
+		}
+		array = array.substring(0,array.length()-1);
+		array += "}";
+		String ret = "public int[] "+TstlConstants.DECLARATION_ACTION_REPID_METHOD+"()"+"\n"
+				+ "{"+"\n";
+		ret += "return " + array +";"+"\n";
+		ret += "}" + "\n";
+		return ret;
+	}
+	public String makeGetFamilyIdMethod(int familyId)
+	{
+		String ret = "public int "+TstlConstants.DECLARATION_ACTION_FAMILY_ID_METHOD+"()"+"\n"
+				+ "{"+"\n";
+		ret += "return " + familyId +";"+"\n";
 		ret += "}" + "\n";
 		return ret;
 	}
@@ -296,7 +337,10 @@ public class ActionEntry extends RepeatablesContainer
 		ret += this.makeEnabledMethod(poolValues);
 		ret += this.makeActMethod(poolValues);
 		ret += this.makeGetAllInfoMethod(poolValues);
-		ret += this.makeGetActionFamilyIdMethod(familyId);
+		ret += this.makeGetInitIdMethod();
+		ret += this.makeGetFamilyIdMethod(familyId);
+		ret += this.makeGetRepValsMethod(poolValues);
+		ret += this.makeGetRepIdsMethod();
 		ret += "};";
 		return ret;
 	}

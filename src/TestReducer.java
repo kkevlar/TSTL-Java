@@ -102,7 +102,7 @@ public abstract class TestReducer
 	{
 		return tester;
 	}
-	public ArrayList<Integer> getReducedTest()
+	protected ArrayList<Integer> getReducedTest()
 	{
 		return reducedTest;
 	}

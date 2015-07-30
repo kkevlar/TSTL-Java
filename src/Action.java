@@ -4,5 +4,8 @@ public interface Action
 	public boolean enabled();
 	public void act();
 	public String getAllInfo();
-	public int actionFamilyId();
+	public int initId();
+	public int familyId();
+	public int[] repVals();
+	public int[] repIds();
 }

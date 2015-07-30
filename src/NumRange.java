@@ -1,5 +1,5 @@
 
-public class NumRange implements Repeatable 
+public class NumRange extends Repeatable 
 {
 
 	private int low;
