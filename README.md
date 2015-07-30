@@ -1,13 +1,9 @@
-# FIX_STR Branch
-The Smart Test Reducer in the master and smartreduce3 branches is defunct.  Smart Test Reducer is being rewritten in this branch to target unnessesary initializations and remove them from the already reduced branch.  This branch is intended to be pulled to smartreduce3, and after tests check out, eventually pulled to master.
+# FIX_STR2 Branch
+The Smart Test Reducer in the master and smartreduce3 branches is defunct. 
 
+More tools need to be written to help Smart Test Reducer.  To finish smart test reducer in fix_STR(1) branch, some fixes need to be made.
 ###Branch Checklist
-- [x] Remove /build folder and the build jar
-- [x] Update .gitignore
-- [x] Remove/comment out code of defunct STR
-- [x] Remove family id's from the Action interface and ActionEntry
-- [x] Give each repeatable a unique id
-- [x] Add method initId() to Action - corrosponds to PoolEntry id, -1 for an action without initialization
-- [x] New smart test reducer will look for duplicate actions with the same initId() in a reduced test; will attempt to remove all but one
-- [ ] Test New Smart Test reducer before pulling changes
-- [ ] Revert this file so the master readme remains unchanged
+- [ ] Bring back families
+- [ ] Have actions hang on to their poolvals
+- [ ] Have actions carry repIds for each of their corosponding poolvals
+- [ ] Init Actions carry what index of the repId they set
