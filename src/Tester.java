@@ -57,6 +57,16 @@ public abstract class Tester
 		}
 		SmartTestReducer smartReduce = new SmartTestReducer(sut, actionIds, this);
 		int[] smartActionIds = smartReduce.getReducedTestIds();
+
+		int prevSize = actionIds.length;
+		int smartSize = smartActionIds.length;
+		while(smartSize < prevSize)
+		{
+			prevSize = smartSize;
+			smartReduce = new SmartTestReducer(sut, smartActionIds, this);
+			smartActionIds = smartReduce.getReducedTestIds();
+			smartSize = smartActionIds.length;
+		}
 		rprintln("Test smart reduced. Heres main line of each step.");
 		for (int i = 0; i < smartActionIds.length; i++) 
 		{

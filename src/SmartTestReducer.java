@@ -26,8 +26,6 @@ public class SmartTestReducer extends TestReducer
 
 	private void removeReInitializations(int[] testToReduce)
 	{
-		boolean shouldRunAgain = false;
-		
 		for(int x = 0; x < testToReduce.length; x++)
 		{
 			boolean didReplace = false;
@@ -95,7 +93,6 @@ public class SmartTestReducer extends TestReducer
 						String name = getSut().getActions()[binReducedTest[i]].name();
 						logger.append("--"+name.trim());
 					}
-					shouldRunAgain = true;
 					break;
 				}
 			}
@@ -109,8 +106,6 @@ public class SmartTestReducer extends TestReducer
 					}
 			}
 		}
-		if(shouldRunAgain)		
-			this.removeReInitializations(this.getReducedTest());
 		if(this.getReducedTest() == null)
 			this.setReducedTest(this.getOriginalTestIds());
 	}
@@ -129,30 +124,42 @@ public class SmartTestReducer extends TestReducer
 	{		
 		boolean testFailed = false;
 		getSut().reset();
+		ArrayList<Integer> smallerTest = new ArrayList<Integer>();
+		int shouldIgnore = getSut().getActions()[removedInitActionIndex].initId();
 		for (int i = 0; i < actionIds.length; i++) 
 		{
 			Action action = getSut().getActions()[actionIds[i]];
-			if(!action.enabled())
+			int changeId = -1;
+			if(!action.enabled() && action.initId() != shouldIgnore)
 			{
 				String oldname = action.name();
-				action = findRelatedEnabledAction(removedInitActionIndex, replacedInitActionIndex, actionIds[i]);
+				changeId = findRelatedEnabledActionId(removedInitActionIndex, replacedInitActionIndex, actionIds[i]);
+				if(changeId == -1)
+					return false;
+				action = getSut().getActions()[changeId];
 				logger.append("findRelatedEnabledAction replaced \"" + oldname + "\" with \"" + action.name() + "\".");
 				if(action == null || (!(action.enabled())))
 					return false;
 			}
-			boolean success = getTester().executeAct(getTester().getIgnoreCheckValue() < 1, action, false);
-			if(!success)
+			if(action.enabled())
 			{
-				testFailed = true;
-				break;
+				boolean success = getTester().executeAct(getTester().getIgnoreCheckValue() < 1, action, false);
+				if(changeId == -1)
+					changeId = actionIds[i];
+				smallerTest.add(changeId);
+				if(!success)
+				{
+					testFailed = true;
+					break;
+				}
 			}
 		}
 		if(testFailed)
-			setReducedTest(actionIds);		
+			setReducedTest(smallerTest);		
 		return testFailed;
 
 	}
-	private Action findRelatedEnabledAction(int removedInitActionIndex, int replacedInitActionIndex, int disabledActionIndex)
+	private int findRelatedEnabledActionId(int removedInitActionIndex, int replacedInitActionIndex, int disabledActionIndex)
 	{
 		Action removedInitAction = getSut().getActions()[removedInitActionIndex];
 		Action replacedInitAction = getSut().getActions()[replacedInitActionIndex];
@@ -198,10 +205,7 @@ public class SmartTestReducer extends TestReducer
 				}
 			}
 		}
-		if(changeId >= 0)
-			return getSut().getActions()[changeId];
-		else
-			return null;
+		return changeId;
 	}
 
 	private void outputTheReplace(int[] testToReduce, int y, int z) 
