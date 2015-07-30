@@ -113,18 +113,18 @@ public class ActionEntry extends RepeatablesContainer
 		this.javaCodePieces = packet.getJavaCodePieces();
 		this.repeatables = entries.toArray(new Repeatable[entries.size()]);
 	}
-	
+
 	protected String[] getJavaPieces() 
 	{
 		return this.javaCodePieces;
 	}
-	
+
 	@Override
 	public Repeatable[] getRepeatables()
 	{
 		return this.repeatables;
 	}
-	
+
 	protected boolean hasInit()
 	{
 		return this.getRepeatables().length == this.getJavaPieces().length;
@@ -243,6 +243,44 @@ public class ActionEntry extends RepeatablesContainer
 		ret += "}" + "\n";
 		return ret;
 	}
+	public String makeGetRepValsMethod(int[] repVals)
+	{
+		String array = "new int[] {";
+		for (int i = 0; i < repVals.length; i++) 
+		{
+			array += repVals[i] + ",";
+		}
+		array = array.substring(0,array.length()-1);
+		array += "}";
+		String ret = "public int[] "+TstlConstants.DECLARATION_ACTION_REPVAL_METHOD+"()"+"\n"
+				+ "{"+"\n";
+		ret += "return " + array +";"+"\n";
+		ret += "}" + "\n";
+		return ret;
+	}
+	public String makeGetRepIdsMethod()
+	{
+		String array = "new int[] {";
+		for (int i = 0; i < this.getRepeatables().length; i++) 
+		{
+			array += this.getRepeatables()[i].getId() + ",";
+		}
+		array = array.substring(0,array.length()-1);
+		array += "}";
+		String ret = "public int[] "+TstlConstants.DECLARATION_ACTION_REPID_METHOD+"()"+"\n"
+				+ "{"+"\n";
+		ret += "return " + array +";"+"\n";
+		ret += "}" + "\n";
+		return ret;
+	}
+	public String makeGetFamilyIdMethod(int familyId)
+	{
+		String ret = "public int "+TstlConstants.DECLARATION_ACTION_FAMILY_ID_METHOD+"()"+"\n"
+				+ "{"+"\n";
+		ret += "return " + familyId +";"+"\n";
+		ret += "}" + "\n";
+		return ret;
+	}
 	public String getActMainLine(int[] poolValues)
 	{
 		String mainLine = "";
@@ -292,7 +330,7 @@ public class ActionEntry extends RepeatablesContainer
 		return ret;
 	}
 
-	public String createActionClass(int[] poolValues)
+	public String createActionClass(int[] poolValues, int familyId)
 	{
 		String ret = TstlConstants.DECLARATION_ACTION_CLASS + "\n";
 		ret += this.makeGetNameMethod(poolValues);
@@ -300,6 +338,7 @@ public class ActionEntry extends RepeatablesContainer
 		ret += this.makeActMethod(poolValues);
 		ret += this.makeGetAllInfoMethod(poolValues);
 		ret += this.makeGetInitIdMethod();
+		ret += this.makeGetFamilyIdMethod(familyId);
 		ret += "};";
 		return ret;
 	}

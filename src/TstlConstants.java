@@ -79,6 +79,9 @@ public class TstlConstants
 	public static final String TSTL_JAVA = "TSTL-Java";
 	public static final String VISIBILITY_LEVEL_POOL_VAR = "private";
 	public static final long SMART_REDUCER_DEFAULT_TIMEOUT = 10000;
+	public static final String DECLARATION_ACTION_FAMILY_ID_METHOD = "familyId";
+	public static final String DECLARATION_ACTION_REPVAL_METHOD = "repVals";
+	public static final String DECLARATION_ACTION_REPID_METHOD = "repIds";
 
 	public static void closeLogger()
 	{
