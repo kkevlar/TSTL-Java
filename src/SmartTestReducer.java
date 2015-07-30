@@ -67,8 +67,7 @@ public class SmartTestReducer extends TestReducer
 			boolean testFailed = runTest(newTestIds, removedInitActionIndex, replacedInitActionIndex);
 			
 			if(testFailed)
-			{
-				
+			{				
 				if(didReplace)
 				{
 					logger.append("A TEST FAILED");
@@ -78,11 +77,10 @@ public class SmartTestReducer extends TestReducer
 						logger.append("--"+name.trim());
 					}
 				}
-				
 				BinaryTestReducer reducer = new BinaryTestReducer(getSut(), this.getReducedTest(), getTester());
 				int[] binReducedTest = reducer.getReducedTestIds();
 
-				if(binReducedTest != null && (this.getReducedTest() == null || this.getReducedTest().size() > binReducedTest.length))
+				if(binReducedTest != null && (this.getReducedTest() == null || newTestIds.length > binReducedTest.length))
 				{
 					int[] newArray = new int[binReducedTest.length];
 					for (int i = 0; i < newArray.length; i++)
@@ -112,8 +110,19 @@ public class SmartTestReducer extends TestReducer
 			}
 		}
 		if(shouldRunAgain)		
-			this.removeReInitializations(this.getReducedTestIds());
+			this.removeReInitializations(this.getReducedTest());
+		if(this.getReducedTest() == null)
+			this.setReducedTest(this.getOriginalTestIds());
+	}
 
+	private void removeReInitializations(ArrayList<Integer> reducedTest)
+	{
+		int[] actionIndicies = new int[reducedTest.size()];
+		for (int i = 0; i < actionIndicies.length; i++) 
+		{
+			actionIndicies[i] = reducedTest.get(i);
+		}
+		removeReInitializations(actionIndicies);		
 	}
 
 	protected boolean runTest(int[] actionIds, int removedInitActionIndex, int replacedInitActionIndex)
@@ -125,7 +134,9 @@ public class SmartTestReducer extends TestReducer
 			Action action = getSut().getActions()[actionIds[i]];
 			if(!action.enabled())
 			{
+				String oldname = action.name();
 				action = findRelatedEnabledAction(removedInitActionIndex, replacedInitActionIndex, actionIds[i]);
+				logger.append("findRelatedEnabledAction replaced \"" + oldname + "\" with \"" + action.name() + "\".");
 				if(action == null || (!(action.enabled())))
 					return false;
 			}
