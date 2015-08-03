@@ -378,6 +378,9 @@ public class TstlConstants
 			log(Level.WARNING, "Writing the "+name+ " file failed. Path: \"" + path + "\"");
 		}
 	}
+	public static final String DECLARATION_SUT_SET_RENIT_VALUE_METHOD = "setReInitValue";
+	public static final String DECLARATION_SUT_ALLOW_REINIT_VALUE_FIELD = "allowReInitValue";
+	public static final int DEFUALT_SUT_REINIT_VALUE = 1;
 
 
 }
