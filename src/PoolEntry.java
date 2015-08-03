@@ -47,7 +47,7 @@ public class PoolEntry extends Repeatable
 	{
 		
 		String ret = visibilityLevel + " List<" + this.getClassName() + "> "+ this.getVarName() + ";\n";
-		ret += visibilityLevel +  " boolean[] " + this.getUsedVarName() + ";";
+		ret += visibilityLevel +  " int[] " + this.getUsedVarName() + ";";
 		return ret;
 	}
 	
@@ -59,7 +59,7 @@ public class PoolEntry extends Repeatable
 		//should instead use clear()?
 		ret += "for (int i = 0; i < " + this.getListSize() + "; i++)\n";
 		ret += getVarName() + ".add(null);\n";
-		ret += getUsedVarName() + " = new boolean[" + this.getListSize() + "];";
+		ret += getUsedVarName() + " = new int[" + this.getListSize() + "];";
 		return ret;
 	}
 
@@ -93,7 +93,7 @@ public class PoolEntry extends Repeatable
 	@Override
 	public String getCanOverwriteExpression(int i) 
 	{
-		return "(" + this.getAsJava(i) + " == null ||" + this.getUsedAsJava(i) + "== true)";
+		return "(" + this.getAsJava(i) + " == null ||" + this.getUsedAsJava(i) + " + " + TstlConstants.DECLARATION_SUT_ALLOW_REINIT_VALUE_FIELD + ">= 2)";
 	}
 
 	
