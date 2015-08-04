@@ -51,7 +51,7 @@ public class TestRunnerArgsParser extends BasicParser
 			if(cmd.hasOption("i"))
 				tester.setIgnoreCheckValue(Integer.parseInt(cmd.getOptionValue("i")));
 			if(cmd.hasOption("r"))
-				tester.getSut().setReInitValue(Integer.parseInt(cmd.getOptionValue("r")));
+				tester.setReInitValue(Integer.parseInt(cmd.getOptionValue("r")));
 			if(cmd.hasOption("c"))
 				tester.setTestsPerCycle(Integer.parseInt(cmd.getOptionValue("c")));		
 			if(cmd.hasOption("a"))

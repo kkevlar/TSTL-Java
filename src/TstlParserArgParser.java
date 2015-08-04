@@ -22,7 +22,7 @@ public class TstlParserArgParser extends BasicParser
 		options.addOption("p", "path", true, "[REQUIRED] Path to working directory. (should be provided by command line script)");
 		options.addOption("t", "tstl", true, "[OPTIONAL] Path to tstl file. Should work for java.io.File construciton.");
 		options.addOption("j", "classpath", true, "[OPTIONAL] Jars or directories to add to the classpath at compiletime and runtime. Separated by '~' '.' or ','.");
-		options.addOption("x", "noparse", false, "Skip parsing of a source .tstl file will be done. Use with caution, if generated classes do not already exist from a previous parse, you will have plenty of errors.");
+		options.addOption("x", "noparse", false, "[OPTIONAL] Skip parsing of a source .tstl file will be done. Use with caution, if generated classes do not already exist from a previous parse, you will have plenty of errors.");
 	}
 	@Override
 	protected void processOption(final String arg, final ListIterator<String> iterator) throws ParseException 
