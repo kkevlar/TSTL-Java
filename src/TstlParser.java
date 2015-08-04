@@ -18,8 +18,8 @@ public class TstlParser implements Runnable
 	
 	public static void main(String[] args) throws IOException
 	{
-		TstlParserArgParser parse = new TstlParserArgParser(args);
-		parse.parse();
+		TstlParserArgParser parser = new TstlParserArgParser(args);
+		parser.parse();
 		String line = "";
 		for (int i = 0; i < args.length; i++) 
 		{
@@ -33,9 +33,13 @@ public class TstlParser implements Runnable
 		writer.println(line);
 		writer.flush();
 		writer.close();
-		
+
+		if(parser.shouldSkipParse())
+		{
+			TstlConstants.writeHomeFile(TstlConstants.FILE_WASHELP, false +"");
+			System.exit(0);
+		}
 		TstlConstants.writeHomeFile(TstlConstants.FILE_WASHELP, true +"");
-		
 		new Thread(new TstlParser()).start();
 	}
 	@Override
