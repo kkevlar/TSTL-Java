@@ -175,4 +175,13 @@ public abstract class Tester
 	public void setShouldAppendFailingTest(boolean shouldAppendFailingTest) {
 		this.shouldAppendFailingTest = shouldAppendFailingTest;
 	}
+	
+	public SUTInterface getSut() {
+		return sut;
+	}
+
+	public void setSut(SUTInterface sut) {
+		this.sut = sut;
+	}
+
 }

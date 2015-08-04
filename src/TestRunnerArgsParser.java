@@ -28,7 +28,7 @@ public class TestRunnerArgsParser extends BasicParser
 		stat.addOption("i", "ignorecheck", true, "[OPTIONAL] Should the tester ignore properties from tstl? 0=never 1=when_not_reducing 2=always. Defualt is never (0).");
 		stat.addOption("c", "tests", true, "[OPTIONAL] Tests per reset. Defualt is 1000.");
 		stat.addOption("a", "noappend", false, "[OPTIONAL] The final (failing) test will not be appended to each subtest when reducing if enabled. Default is not including this.");
-
+		stat.addOption("r", "allowreinit", true, "[OPTIONAL] Allow TSTL-Java to reinitalize unused pool values? 0=never, 1=on a per-value basis as defined in the .tstl file, 2=always. Defualt is allow (1).");
 		return stat;
 	}
 
@@ -50,6 +50,8 @@ public class TestRunnerArgsParser extends BasicParser
 				tester.setTestPrintDelay(Long.parseLong(cmd.getOptionValue("d")));
 			if(cmd.hasOption("i"))
 				tester.setIgnoreCheckValue(Integer.parseInt(cmd.getOptionValue("i")));
+			if(cmd.hasOption("r"))
+				tester.getSut().setReInitValue(Integer.parseInt(cmd.getOptionValue("r")));
 			if(cmd.hasOption("c"))
 				tester.setTestsPerCycle(Integer.parseInt(cmd.getOptionValue("c")));		
 			if(cmd.hasOption("a"))

@@ -61,6 +61,8 @@ public class TstlParser implements Runnable
 		generateInstanceVariables();
 		
 		generateCheckMethod();
+		
+		generateSetReInitValueMethod();
 
 		generateConstructor();
 
@@ -78,6 +80,13 @@ public class TstlParser implements Runnable
 	}
 
 	
+	private void generateSetReInitValueMethod()
+	{
+		writer.println("private int " + TstlConstants.DECLARATION_SUT_ALLOW_REINIT_VALUE_FIELD + " = "+TstlConstants.DEFUALT_SUT_REINIT_VALUE+";");
+		writer.println("public void " + TstlConstants.DECLARATION_SUT_SET_RENIT_VALUE_METHOD + "(int val) {");
+		writer.println(TstlConstants.DECLARATION_SUT_ALLOW_REINIT_VALUE_FIELD + " = val;");
+		writer.println("}");
+	}
 	private void readCCSource ()
 	{
 		TstlConstants.log(Level.INFO,"Starting readCCSource");
