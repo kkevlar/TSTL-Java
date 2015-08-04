@@ -111,13 +111,7 @@ public abstract class Tester
 			{
 				throw new TstlException("Check failed! \"" + check + "\" failed to evaluate true!");
 			}
-			public SUTInterface getSut() {
-				return sut;
-			}
-
-			public void setSut(SUTInterface sut) {
-				this.sut = sut;
-			}
+			
 			return true;
 		}
 		catch(Exception ex)
@@ -190,6 +184,13 @@ public abstract class Tester
 
 	public void setReInitValue(int reInitValue) {
 		this.reInitValue = reInitValue;
+	}
+	public SUTInterface getSut() {
+		return sut;
+	}
+
+	public void setSut(SUTInterface sut) {
+		this.sut = sut;
 	}
 
 }
