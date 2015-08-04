@@ -12,15 +12,17 @@ public class TstlParserArgParser extends BasicParser
 {
 	private String[] args = null;
 	private Options options = new Options();
+	private boolean shouldSkipParse;
 
 	public TstlParserArgParser(String[] args)
 	{
-
+		shouldSkipParse = false;
 		this.args = args;
 		options.addOption("h", "help", false, "[OPTIONAL] Displays help.");
 		options.addOption("p", "path", true, "[REQUIRED] Path to working directory. (should be provided by command line script)");
 		options.addOption("t", "tstl", true, "[OPTIONAL] Path to tstl file. Should work for java.io.File construciton.");
 		options.addOption("j", "classpath", true, "[OPTIONAL] Jars or directories to add to the classpath at compiletime and runtime. Separated by '~' '.' or ','.");
+		options.addOption("x", "noparse", false, "[OPTIONAL] Skip parsing of a source .tstl file will be done. Use with caution, if generated classes do not already exist from a previous parse, you will have plenty of errors.");
 	}
 	@Override
 	protected void processOption(final String arg, final ListIterator<String> iterator) throws ParseException 
@@ -58,7 +60,8 @@ public class TstlParserArgParser extends BasicParser
 				TstlConstants.setPath(TstlConstants.PATHKEY_TSTLFILE,cmd.getOptionValue("t"));
 			} 
 			writeToClasspathStore(cmd);
-
+			if(cmd.hasOption("x"))
+				shouldSkipParse = true;
 		} catch (ParseException e) {
 			TstlConstants.log(Level.SEVERE, "Failed to parse comand line properties", e);
 			help();
@@ -99,9 +102,12 @@ public class TstlParserArgParser extends BasicParser
 			if(!o.getOpt().equals("p"))
 				helpOptions.addOption(o);
 		}
-
-		formater.printHelp("Main", helpOptions);
+		formater.printHelp("TstlJava: ", helpOptions);
 		TstlConstants.writeHomeFile(TstlConstants.FILE_WASHELP, true +"");
 		System.exit(0);
+	}
+	public boolean shouldSkipParse()
+	{
+		return shouldSkipParse;
 	}
 }

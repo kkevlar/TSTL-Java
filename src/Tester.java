@@ -12,7 +12,7 @@ public abstract class Tester
 	private boolean shouldAppendFailingTest = TstlConstants.TESTER_CONFIG_DEFAULT_APPEND_FAILING_TEST;
 	private FlushWriter logWriter;
 	private FlushWriter reduceWriter;
-
+	private int reInitValue;
 	public void go() 
 	{
 		try
@@ -26,6 +26,7 @@ public abstract class Tester
 
 		}
 		sut = new SUT();
+		sut.setReInitValue(this.getReInitValue());
 		runTests(sut);
 		if(reduceWriter != null)
 			logWriter.close();
@@ -110,6 +111,7 @@ public abstract class Tester
 			{
 				throw new TstlException("Check failed! \"" + check + "\" failed to evaluate true!");
 			}
+			
 			return true;
 		}
 		catch(Exception ex)
@@ -175,7 +177,14 @@ public abstract class Tester
 	public void setShouldAppendFailingTest(boolean shouldAppendFailingTest) {
 		this.shouldAppendFailingTest = shouldAppendFailingTest;
 	}
-	
+
+	public int getReInitValue() {
+		return reInitValue;
+	}
+
+	public void setReInitValue(int reInitValue) {
+		this.reInitValue = reInitValue;
+	}
 	public SUTInterface getSut() {
 		return sut;
 	}
