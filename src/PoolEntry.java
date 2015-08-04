@@ -93,7 +93,7 @@ public class PoolEntry extends Repeatable
 	@Override
 	public String getCanOverwriteExpression(int i) 
 	{
-		return "(" + this.getAsJava(i) + " == null ||" + this.getUsedAsJava(i) + " + " + TstlConstants.DECLARATION_SUT_ALLOW_REINIT_VALUE_FIELD + ">= 2)";
+		return "(" + this.getAsJava(i) + " == null || (" + this.getUsedAsJava(i) + " + " + TstlConstants.DECLARATION_SUT_ALLOW_REINIT_VALUE_FIELD + ">= 2))";
 	}
 
 	
