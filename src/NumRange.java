@@ -78,6 +78,11 @@ public class NumRange extends Repeatable
 		ret += TstlConstants.IDENTIFIER_TSTLVARIABLE;
 		return ret;
 	}
+	@Override
+	public String getAsFormattedTstl(int i) 
+	{
+		return getAsJava(i);
+	}
 }
 
 

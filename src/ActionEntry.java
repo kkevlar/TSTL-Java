@@ -316,6 +316,23 @@ public class ActionEntry extends RepeatablesContainer
 		mainLine += endingCharacters;
 		return mainLine;
 	}
+	public String makeFormattedTstlMethod(int[] poolValues)
+	{
+		String line = "public String " + TstlConstants.DECLARTATION_ACTION_METHOD_TSTL_STYLE_OUTPUT + "(){\n";
+		for (int i = 0; i < (this.getJavaPieces().length*2)-1;i++) 
+		{
+			if(i%2==0)
+				line += this.getJavaPieces()[(i)/2];//was (i+1)/2 - if bug reimplement
+			else
+			{
+				int index = ((i-1)/2);
+				line += this.getRepeatables()[index].getAsFormattedTstl(poolValues[index]);
+			}
+		}
+		line += ";\n";
+		line += "}\n";
+		return line;
+	}
 	public String getActUsageLines(int[] poolValues)
 	{
 		String ret = "";
@@ -356,6 +373,7 @@ public class ActionEntry extends RepeatablesContainer
 		ret += this.makeGetFamilyIdMethod(familyId);
 		ret += this.makeGetRepValsMethod(poolValues);
 		ret += this.makeGetRepIdsMethod();
+		ret += this.makeFormattedTstlMethod(poolValues);
 		ret += "};";
 		return ret;
 	}
