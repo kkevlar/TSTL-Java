@@ -381,6 +381,7 @@ public class TstlConstants
 	public static final String DECLARATION_SUT_SET_RENIT_VALUE_METHOD = "setReInitValue";
 	public static final String DECLARATION_SUT_ALLOW_REINIT_VALUE_FIELD = "allowReInitValue";
 	public static final int DEFUALT_SUT_REINIT_VALUE = 1;
+	public static final String FILE_SKIPCOMPILE = "skipcompile.yes";
 
 
 }
