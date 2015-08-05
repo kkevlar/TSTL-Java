@@ -53,8 +53,8 @@ public abstract class Tester
 		rprintln("Test reduced. Heres main line of each step.");
 		for (int i = 0; i < actionIds.length; i++) 
 		{
-			String name = sut.getActions()[actionIds[i]].name();
-			rprintln(name.trim());
+			String print = sut.getActions()[actionIds[i]].tstlStyleOutput();
+			rprintln(print.trim());
 		}
 		SmartTestReducer smartReduce = new SmartTestReducer(sut, actionIds, this);
 		int[] smartActionIds = smartReduce.getReducedTestIds();
@@ -71,8 +71,8 @@ public abstract class Tester
 		rprintln("Test smart reduced. Heres main line of each step.");
 		for (int i = 0; i < smartActionIds.length; i++) 
 		{
-			String name = sut.getActions()[smartActionIds[i]].name();
-			rprintln(name.trim());
+			String print = sut.getActions()[smartActionIds[i]].tstlStyleOutput();
+			rprintln(print.trim());
 		}
 		rprintln("Stepcounts:");
 		rprintln("--" + "Original: " + actTrace.size());
