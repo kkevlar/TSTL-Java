@@ -37,8 +37,10 @@ public class TstlParser implements Runnable
 		if(parser.shouldSkipParse())
 		{
 			TstlConstants.writeHomeFile(TstlConstants.FILE_WASHELP, false +"");
+			TstlConstants.writeHomeFile(TstlConstants.FILE_SKIPCOMPILE, true +"");
 			System.exit(0);
 		}
+		TstlConstants.writeHomeFile(TstlConstants.FILE_SKIPCOMPILE, false +"");
 		TstlConstants.writeHomeFile(TstlConstants.FILE_WASHELP, true +"");
 		new Thread(new TstlParser()).start();
 	}
