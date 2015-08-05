@@ -318,20 +318,31 @@ public class ActionEntry extends RepeatablesContainer
 	}
 	public String makeFormattedTstlMethod(int[] poolValues)
 	{
-		String line = "public String " + TstlConstants.DECLARTATION_ACTION_METHOD_TSTL_STYLE_OUTPUT + "(){\n";
+		String[] jav = new String[getJavaPieces().length];
+		Repeatable[] reps = new Repeatable[getRepeatables().length]; 
+		//need to copy, escape quotes, and replace below
+		String ret = "public String " + TstlConstants.DECLARTATION_ACTION_METHOD_TSTL_STYLE_OUTPUT + "(){\n";
+		String line = "return \"";
+		int plus = 0;
+		if(hasInit())
+		{
+			line += this.getRepeatables()[0].getAsFormattedTstl(poolValues[0]) + " =";
+			plus = 1;
+		}
 		for (int i = 0; i < (this.getJavaPieces().length*2)-1;i++) 
 		{
 			if(i%2==0)
 				line += this.getJavaPieces()[(i)/2];//was (i+1)/2 - if bug reimplement
 			else
 			{
-				int index = ((i-1)/2);
+				int index = ((i-1)/2) + plus;
 				line += this.getRepeatables()[index].getAsFormattedTstl(poolValues[index]);
 			}
 		}
-		line += ";\n";
-		line += "}\n";
-		return line;
+		line += "\";\n";
+		ret += line;
+		ret += "}\n";
+		return ret;
 	}
 	public String getActUsageLines(int[] poolValues)
 	{
