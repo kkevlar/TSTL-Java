@@ -5,6 +5,7 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.logging.Level;
 
 
@@ -337,12 +338,13 @@ public class TstlParser implements Runnable
 					ActionEntry aEntry = (ActionEntry) cont;
 
 					writer.println(aEntry.createActionClass(vals,index));		
-
+					
 					writer.println("actions[" + countActionsPrinted + "] = action;");
 					countActionsPrinted++;					
 				}
 				
 			};
+			
 			entry.actOnValidCombinations(action);
 		}
 		writer.println("}//close actionInit()");
