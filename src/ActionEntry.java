@@ -320,17 +320,9 @@ public class ActionEntry extends RepeatablesContainer
 	{
 		String[] jav = new String[getJavaPieces().length];
 		//need to copy, escape quotes, and replace below
-		for (int x = 0; x < jav.length; x++) 
+		for (int i = 0; i < jav.length; i++) 
 		{
-			String temp= "";
-			for(int y = 0; y < getJavaPieces()[x].length(); y++)
-			{
-				if(getJavaPieces()[x].charAt(y) == '"')
-					temp += "\\\"";
-				else
-					temp += getJavaPieces()[x].charAt(y);
-			}
-			jav[x] = temp;
+			jav[i] = TstlConstants.excapeString(getJavaPieces()[i]);
 		}
 		String ret = "public String " + TstlConstants.DECLARTATION_ACTION_METHOD_TSTL_STYLE_OUTPUT + "(){\n";
 		String line = "return \"";
