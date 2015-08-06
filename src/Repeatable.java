@@ -22,4 +22,5 @@ public abstract class Repeatable
 	public abstract String getIsUsableExpression(int i);
 	public abstract String getCanOverwriteExpression(int i);
 	public abstract boolean equalsRepeatable(Repeatable rep);
+	public abstract String getAsFormattedTstl(int i);
 }

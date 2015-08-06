@@ -373,4 +373,5 @@ public class TstlConstants
 			log(Level.WARNING, "Writing the "+name+ " file failed. Path: \"" + path + "\"");
 		}
 	}
+	public static final String DECLARTATION_ACTION_METHOD_TSTL_STYLE_OUTPUT = "tstlStyleOutput";
 }

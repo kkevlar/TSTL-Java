@@ -316,6 +316,45 @@ public class ActionEntry extends RepeatablesContainer
 		mainLine += endingCharacters;
 		return mainLine;
 	}
+	public String makeFormattedTstlMethod(int[] poolValues)
+	{
+		String[] jav = new String[getJavaPieces().length];
+		//need to copy, escape quotes, and replace below
+		for (int x = 0; x < jav.length; x++) 
+		{
+			String temp= "";
+			for(int y = 0; y < getJavaPieces()[x].length(); y++)
+			{
+				if(getJavaPieces()[x].charAt(y) == '"')
+					temp += "\\\"";
+				else
+					temp += getJavaPieces()[x].charAt(y);
+			}
+			jav[x] = temp;
+		}
+		String ret = "public String " + TstlConstants.DECLARTATION_ACTION_METHOD_TSTL_STYLE_OUTPUT + "(){\n";
+		String line = "return \"";
+		int plus = 0;
+		if(hasInit())
+		{
+			line += this.getRepeatables()[0].getAsFormattedTstl(poolValues[0]) + " =";
+			plus = 1;
+		}
+		for (int i = 0; i < (jav.length*2)-1;i++) 
+		{
+			if(i%2==0)
+				line += jav[(i)/2];//was (i+1)/2 - if bug reimplement
+			else
+			{
+				int index = ((i-1)/2) + plus;
+				line += this.getRepeatables()[index].getAsFormattedTstl(poolValues[index]);
+			}
+		}
+		line += "\";\n";
+		ret += line;
+		ret += "}\n";
+		return ret;
+	}
 	public String getActUsageLines(int[] poolValues)
 	{
 		String ret = "";
@@ -356,6 +395,7 @@ public class ActionEntry extends RepeatablesContainer
 		ret += this.makeGetFamilyIdMethod(familyId);
 		ret += this.makeGetRepValsMethod(poolValues);
 		ret += this.makeGetRepIdsMethod();
+		ret += this.makeFormattedTstlMethod(poolValues);
 		ret += "};";
 		return ret;
 	}

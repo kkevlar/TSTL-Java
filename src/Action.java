@@ -8,4 +8,5 @@ public interface Action
 	public int familyId();
 	public int[] repVals();
 	public int[] repIds();
+	public String tstlStyleOutput();
 }

@@ -1,7 +1,6 @@
 
 public class RandomTester extends Tester
 {
-
 	@Override
 	protected void runTests(SUTInterface sut) 
 	{
@@ -30,8 +29,7 @@ public class RandomTester extends Tester
 					enabled = sut.getActions()[testNum].enabled();
 				}
 				if(print)
-					println(sut.getActions()[testNum].name().trim());
-				String info = sut.getActions()[testNum].getAllInfo();
+					println(sut.getActions()[testNum].tstlStyleOutput().trim());
 				addToActTrace(testNum);
 				boolean success = executeAct(this.getIgnoreCheckValue() < 2, sut.getActions()[testNum], true);
 				if(!success)
