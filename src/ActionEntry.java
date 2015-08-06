@@ -326,7 +326,7 @@ public class ActionEntry extends RepeatablesContainer
 			for(int y = 0; y < getJavaPieces()[x].length(); y++)
 			{
 				if(getJavaPieces()[x].charAt(y) == '"')
-					temp += ('\\' + '"' + "");
+					temp += "\\\"";
 				else
 					temp += getJavaPieces()[x].charAt(y);
 			}
