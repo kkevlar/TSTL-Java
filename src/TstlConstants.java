@@ -93,30 +93,18 @@ public class TstlConstants
 	}
 	public static String excapeString(String s)
 	{
-
+		String ret = "";
 		if(s.contains("\""))
 		{
-			while(true)
+			for(int i = 0; i < s.length(); i++)
 			{
-				boolean restart = false;
-				for(int i = 0; i < s.length(); i++)
-				{
-					String rep = null;
-					if(s.charAt(i) == '"' && !(s.charAt(i-1) == '\\'))				
-					{
-						rep = "\\" + s.charAt(i)+"";
-						s = s.replace(s.charAt(i)+"", rep);
-						restart = true;
-						break;
-					}
-				}
-				if(restart)
-					continue;
-				break;
+				if(s.charAt(i) == '"' && ((i == 0) || (i > 0 && (!(s.charAt(i-1) == '\\')))))		
+					ret += "\\\"";
+				else
+					ret += s.charAt(i);
 			}
 		}
-
-		return s;
+		return ret;
 	}
 	public static String fileInDir(File d, String s)
 	{
