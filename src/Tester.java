@@ -74,6 +74,8 @@ public abstract class Tester
 			String print = sut.getActions()[smartActionIds[i]].tstlStyleOutput();
 			rprintln(print.trim());
 		}
+		JUnitTestCreator junit = new JUnitTestCreator(smartActionIds, sut);
+		junit.writeTest();
 		rprintln("Stepcounts:");
 		rprintln("--" + "Original: " + actTrace.size());
 		rprintln("--" + "Reduced : " + actionIds.length);		
