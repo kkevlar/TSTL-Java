@@ -1,7 +1,12 @@
+import java.io.File;
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.util.HashMap;
+import java.util.logging.Level;
 
 public class PoolEntry extends Repeatable
 {
-	
+	private static HashMap<Integer,String> poolwideMap;
 	private String className;
 	private String varName;
 	private int listSize;
@@ -11,6 +16,33 @@ public class PoolEntry extends Repeatable
 		this.className = className.trim();
 		this.varName = varName.trim();
 		this.listSize = listSize;
+		if(poolwideMap == null)
+			poolwideMap = new HashMap<Integer,String>();
+		poolwideMap.put(getId(), className);
+	}
+	public static void writePoolwideMapToFile()
+	{
+		File mapFile = new File(TstlConstants.fileInDir(TstlConstants.getTstlHomeDir(), TstlConstants.FILE_POOLWIDE_MAP));			
+		PrintWriter writer = null;
+		try 
+		{
+			mapFile.createNewFile();
+			writer = new PrintWriter(mapFile);
+		} 
+		catch (IOException e) 
+		{
+			TstlConstants.log(Level.SEVERE, "Failed to write poolwidemap file!", e);
+			return;
+		}
+		finally
+		{
+			if(writer == null)
+				return;
+		}
+		int[] poolIds = new int[poolwideMap.size()];
+		//unfinished
+		
+		
 	}
 	public String getClassName() 
 	{
