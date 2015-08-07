@@ -28,6 +28,8 @@ public class RandomTester extends Tester
 					testNum = (int) (Math.random() * sut.getActions().length);
 					enabled = sut.getActions()[testNum].enabled();
 				}
+				if(testNum == -1)
+					continue;
 				if(print)
 					println(sut.getActions()[testNum].tstlStyleOutput().trim());
 				addToActTrace(testNum);
