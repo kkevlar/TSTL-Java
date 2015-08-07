@@ -353,4 +353,5 @@ public class TstlConstants
 		}
 	}
 	public static final String DECLARTATION_ACTION_METHOD_TSTL_STYLE_OUTPUT = "tstlStyleOutput";
+	public static final String JAR_COMMONS_LANG = "commons-lang.jar";
 }
