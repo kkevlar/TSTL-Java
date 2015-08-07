@@ -93,25 +93,7 @@ public class TstlConstants
 	}
 	public static String escapeString(String s)
 	{
-		String ret = "";		
-		for(int i = 0; i < s.length(); i++)
-		{
-			char c = s.charAt(i);
-			boolean isQuote = c=='"';
-			boolean isBkSlash = c=='\\';
-			if(isQuote || isBkSlash)
-			{
-				boolean isZero = (i == 0);
-				boolean isEnd = i==(s.length()-1);				
-				boolean isEscaped = !isZero && s.charAt(i-1)=='\\';
-				boolean isEscaping = !isEnd && (s.charAt(i+1)=='\\'||s.charAt(i+1)=='"');
-				if(isQuote && !isEscaped || isBkSlash && !(isEscaped || isEscaping))
-					ret += ("\\"+c);
-			}
-			else
-				ret += s.charAt(c);
-		}
-		return ret;
+		return StringEscapeUtils;
 	}
 	public static String fileInDir(File d, String s)
 	{
