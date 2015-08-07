@@ -91,6 +91,7 @@ public class CodeCopier
 		}	
 		copyDependency(TstlConstants.JAR_COMMONS_CLI);
 		copyDependency(TstlConstants.JAR_EMMA);
+		copyDependency(TstlConstants.JAR_COMMONS_LANG);
 		copyClientCode();
 	}
 	private void copyClientCode() 

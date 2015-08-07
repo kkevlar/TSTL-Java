@@ -10,6 +10,8 @@ import java.util.Locale;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import org.apache.commons.lang3.StringEscapeUtils;
+
 
 public class TstlConstants 
 {
@@ -93,25 +95,7 @@ public class TstlConstants
 	}
 	public static String escapeString(String s)
 	{
-		String ret = "";		
-		for(int i = 0; i < s.length(); i++)
-		{
-			char c = s.charAt(i);
-			boolean isQuote = c=='"';
-			boolean isBkSlash = c=='\\';
-			if(isQuote || isBkSlash)
-			{
-				boolean isZero = (i == 0);
-				boolean isEnd = i==(s.length()-1);				
-				boolean isEscaped = !isZero && s.charAt(i-1)=='\\';
-				boolean isEscaping = !isEnd && (s.charAt(i+1)=='\\'||s.charAt(i+1)=='"');
-				if(isQuote && !isEscaped || isBkSlash && !(isEscaped || isEscaping))
-					ret += ("\\"+c);
-			}
-			else
-				ret += s.charAt(c);
-		}
-		return ret;
+		return StringEscapeUtils.escapeJava(s);
 	}
 	public static String fileInDir(File d, String s)
 	{
@@ -380,4 +364,5 @@ public class TstlConstants
 	}
 	public static final String DECLARTATION_ACTION_METHOD_TSTL_STYLE_OUTPUT = "tstlStyleOutput";
 	public static final String IDENTIFIER_USED_ACTS_SPECIAL = "~";
+	public static final String JAR_COMMONS_LANG = "commons-lang.jar";
 }

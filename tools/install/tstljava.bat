@@ -11,13 +11,13 @@ if %SKIPCOMPILE%==true goto DORUN
 goto COMPILE
 
 :COMPILE
-javac -cp lib/commons-cli.jar%CCP% -d genbin -sourcepath gensrc gensrc/TestRunner.java
+javac -cp lib\commons-cli.jar;lib/commons-lang.jar%CCP% -d genbin -sourcepath gensrc gensrc/TestRunner.java
 goto DORUN
 
 :DORUN
 set /p WANTSCC=<%TJHOME%\wantscc.yes
 if %WANTSCC%==true goto GIVECC
-java -cp lib\commons-cli.jar;genbin;.%CCP% TestRunner
+java -cp lib\commons-cli.jar;lib\commons-lang.jar;genbin;.%CCP% TestRunner
 goto EXIT
 
 :GIVECC
