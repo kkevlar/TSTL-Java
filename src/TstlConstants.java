@@ -369,4 +369,5 @@ public class TstlConstants
 		}
 	}
 	public static final String DECLARTATION_ACTION_METHOD_TSTL_STYLE_OUTPUT = "tstlStyleOutput";
+	public static final String FILE_POOLWIDE_MAP = "poolwidemap.map";
 }
