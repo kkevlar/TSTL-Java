@@ -10,6 +10,8 @@ import java.util.Locale;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import org.apache.commons.lang3.StringEscapeUtils;
+
 
 public class TstlConstants 
 {
@@ -93,7 +95,7 @@ public class TstlConstants
 	}
 	public static String escapeString(String s)
 	{
-		return StringEscapeUtils;
+		return StringEscapeUtils.escapeJava(s);
 	}
 	public static String fileInDir(File d, String s)
 	{
