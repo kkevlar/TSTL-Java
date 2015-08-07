@@ -24,3 +24,4 @@ hs_err_pid*
 /lib/
 !/lib/emma.jar
 !/lib/commons-cli.jar
+!/lib/commons-lang.jar
