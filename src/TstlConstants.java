@@ -305,11 +305,13 @@ public class TstlConstants
 	}
 	public static LineParsePacket parseVarLine(String varLine, PoolEntry[] entirePoolEntries)
 	{
+		varLine = varLine.replace(TstlConstants.IDENTIFIER_USED_ACTS_SPECIAL + TstlConstants.IDENTIFIER_TSTLVARIABLE, TstlConstants.IDENTIFIER_TSTLVARIABLE + TstlConstants.IDENTIFIER_USED_ACTS_SPECIAL);
 		String[] pieces = varLine.split(TstlConstants.IDENTIFIER_TSTLVARIABLE);
 		if(pieces.length % 2 != 1)
 			throw new MalformedTstlException(TstlConstants.MESSGAGE_NONSURROUNDING_VARIABLE_IDENTIFIERS + varLine);
 		String[] javaCodePieces = new String[(pieces.length+1)/2];
 		Repeatable[] reps = new Repeatable[(pieces.length-1)/2];
+		boolean[] treatAsUnused = new boolean[reps.length];
 		for (int i = 0; i < pieces.length; i++)
 		{
 			if(i%2==0)
@@ -319,14 +321,22 @@ public class TstlConstants
 			}
 			else
 			{
-				Repeatable entry = TstlConstants.getRepeatableFromVariable((pieces[i]).trim(), false, entirePoolEntries, varLine);
+				String piece = (pieces[i]).trim();
+				int index = (i-1)/2;
+				if(piece.startsWith(TstlConstants.IDENTIFIER_USED_ACTS_SPECIAL))
+				{
+					piece = piece.substring(TstlConstants.IDENTIFIER_USED_ACTS_SPECIAL.length());
+					treatAsUnused[index] = true;
+				}
+				Repeatable entry = TstlConstants.getRepeatableFromVariable(piece, false, entirePoolEntries, varLine);
 				if (entry == null)
 					throw new MalformedTstlException(TstlConstants.MESSAGE_UNDEFINED_TSTL_VARIABLE + "Variable:" + TstlConstants.IDENTIFIER_TSTLVARIABLE + pieces[i] + TstlConstants.IDENTIFIER_TSTLVARIABLE + " Line:" + varLine);
-				else
-					reps[(i-1)/2] = entry;
+				else {
+					reps[index] = entry;
+				}
 			}
 		}
-		return new LineParsePacket(javaCodePieces, reps);
+		return new LineParsePacket(javaCodePieces, reps, treatAsUnused);
 	}
 	public static void setPath(String pathkey, String path) 
 	{
@@ -354,5 +364,6 @@ public class TstlConstants
 	}
 	public static final String DECLARTATION_ACTION_METHOD_TSTL_STYLE_OUTPUT = "tstlStyleOutput";
 	public static final String FILE_POOLWIDE_MAP = "poolwidemap.map";
+	public static final String IDENTIFIER_USED_ACTS_SPECIAL = "~";
 	public static final String JAR_COMMONS_LANG = "commons-lang.jar";
 }
