@@ -1,0 +1,7 @@
+pool: String %STR% 1
+
+%STR% =: "Chocolate"
+%STR% =: "\"Chocolate"
+%STR% =: "\\"
+%STR% =: "\\\\"
+%STR% =: "\"\\\"\"\\"
