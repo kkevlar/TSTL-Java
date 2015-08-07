@@ -143,7 +143,7 @@ public class ActionEntry extends RepeatablesContainer
 	{
 		String ret = TstlConstants.DECLARATION_ACTION_NAME_METHOD + "\n";
 		ret += "{\n";
-		ret += "return \"" + TstlConstants.excapeString(this.getActMainLine(poolValues).replace(";", "")) + "\";\n";
+		ret += "return \"" + TstlConstants.escapeString(this.getActMainLine(poolValues).replace(";", "")) + "\";\n";
 		ret += "} //end name()\n";
 		return ret;
 	}
@@ -218,7 +218,7 @@ public class ActionEntry extends RepeatablesContainer
 		String ret = "public String getAllInfo()"+ "\n"
 				+"{"+ "\n"+ "\n"
 				+"LabelFormatter formatter = new LabelFormatter();"+ "\n"
-				+"formatter.addToStorage"+"(\"MainLine/Name\",\"" + TstlConstants.excapeString(this.getActMainLine(vals)) + "\");"+ "\n"
+				+"formatter.addToStorage"+"(\"MainLine/Name\",\"" + TstlConstants.escapeString(this.getActMainLine(vals)) + "\");"+ "\n"
 				+"formatter.addToStorage"+"(\"enabled()\",enabled()+\"\");"+ "\n";
 		for(int i = 0; i < this.getRepeatables().length; i++)
 		{			
@@ -322,7 +322,7 @@ public class ActionEntry extends RepeatablesContainer
 		//need to copy, escape quotes, and replace below
 		for (int i = 0; i < jav.length; i++) 
 		{
-			jav[i] = TstlConstants.excapeString(getJavaPieces()[i]);
+			jav[i] = TstlConstants.escapeString(getJavaPieces()[i]);
 		}
 		String ret = "public String " + TstlConstants.DECLARTATION_ACTION_METHOD_TSTL_STYLE_OUTPUT + "(){\n";
 		String line = "return \"";
