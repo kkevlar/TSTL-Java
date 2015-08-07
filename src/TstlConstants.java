@@ -91,32 +91,27 @@ public class TstlConstants
 			logFileWriter.close();
 		logFileWriter = null;
 	}
-	public static String excapeString(String s)
+	public static String escapeString(String s)
 	{
-
-		if(s.contains("\""))
+		String ret = "";		
+		for(int i = 0; i < s.length(); i++)
 		{
-			while(true)
+			char c = s.charAt(i);
+			boolean isQuote = c=='"';
+			boolean isBkSlash = c=='\\';
+			if(isQuote || isBkSlash)
 			{
-				boolean restart = false;
-				for(int i = 0; i < s.length(); i++)
-				{
-					String rep = null;
-					if(s.charAt(i) == '"' && !(s.charAt(i-1) == '\\'))				
-					{
-						rep = "\\" + s.charAt(i)+"";
-						s = s.replace(s.charAt(i)+"", rep);
-						restart = true;
-						break;
-					}
-				}
-				if(restart)
-					continue;
-				break;
+				boolean isZero = (i == 0);
+				boolean isEnd = i==(s.length()-1);				
+				boolean isEscaped = !isZero && s.charAt(i-1)=='\\';
+				boolean isEscaping = !isEnd && (s.charAt(i+1)=='\\'||s.charAt(i+1)=='"');
+				if(isQuote && !isEscaped || isBkSlash && !(isEscaped || isEscaping))
+					ret += ("\\"+c);
 			}
+			else
+				ret += s.charAt(c);
 		}
-
-		return s;
+		return ret;
 	}
 	public static String fileInDir(File d, String s)
 	{
