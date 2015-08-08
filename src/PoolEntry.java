@@ -39,10 +39,14 @@ public class PoolEntry extends Repeatable
 			if(writer == null)
 				return;
 		}
-		int[] poolIds = new int[poolwideMap.size()];
-		//unfinished
 		
-		
+		Integer[] integerPoolIds = poolwideMap.keySet().toArray(new Integer[poolwideMap.size()]);
+		for (int i = 0; i < integerPoolIds.length; i++) 
+		{
+			writer.println(integerPoolIds[i] + "," +poolwideMap.get(integerPoolIds[i]));
+		}	
+		writer.flush();
+		writer.close();	
 	}
 	public String getClassName() 
 	{
