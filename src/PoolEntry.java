@@ -43,7 +43,7 @@ public class PoolEntry extends Repeatable
 		Integer[] integerPoolIds = poolwideMap.keySet().toArray(new Integer[poolwideMap.size()]);
 		for (int i = 0; i < integerPoolIds.length; i++) 
 		{
-			writer.println(integerPoolIds[i] + "," +poolwideMap.get(integerPoolIds[i]));
+			writer.println(integerPoolIds[i] + TstlConstants.SPLIT_SYNTAX_POOLENTRY_ID_AND_CLASSNAME +poolwideMap.get(integerPoolIds[i]));
 		}	
 		writer.flush();
 		writer.close();	
@@ -108,7 +108,7 @@ public class PoolEntry extends Repeatable
 	}
 	public String getAsFormattedTstl(int i)
 	{
-		return TstlConstants.IDENTIFIER_TSTLVARIABLE + this.getVarName().substring(TstlConstants.PREFIX_JAVA_VARIABLES.length()) +","+i+ TstlConstants.IDENTIFIER_TSTLVARIABLE;
+		return TstlConstants.IDENTIFIER_TSTLVARIABLE + this.getVarName().substring(TstlConstants.PREFIX_JAVA_VARIABLES.length()) +TstlConstants.SPLIT_SYNTAX_POOLENTRY_ID_AND_CLASSNAME+i+ TstlConstants.IDENTIFIER_TSTLVARIABLE;
 	}	
 	@Override
 	public String getIsUsableExpression(int i) 

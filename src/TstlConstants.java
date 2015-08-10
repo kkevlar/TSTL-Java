@@ -369,4 +369,5 @@ public class TstlConstants
 	public static final String SPLIT_SYNTAX_ID_WITH_CODE_PIECES = "$~$~$~";
 	public static final String SPLIT_SYNTAX_JAVA_CODE_PIECES = "~@;~@;";
 	public static final String FILE_JAVA_CODE_PIECE_SAVE = "javaCodePieces.jcp";
+	public static final String SPLIT_SYNTAX_POOLENTRY_ID_AND_CLASSNAME = ",";
 }
