@@ -418,7 +418,7 @@ public class ActionEntry extends RepeatablesContainer
 	{
 		return treatAsUnused;
 	}
-	public String getAsSaveLine()
+	public String getJavaCodePiecesAsSaveLine()
 	{
 		String javaCodePieceLine = "";
 		for (int i = 0; i < getJavaPieces().length; i++) 

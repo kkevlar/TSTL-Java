@@ -310,8 +310,17 @@ public class TstlParser implements Runnable
 	}
 	private void generateActionsInit() 
 	{
+		File javaCodePieceFile = new File(TstlConstants.fileInDir(TstlConstants.getTstlHomeDir(), TstlConstants.FILE_JAVA_CODE_PIECE_SAVE));
+		PrintWriter javaCodePieceWriter = null;
+		try 
+		{
+			javaCodePieceFile.createNewFile();
+			javaCodePieceWriter = new PrintWriter(javaCodePieceFile);
+		} catch (IOException e) 
+		{
+			TstlConstants.log(Level.SEVERE,"Failed to write to javaCodePieceFile.",e);
+		}
 		writer.println(TstlConstants.DECLARATION_ACTIONS_INIT_METHOD + " {");
-
 		ArrayList<String> actionLines = new ArrayList<String>();
 		int totalCount = 0;
 		//can be omitted in the future for more efficent code
@@ -337,12 +346,18 @@ public class TstlParser implements Runnable
 					ActionEntry aEntry = (ActionEntry) cont;
 					writer.println(aEntry.createActionClass(vals));		
 					writer.println("actions[" + countActionsPrinted + "] = action;");
-					countActionsPrinted++;					
+					countActionsPrinted++;		
 				}
-				
+
 			};
-			
 			entry.actOnValidCombinations(action);
+			if(javaCodePieceWriter != null)
+				javaCodePieceWriter.println(entry.getJavaCodePiecesAsSaveLine());
+		}
+		if(javaCodePieceFile != null)
+		{
+			javaCodePieceWriter.flush();
+			javaCodePieceWriter.close();
 		}
 		writer.println("}//close actionInit()");
 	}
@@ -378,6 +393,7 @@ public class TstlParser implements Runnable
 		writer.close();
 		TstlConstants.closeLogger();
 		TstlConstants.writeHomeFile(TstlConstants.FILE_WASHELP, false +"");
+		PoolEntry.writePoolwideMapToFile();
 		System.out.println("finished");	
 	}	
 
