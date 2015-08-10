@@ -28,14 +28,16 @@ public class ActionEntry extends RepeatablesContainer
 	private String[] javaExpressionPieces;
 	private String[] expressionVarInformation;
 	private boolean[] treatAsUnused;
+	private int familyId;
 
-	public ActionEntry(String explicitGuardUnparsed, String actionLine, PoolEntry[] entirePoolEntries) 
+	public ActionEntry(String explicitGuardUnparsed, String actionLine, PoolEntry[] entirePoolEntries, int familyId) 
 	{
 		this.explicitGuardUnparsed = explicitGuardUnparsed;
 		this.actionLine = actionLine;
 		this.entirePoolEntries = entirePoolEntries;
 		this.parseActionLine();
 		this.parseExplicitGuard();
+		this.setFamilyId(familyId);
 	}
 	private void parseExplicitGuard()
 	{
@@ -287,7 +289,7 @@ public class ActionEntry extends RepeatablesContainer
 		ret += "}" + "\n";
 		return ret;
 	}
-	public String makeGetFamilyIdMethod(int familyId)
+	public String makeGetFamilyIdMethod()
 	{
 		String ret = "public int "+TstlConstants.DECLARATION_ACTION_FAMILY_ID_METHOD+"()"+"\n"
 				+ "{"+"\n";
@@ -381,7 +383,7 @@ public class ActionEntry extends RepeatablesContainer
 		return ret;
 	}
 
-	public String createActionClass(int[] poolValues, int familyId)
+	public String createActionClass(int[] poolValues)
 	{
 		String ret = TstlConstants.DECLARATION_ACTION_CLASS + "\n";
 		ret += this.makeGetNameMethod(poolValues);
@@ -389,7 +391,7 @@ public class ActionEntry extends RepeatablesContainer
 		ret += this.makeActMethod(poolValues);
 		ret += this.makeGetAllInfoMethod(poolValues);
 		ret += this.makeGetInitIdMethod();
-		ret += this.makeGetFamilyIdMethod(familyId);
+		ret += this.makeGetFamilyIdMethod();
 		ret += this.makeGetRepValsMethod(poolValues);
 		ret += this.makeGetRepIdsMethod();
 		ret += this.makeFormattedTstlMethod(poolValues);
@@ -397,6 +399,12 @@ public class ActionEntry extends RepeatablesContainer
 		return ret;
 	}
 
+	public int getFamilyId() {
+		return familyId;
+	}
+	public void setFamilyId(int familyId) {
+		this.familyId = familyId;
+	}
 	@Override
 	public String toString() 
 	{
@@ -410,5 +418,14 @@ public class ActionEntry extends RepeatablesContainer
 	{
 		return treatAsUnused;
 	}
-
+	public String getAsSaveLine()
+	{
+		String javaCodePieceLine = "";
+		for (int i = 0; i < getJavaPieces().length; i++) 
+		{
+			javaCodePieceLine = getJavaPieces()[i] + TstlConstants.SPLIT_SYNTAX_JAVA_CODE_PIECES;
+		}
+		javaCodePieceLine = javaCodePieceLine.substring(0,javaCodePieceLine.length()-TstlConstants.SPLIT_SYNTAX_JAVA_CODE_PIECES.length());
+		return getFamilyId() + TstlConstants.SPLIT_SYNTAX_ID_WITH_CODE_PIECES + javaCodePieceLine;
+	}
 }

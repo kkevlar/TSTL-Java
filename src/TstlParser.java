@@ -314,11 +314,12 @@ public class TstlParser implements Runnable
 
 		ArrayList<String> actionLines = new ArrayList<String>();
 		int totalCount = 0;
+		//can be omitted in the future for more efficent code
 		for(int i = 0; i < tstl.size(); i++)
 		{
 			if(!tstl.get(i).equals(""))
 			{
-				ActionEntry entry = makeActionEntry(tstl.get(i));
+				ActionEntry entry = makeActionEntry(tstl.get(i),-1);
 				actionLines.add(tstl.get(i));
 				totalCount += entry.getActionCount();
 			}
@@ -327,17 +328,14 @@ public class TstlParser implements Runnable
 		writer.println(TstlConstants.DECLARATION_ACTION_LOCAL_VARIABLE);
 		for(int i = 0; i < actionLines.size(); i++)
 		{			
-			final int index = i;
-			ActionEntry entry = this.makeActionEntry(actionLines.get(i));
+			ActionEntry entry = this.makeActionEntry(actionLines.get(i),i);
 			RepeatablesAction action = new RepeatablesAction()
 			{
 				@Override
 				public void actOnRepValues(int[] vals, RepeatablesContainer cont)
 				{
 					ActionEntry aEntry = (ActionEntry) cont;
-
-					writer.println(aEntry.createActionClass(vals,index));		
-					
+					writer.println(aEntry.createActionClass(vals));		
 					writer.println("actions[" + countActionsPrinted + "] = action;");
 					countActionsPrinted++;					
 				}
@@ -348,10 +346,10 @@ public class TstlParser implements Runnable
 		}
 		writer.println("}//close actionInit()");
 	}
-	private ActionEntry makeActionEntry(String tstlLine) 
+	private ActionEntry makeActionEntry(String tstlLine, int familyId) 
 	{
 		String[] parts = ActionEntry.splitActionLine(tstlLine);
-		ActionEntry entry = new ActionEntry(parts[0],parts[1],this.poolEntries);
+		ActionEntry entry = new ActionEntry(parts[0],parts[1],this.poolEntries,familyId);
 		return entry;
 	}
 	

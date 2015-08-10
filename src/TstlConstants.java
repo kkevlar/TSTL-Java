@@ -366,4 +366,6 @@ public class TstlConstants
 	public static final String FILE_POOLWIDE_MAP = "poolwidemap.map";
 	public static final String IDENTIFIER_USED_ACTS_SPECIAL = "~";
 	public static final String JAR_COMMONS_LANG = "commons-lang.jar";
+	public static final String SPLIT_SYNTAX_ID_WITH_CODE_PIECES = "~`~`~`";
+	public static final String SPLIT_SYNTAX_JAVA_CODE_PIECES = "~`;~`;";
 }
