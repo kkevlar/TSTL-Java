@@ -1,7 +1,6 @@
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.logging.Level;
@@ -31,7 +30,7 @@ public class JUnitTestCreator
 	public void writeTest() 
 	{
 		parsePoolEntryMap();
-		generateLocalVariables();
+		String[] lines = generateLocalVariables();
 	}
 
 	private void parsePoolEntryMap() 
@@ -113,5 +112,8 @@ public class JUnitTestCreator
 		String className = poolwideMap.get(new Integer(initId));
 		return className.substring(0, 1).toLowerCase() + className.substring(1) + action.repVals()[varNum];
 	}
+	
+	private class 
+	
 	
 }
