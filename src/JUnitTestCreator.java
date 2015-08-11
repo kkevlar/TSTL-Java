@@ -238,9 +238,13 @@ public class JUnitTestCreator
 		catch(IOException ex)
 		{
 			TstlConstants.log(Level.WARNING, "Failed to create failing test source file.", ex);
-		}	
+		}
 		if(writer == null)
 			return;
+		writer.println("public class " + TstlConstants.FILE_FAILING_TEST_OUTPUT_SOURCE.split(".")[0]);
+		writer.println("{");
+		writer.println("public static void main(String[] args0)");
+		writer.println("{");
 		for (int i = 0; i < initLines.length; i++) 
 		{
 			writer.println(initLines[i]);
@@ -250,6 +254,8 @@ public class JUnitTestCreator
 		{
 			writer.println(actionLines[i]);
 		}
+		writer.println("}//main method closing");
+		writer.println("}//class closing");
 		writer.flush();
 		writer.close();
 	}
