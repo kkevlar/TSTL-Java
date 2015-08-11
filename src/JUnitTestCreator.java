@@ -81,12 +81,12 @@ public class JUnitTestCreator
 			for(int y = 0; y < javaList.size(); y++)
 			{
 				int varIndex = y + wasInit;
-				line += javaList.get(y);
+				line += javaList.get(y).trim();
 				if(varIndex < action.repIds().length)
 					line += makeLocalVariableName(action, varIndex);
 				System.out.println("building line " + line); //t
 			}
-			array[x] = line;
+			array[x] = (line + ";");
 		}
 		return array;
 	}
@@ -175,6 +175,7 @@ public class JUnitTestCreator
 					int id = Integer.parseInt(split[0]);
 					String className = split[1];
 					poolwideMap.put(id,className);
+					System.out.println("pwm added " + id + " " + className );//t
 				}
 				else
 					break;
@@ -223,7 +224,7 @@ public class JUnitTestCreator
 				}
 				if(!already)
 				{
-					String className = poolwideMap.get(new Integer(initId));
+					String className = poolwideMap.get(new Integer(initId)).split(TstlConstants.SPLIT_SYNTAX_POOLVAL_CLASSNAME_WITH_VARNAME)[0];
 					String initLine = className + " " + makeLocalVariableName(action,  0) + ";";
 					lines.add(initLine);
 					varBeenInited.add(initId);
@@ -241,11 +242,9 @@ public class JUnitTestCreator
 		System.out.println(TstlConstants.formatActionData(action)); //t
 		System.out.println(varNum); //t
 		System.out.println(); //t
-		String className = poolwideMap.get(varNum);
-		String firstChar = className.substring(0, 1).toLowerCase();
-		String nextString = className.substring(1);
+		String varName = poolwideMap.get(action.repIds()[varNum]).split(TstlConstants.SPLIT_SYNTAX_POOLVAL_CLASSNAME_WITH_VARNAME)[1].toLowerCase().trim();
 		int num = action.repVals()[varNum];
-		return firstChar + nextString + num;
+		return varName + num;
 	}
 
 }

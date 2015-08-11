@@ -367,10 +367,11 @@ public class TstlConstants
 	public static final String FILE_POOLWIDE_MAP = "poolwidemap.map";
 	public static final String IDENTIFIER_USED_ACTS_SPECIAL = "~";
 	public static final String JAR_COMMONS_LANG = "commons-lang.jar";
-	public static final String SPLIT_SYNTAX_ID_WITH_CODE_PIECES = "~~~";
-	public static final String SPLIT_SYNTAX_JAVA_CODE_PIECES = "~@;~@;";
+	private static final String SPLIT_SYNTAX_SUFFIX = "split!";
+	public static final String SPLIT_SYNTAX_ID_WITH_CODE_PIECES = "@_~" + TstlConstants.SPLIT_SYNTAX_SUFFIX;
+	public static final String SPLIT_SYNTAX_JAVA_CODE_PIECES = "@~_" + TstlConstants.SPLIT_SYNTAX_SUFFIX;
 	public static final String FILE_JAVA_CODE_PIECE_SAVE = "javaCodePieces.jcp";
-	public static final String SPLIT_SYNTAX_POOLENTRY_ID_AND_CLASSNAME = ",";
+	public static final String SPLIT_SYNTAX_POOLENTRY_ID_AND_CLASSNAME = "~@_" + TstlConstants.SPLIT_SYNTAX_SUFFIX;
 	public static String formatActionData(Action action)
 	{
 		LabelFormatter formatter = new LabelFormatter(" -> ");
@@ -383,6 +384,7 @@ public class TstlConstants
 		formatter.addToStorage("tstlStyleOutput", action.tstlStyleOutput());
 		return formatter.getAllFormatted();
 	}
-	public static final String LABEL_FORMATTER_SPLIT = "~!~!@!~";
+	public static final String SPLIT_SYNTAX_LABEL_FORMATTER = "~_@" + TstlConstants.SPLIT_SYNTAX_SUFFIX;
 	public static final String FILE_FAILING_TEST_OUTPUT_SOURCE = "Failure.java";
+	public static final String SPLIT_SYNTAX_POOLVAL_CLASSNAME_WITH_VARNAME = "_@~" + TstlConstants.SPLIT_SYNTAX_SUFFIX;
 }

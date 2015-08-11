@@ -426,9 +426,17 @@ public class ActionEntry extends RepeatablesContainer
 		String javaCodePieceLine = "";
 		for (int i = 0; i < getJavaPieces().length; i++) 
 		{
-			javaCodePieceLine = getJavaPieces()[i] + TstlConstants.SPLIT_SYNTAX_JAVA_CODE_PIECES;
+			System.out.println("Java Code Piece " + i + ": " + getJavaPieces()[i]); //t
+			String append;				
+			if(getJavaPieces()[i].length() > 0)
+				append = getJavaPieces()[i];
+			else
+				append = " ";
+			javaCodePieceLine += append + TstlConstants.SPLIT_SYNTAX_JAVA_CODE_PIECES;
 		}
-		javaCodePieceLine = javaCodePieceLine.substring(0,javaCodePieceLine.length()-TstlConstants.SPLIT_SYNTAX_JAVA_CODE_PIECES.length());
+		System.out.println("jcpl " + javaCodePieceLine); //t
+		javaCodePieceLine = javaCodePieceLine.substring(0,(javaCodePieceLine.length()-TstlConstants.SPLIT_SYNTAX_JAVA_CODE_PIECES.length()));
+		System.out.println("jcpl " + javaCodePieceLine); //t
 		return getFamilyId() + TstlConstants.SPLIT_SYNTAX_ID_WITH_CODE_PIECES + javaCodePieceLine;
 	}
 }

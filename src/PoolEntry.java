@@ -18,7 +18,7 @@ public class PoolEntry extends Repeatable
 		this.listSize = listSize;
 		if(poolwideMap == null)
 			poolwideMap = new HashMap<Integer,String>();
-		poolwideMap.put(getId(), className);
+		poolwideMap.put(getId(), className+TstlConstants.SPLIT_SYNTAX_POOLVAL_CLASSNAME_WITH_VARNAME+varName.substring(TstlConstants.PREFIX_JAVA_VARIABLES.length()+1).toLowerCase());
 	}
 	public static void writePoolwideMapToFile()
 	{
