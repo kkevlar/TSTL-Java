@@ -11,9 +11,9 @@ import java.util.logging.Level;
 public class JUnitTestCreator 
 {
 	private int[] actionIndecies;
-	private SUTInterface sut;
-	private HashMap<Integer, String> poolwideMap;
 	private HashMap<Integer, ArrayList<String>> javaCodePiecesMap;
+	private HashMap<Integer, String> poolwideMap;
+	private SUTInterface sut;
 
 
 	public JUnitTestCreator(int[] actionIds, SUTInterface sut) 
@@ -22,47 +22,6 @@ public class JUnitTestCreator
 		this.actionIndecies = actionIds;
 		this.sut = sut;
 	}
-
-	public int[] getActionIds() {
-		return actionIndecies;
-	}
-
-	public void setActionIds(int[] actionIds) {
-		this.actionIndecies = actionIds;
-	}
-
-	public void writeTest() 
-	{
-		parsePoolEntryMap();
-		parseJavaCodePiecesMap();
-		String[] initLines = generateLocalVariables();
-		String[] actionLines = genearateActionLines();
-		File failureClassFile = new File(TstlConstants.fileInDir(TstlConstants.getPath(TstlConstants.PATHKEY_WORKINGDIR), TstlConstants.FILE_FAILING_TEST_OUTPUT_SOURCE));
-		PrintWriter writer = null;
-		try
-		{
-			failureClassFile.createNewFile();
-			writer = new PrintWriter(failureClassFile);
-		}
-		catch(IOException ex)
-		{
-			TstlConstants.log(Level.WARNING, "Failed to create failing test source file.", ex);
-		}	
-		if(writer == null)
-			return;
-		for (int i = 0; i < initLines.length; i++) 
-		{
-			writer.println(initLines[i]);
-		}
-		writer.println();
-		for (int i = 0; i < actionLines.length; i++) 
-		{
-			writer.println(actionLines[i]);
-		}
-		writer.flush();
-		writer.close();
-	}
-
 
 	private String[] genearateActionLines() 
 	{
@@ -90,6 +49,62 @@ public class JUnitTestCreator
 			array[x] = (line + ";");
 		}
 		return array;
+	}
+
+	private String[] generateLocalVariables() 
+	{
+		ArrayList<String> lines = new ArrayList<String>();
+		if(poolwideMap == null)
+			return null;
+		ArrayList<Integer> varBeenInited = new ArrayList<Integer>();
+		for (int x = 0; x < actionIndecies.length; x++) 
+		{
+			Action action = sut.getActions()[actionIndecies[x]];
+			int initId = action.initId();
+			if(initId != -1)
+			{
+				boolean already = false;
+				for (int y = 0; y < varBeenInited.size(); y++) 
+				{
+					if(initId == varBeenInited.get(y))
+					{
+						already = true;
+						break;
+					}
+				}
+				if(!already)
+				{
+					String className = poolwideMap.get(new Integer(initId)).split(TstlConstants.SPLIT_SYNTAX_POOLVAL_CLASSNAME_WITH_VARNAME)[0];
+					String initLine = className + " " + makeLocalVariableName(action,  0) + ";";
+					lines.add(initLine);
+					varBeenInited.add(initId);
+				}
+			}
+		}
+		return lines.toArray(new String[lines.size()]);
+	}
+
+	public int[] getActionIds() 
+	{
+		return actionIndecies;
+	}
+
+
+	private String makeLocalVariableName(Action action,  int varNum)
+	{
+		String gotFromMap = poolwideMap.get(action.repIds()[varNum]);
+		String[] splitFromMap = gotFromMap.split(TstlConstants.SPLIT_SYNTAX_POOLVAL_CLASSNAME_WITH_VARNAME);
+		String varName = splitFromMap[1].toLowerCase().trim();
+		int num = action.repVals()[varNum];
+		if(!(gotFromMap.startsWith(TstlConstants.POOLWIDEMAP_IDENTIFIER_NUMRANGE_CONSTANT)))
+		{
+			return varName + num;
+		}
+		else
+		{
+			int low = Integer.parseInt(varName);
+			return (low + num) + "";
+		}
 	}
 
 	private void parseJavaCodePiecesMap()
@@ -202,53 +217,40 @@ public class JUnitTestCreator
 		}
 	}
 
-	private String[] generateLocalVariables() 
+	public void setActionIds(int[] actionIds) 
 	{
-		ArrayList<String> lines = new ArrayList<String>();
-		if(poolwideMap == null)
-			return null;
-		ArrayList<Integer> varBeenInited = new ArrayList<Integer>();
-		for (int x = 0; x < actionIndecies.length; x++) 
-		{
-			Action action = sut.getActions()[actionIndecies[x]];
-			int initId = action.initId();
-			if(initId != -1)
-			{
-				boolean already = false;
-				for (int y = 0; y < varBeenInited.size(); y++) 
-				{
-					if(initId == varBeenInited.get(y))
-					{
-						already = true;
-						break;
-					}
-				}
-				if(!already)
-				{
-					String className = poolwideMap.get(new Integer(initId)).split(TstlConstants.SPLIT_SYNTAX_POOLVAL_CLASSNAME_WITH_VARNAME)[0];
-					String initLine = className + " " + makeLocalVariableName(action,  0) + ";";
-					lines.add(initLine);
-					varBeenInited.add(initId);
-				}
-			}
-		}
-		return lines.toArray(new String[lines.size()]);
+		this.actionIndecies = actionIds;
 	}
 
-	private String makeLocalVariableName(Action action,  int varNum)
+	public void writeTest() 
 	{
-		String gotFromMap = poolwideMap.get(action.repIds()[varNum]);
-		String[] splitFromMap = gotFromMap.split(TstlConstants.SPLIT_SYNTAX_POOLVAL_CLASSNAME_WITH_VARNAME);
-		String varName = splitFromMap[1].toLowerCase().trim();
-		int num = action.repVals()[varNum];
-		if(!(gotFromMap.startsWith(TstlConstants.POOLWIDEMAP_IDENTIFIER_NUMRANGE_CONSTANT)))
+		parsePoolEntryMap();
+		parseJavaCodePiecesMap();
+		String[] initLines = generateLocalVariables();
+		String[] actionLines = genearateActionLines();
+		File failureClassFile = new File(TstlConstants.fileInDir(TstlConstants.getPath(TstlConstants.PATHKEY_WORKINGDIR), TstlConstants.FILE_FAILING_TEST_OUTPUT_SOURCE));
+		PrintWriter writer = null;
+		try
 		{
-			return varName + num;
+			failureClassFile.createNewFile();
+			writer = new PrintWriter(failureClassFile);
 		}
-		else
+		catch(IOException ex)
 		{
-			int low = Integer.parseInt(varName);
-			return (low + num) + "";
+			TstlConstants.log(Level.WARNING, "Failed to create failing test source file.", ex);
+		}	
+		if(writer == null)
+			return;
+		for (int i = 0; i < initLines.length; i++) 
+		{
+			writer.println(initLines[i]);
 		}
+		writer.println();
+		for (int i = 0; i < actionLines.length; i++) 
+		{
+			writer.println(actionLines[i]);
+		}
+		writer.flush();
+		writer.close();
 	}
 }

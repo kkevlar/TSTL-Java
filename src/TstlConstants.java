@@ -41,27 +41,33 @@ public class TstlConstants
 	public static final String DECLARATION_SUT_GETACTIONS_METHOD = "public Action[] getActions()";	
 	public static final String DECLARATION_SUT_RESET_METHOD = "public void reset()";
 	public static final String DECLARATION_SUT_SET_RENIT_VALUE_METHOD = "setReInitValue";
-	public static final int DEFUALT_SUT_REINIT_VALUE = 1;	
-	public static final String FILE_CC_CFG = "cc.cfg";
-	public static final String FILE_CUSTOM_CLASSPATH = "cp.cfg";	
-	private static final String FILE_LOGGER_LOG = "log.log";			
+	public static final String DECLARTATION_ACTION_METHOD_TSTL_STYLE_OUTPUT = "tstlStyleOutput";	
+	public static final int DEFUALT_SUT_REINIT_VALUE = 1;
+	public static final String FILE_CC_CFG = "cc.cfg";	
+	public static final String FILE_CUSTOM_CLASSPATH = "cp.cfg";			
+	public static final String FILE_FAILING_TEST_OUTPUT_SOURCE = "Failure.java";
+	public static final String FILE_JAVA_CODE_PIECE_SAVE = "javaCodePieces.jcp";	
+	private static final String FILE_LOGGER_LOG = "log.log";	
+	public static final String FILE_POOLWIDE_MAP = "poolwidemap.map";	
 	public static final String FILE_SKIPCOMPILE = "skipcompile.yes";
-	public static final String FILE_WANTS_CC = "wantscc.yes";	
+	public static final String FILE_WANTS_CC = "wantscc.yes";
 	public static final String FILE_WASHELP = "washelp.yes";	
 	public static final String FILENAME_ARGSSTORE = "args.args";	
 	public static final String IDENTIFIER_CC_SOURCE = "source:";
 	public static final String IDENTIFIER_EXPLICIT_GUARD = "->";
-	public static final String IDENTIFIER_IMPORT = "@import";	
-	public static final String IDENTIFIER_INITIALIZATION = ":=";	
-	public static final String IDENTIFIER_NUMRANGE_LEFT = "[";
+	public static final String IDENTIFIER_IMPORT = "@import";
+	public static final String IDENTIFIER_INITIALIZATION = ":=";
+	public static final String IDENTIFIER_NUMRANGE_LEFT = "[";	
 	public static final String IDENTIFIER_NUMRANGE_MID = "..";
 	public static final String IDENTIFIER_NUMRANGE_RIGHT = "]";
 	public static final String IDENTIFIER_POOL = "pool:";
-	public static final String IDENTIFIER_PROPERTY = "property:";	
+	public static final String IDENTIFIER_PROPERTY = "property:";
 	public static final String IDENTIFIER_TSTLVARIABLE = "%";
+	public static final String IDENTIFIER_USED_ACTS_SPECIAL = "~";
 	public static final String IMPORT_ARRAY_LIST = "java.util.ArrayList";
 	public static final String IMPORT_LIST = "java.util.List";
 	public static final String JAR_COMMONS_CLI = "commons-cli.jar";
+	public static final String JAR_COMMONS_LANG = "commons-lang.jar";
 	public static final String JAR_EMMA = "emma.jar";
 	private static PrintWriter logFileWriter;
 	private static boolean logFileWriterCreationFailed;
@@ -79,11 +85,20 @@ public class TstlConstants
 	public static final String PATHKEY_TSTLFILE = "tstlfile";
 	public static final String PATHKEY_WORKINGDIR = "workingdir";
 	private static HashMap<String, String> paths;
+	public static final String POOLWIDEMAP_IDENTIFIER_NUMRANGE_CONSTANT = "NUMRANGE-CONSTANT~~";
 	public static final String PREFIX_JAVA_VARIABLES = "var_";
+	public static final String SPLIT_SYNTAX_ID_WITH_CODE_PIECES = "@_~" + TstlConstants.SPLIT_SYNTAX_SUFFIX;
+	public static final String SPLIT_SYNTAX_JAVA_CODE_PIECES = "@~_" + TstlConstants.SPLIT_SYNTAX_SUFFIX;
+	public static final String SPLIT_SYNTAX_LABEL_FORMATTER = "~_@" + TstlConstants.SPLIT_SYNTAX_SUFFIX;
+	public static final String SPLIT_SYNTAX_POOLENTRY_ID_AND_CLASSNAME = "~@_" + TstlConstants.SPLIT_SYNTAX_SUFFIX;
+
+	public static final String SPLIT_SYNTAX_POOLVAL_CLASSNAME_WITH_VARNAME = "_@~" + TstlConstants.SPLIT_SYNTAX_SUFFIX;
+	private static final String SPLIT_SYNTAX_SUFFIX = "split!";
 	public static final String SUFFIX_VAR_USED = "_used";
 	public static final boolean TESTER_CONFIG_DEFAULT_APPEND_FAILING_TEST = true;
 	public static final int TESTER_CONFIG_DEFAULT_IGNORE_CHECK_VALUE = 0;
 	public static final int TESTER_CONFIG_DEFAULT_TEST_PRINT_DELAY = 10000;
+
 	public static final int TESTER_CONFIG_DEFAULT_TESTS_PER_CYCLE = 1000;
 	public static final int TESTER_CONFIG_DEFAULT_TIMEOUT = 60000;
 	public static final String TSTL_JAVA = "TSTL-Java";
@@ -94,6 +109,7 @@ public class TstlConstants
 			logFileWriter.close();
 		logFileWriter = null;
 	}
+
 	public static String escapeString(String s)
 	{
 		return StringEscapeUtils.escapeJava(s);
@@ -102,7 +118,6 @@ public class TstlConstants
 	{
 		return fileInDir(d.getAbsolutePath(),s);
 	}
-
 	public static String fileInDir(String d, String s)
 	{
 		if(d.endsWith("/") && s.startsWith("/"))
@@ -111,6 +126,18 @@ public class TstlConstants
 			return (d + s);
 		else
 			return d + "/" + s;
+	}
+	public static String formatActionData(Action action)
+	{
+		LabelFormatter formatter = new LabelFormatter(" -> ");
+		formatter.addToStorage("enabled", action.enabled()+"");
+		formatter.addToStorage("name", action.name());
+		formatter.addToStorage("familyid", action.familyId() + "");
+		formatter.addToStorage("initId", action.initId()+"");
+		formatter.addToStorage("repIds", Arrays.toString(action.repIds()));
+		formatter.addToStorage("repVals", Arrays.toString(action.repVals()));
+		formatter.addToStorage("tstlStyleOutput", action.tstlStyleOutput());
+		return formatter.getAllFormatted();
 	}
 	public static File getGeneratedClassesFolder() 
 	{
@@ -182,7 +209,6 @@ public class TstlConstants
 
 		return rep;
 	}
-
 	public static String getTstlHomeDir()
 	{
 		String home = System.getProperty("user.home");
@@ -220,7 +246,6 @@ public class TstlConstants
 	{
 		log(level,msg,null);
 	}
-
 	public static void log(Level level, String msg, Throwable caught)
 	{
 		if(caught != null)
@@ -363,29 +388,4 @@ public class TstlConstants
 			log(Level.WARNING, "Writing the "+name+ " file failed. Path: \"" + path + "\"");
 		}
 	}
-	public static final String DECLARTATION_ACTION_METHOD_TSTL_STYLE_OUTPUT = "tstlStyleOutput";
-	public static final String FILE_POOLWIDE_MAP = "poolwidemap.map";
-	public static final String IDENTIFIER_USED_ACTS_SPECIAL = "~";
-	public static final String JAR_COMMONS_LANG = "commons-lang.jar";
-	private static final String SPLIT_SYNTAX_SUFFIX = "split!";
-	public static final String SPLIT_SYNTAX_ID_WITH_CODE_PIECES = "@_~" + TstlConstants.SPLIT_SYNTAX_SUFFIX;
-	public static final String SPLIT_SYNTAX_JAVA_CODE_PIECES = "@~_" + TstlConstants.SPLIT_SYNTAX_SUFFIX;
-	public static final String FILE_JAVA_CODE_PIECE_SAVE = "javaCodePieces.jcp";
-	public static final String SPLIT_SYNTAX_POOLENTRY_ID_AND_CLASSNAME = "~@_" + TstlConstants.SPLIT_SYNTAX_SUFFIX;
-	public static String formatActionData(Action action)
-	{
-		LabelFormatter formatter = new LabelFormatter(" -> ");
-		formatter.addToStorage("enabled", action.enabled()+"");
-		formatter.addToStorage("name", action.name());
-		formatter.addToStorage("familyid", action.familyId() + "");
-		formatter.addToStorage("initId", action.initId()+"");
-		formatter.addToStorage("repIds", Arrays.toString(action.repIds()));
-		formatter.addToStorage("repVals", Arrays.toString(action.repVals()));
-		formatter.addToStorage("tstlStyleOutput", action.tstlStyleOutput());
-		return formatter.getAllFormatted();
-	}
-	public static final String SPLIT_SYNTAX_LABEL_FORMATTER = "~_@" + TstlConstants.SPLIT_SYNTAX_SUFFIX;
-	public static final String FILE_FAILING_TEST_OUTPUT_SOURCE = "Failure.java";
-	public static final String SPLIT_SYNTAX_POOLVAL_CLASSNAME_WITH_VARNAME = "_@~" + TstlConstants.SPLIT_SYNTAX_SUFFIX;
-	public static final String POOLWIDEMAP_IDENTIFIER_NUMRANGE_CONSTANT = "NUMRANGE-CONSTANT~~";
 }

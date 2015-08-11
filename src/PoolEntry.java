@@ -71,6 +71,7 @@ public class PoolEntry extends Repeatable
 	{
 		return this.getUsedVarName() + "["+ i + "]";
 	}
+	@Override
 	public String getAsFormattedTstl(int i)
 	{
 		return TstlConstants.IDENTIFIER_TSTLVARIABLE + this.getVarName().substring(TstlConstants.PREFIX_JAVA_VARIABLES.length()) +i+ TstlConstants.IDENTIFIER_TSTLVARIABLE;
