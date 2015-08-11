@@ -49,7 +49,7 @@ public class JUnitTestCreator
 			int wasInit = 0;
 			if(action.initId() != -1)
 			{
-				line += (makeLocalVariableName(action, action.initId(), action.repVals()[0]) + " = ");
+				line += (makeLocalVariableName(action, action.initId()) + " = ");
 				wasInit = 1;
 			}
 			ArrayList<String> javaList = javaCodePiecesMap.get(new Integer(action.familyId()));
@@ -58,7 +58,7 @@ public class JUnitTestCreator
 				int varIndex = y + wasInit;
 				line += javaList.get(y);
 				if(varIndex < action.repIds().length)
-					line += makeLocalVariableName(action, action.repIds()[varIndex], action.repVals()[varIndex]);
+					line += makeLocalVariableName(action, varIndex);
 			}
 			array[x] = line;
 		}
@@ -93,8 +93,8 @@ public class JUnitTestCreator
 				line = reader.readLine();
 				if(line != null)
 				{
-					String[] mainSplit = line.split(TstlConstants.SPLIT_SYNTAX_ID_WITH_CODE_PIECES);
-					int id = Integer.parseInt(mainSplit[0]);
+					String[] mainSplit = (" "+line+" ").split(TstlConstants.SPLIT_SYNTAX_ID_WITH_CODE_PIECES);
+					int id = Integer.parseInt(mainSplit[0].trim());
 					if(id != familyIdsArray[putCount])
 						continue;
 					String codePiecesUnsplit = mainSplit[1];
@@ -113,7 +113,7 @@ public class JUnitTestCreator
 		}
 		catch(Exception ex)
 		{
-			TstlConstants.log(Level.SEVERE,"Failed to read poolwidemap from file!",ex);
+			TstlConstants.log(Level.SEVERE,"Failed to read java code pieces from file!",ex);
 		}
 		finally
 		{
@@ -198,7 +198,7 @@ public class JUnitTestCreator
 				if(!already)
 				{
 					String className = poolwideMap.get(new Integer(initId));
-					String initLine = className + " " + makeLocalVariableName(action, initId, 0) + ";";
+					String initLine = className + " " + makeLocalVariableName(action,  0) + ";";
 					lines.add(initLine);
 					varBeenInited.add(initId);
 				}
@@ -207,10 +207,15 @@ public class JUnitTestCreator
 		return lines.toArray(new String[lines.size()]);
 	}
 
-	private String makeLocalVariableName(Action action, int initId, int varNum)
+	private String makeLocalVariableName(Action action,  int varNum)
 	{
-		String className = poolwideMap.get(new Integer(initId));
-		return className.substring(0, 1).toLowerCase() + className.substring(1) + action.repVals()[varNum];
+		String className = poolwideMap.get(action.repIds()[varNum]);
+		if(className == null)
+			className = "null";
+		String firstChar = className.substring(0, 1).toLowerCase();
+		String nextString = className.substring(1);
+		int num = action.repVals()[varNum];
+		return firstChar + nextString + num;
 	}
 
 }
