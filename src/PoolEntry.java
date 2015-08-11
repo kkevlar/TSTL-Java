@@ -1,9 +1,3 @@
-import java.io.File;
-import java.io.IOException;
-import java.io.PrintWriter;
-import java.util.HashMap;
-import java.util.logging.Level;
-
 public class PoolEntry extends Repeatable
 {
 	
@@ -18,34 +12,7 @@ public class PoolEntry extends Repeatable
 		this.listSize = listSize;
 		poolwideMap.put(getId(), className+TstlConstants.SPLIT_SYNTAX_POOLVAL_CLASSNAME_WITH_VARNAME+varName.substring(TstlConstants.PREFIX_JAVA_VARIABLES.length()+1).toLowerCase());
 	}
-	public static void writePoolwideMapToFile()
-	{
-		File mapFile = new File(TstlConstants.fileInDir(TstlConstants.getTstlHomeDir(), TstlConstants.FILE_POOLWIDE_MAP));			
-		PrintWriter writer = null;
-		try 
-		{
-			mapFile.createNewFile();
-			writer = new PrintWriter(mapFile);
-		} 
-		catch (IOException e) 
-		{
-			TstlConstants.log(Level.SEVERE, "Failed to write poolwidemap file!", e);
-			return;
-		}
-		finally
-		{
-			if(writer == null)
-				return;
-		}
-		
-		Integer[] integerPoolIds = poolwideMap.keySet().toArray(new Integer[poolwideMap.size()]);
-		for (int i = 0; i < integerPoolIds.length; i++) 
-		{
-			writer.println(integerPoolIds[i] + TstlConstants.SPLIT_SYNTAX_POOLENTRY_ID_AND_CLASSNAME +poolwideMap.get(integerPoolIds[i]));
-		}	
-		writer.flush();
-		writer.close();	
-	}
+	
 	public String getClassName() 
 	{
 		return className;
@@ -106,7 +73,7 @@ public class PoolEntry extends Repeatable
 	}
 	public String getAsFormattedTstl(int i)
 	{
-		return TstlConstants.IDENTIFIER_TSTLVARIABLE + this.getVarName().substring(TstlConstants.PREFIX_JAVA_VARIABLES.length()) +TstlConstants.SPLIT_SYNTAX_POOLENTRY_ID_AND_CLASSNAME+i+ TstlConstants.IDENTIFIER_TSTLVARIABLE;
+		return TstlConstants.IDENTIFIER_TSTLVARIABLE + this.getVarName().substring(TstlConstants.PREFIX_JAVA_VARIABLES.length()) +i+ TstlConstants.IDENTIFIER_TSTLVARIABLE;
 	}	
 	@Override
 	public String getIsUsableExpression(int i) 

@@ -432,9 +432,7 @@ public class ActionEntry extends RepeatablesContainer
 				append = " ";
 			javaCodePieceLine += append + TstlConstants.SPLIT_SYNTAX_JAVA_CODE_PIECES;
 		}
-		System.out.println("jcpl " + javaCodePieceLine); //t
 		javaCodePieceLine = javaCodePieceLine.substring(0,(javaCodePieceLine.length()-TstlConstants.SPLIT_SYNTAX_JAVA_CODE_PIECES.length()));
-		System.out.println("jcpl " + javaCodePieceLine); //t
 		return getFamilyId() + TstlConstants.SPLIT_SYNTAX_ID_WITH_CODE_PIECES + javaCodePieceLine;
 	}
 }

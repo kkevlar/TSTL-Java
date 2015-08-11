@@ -393,7 +393,7 @@ public class TstlParser implements Runnable
 		writer.close();
 		TstlConstants.closeLogger();
 		TstlConstants.writeHomeFile(TstlConstants.FILE_WASHELP, false +"");
-		PoolEntry.writePoolwideMapToFile();
+		Repeatable.writePoolwideMapToFile();
 		System.out.println("finished");	
 	}	
 
