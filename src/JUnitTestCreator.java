@@ -8,7 +8,7 @@ import java.util.logging.Level;
 
 public class JUnitTestCreator 
 {
-	private int[] actionIds;
+	private int[] actionIndecies;
 	private SUTInterface sut;
 	private HashMap<Integer, String> poolwideMap;
 	private HashMap<Integer, ArrayList<String>> javaCodePiecesMap;
@@ -17,31 +17,60 @@ public class JUnitTestCreator
 	public JUnitTestCreator(int[] actionIds, SUTInterface sut) 
 	{
 		super();
-		this.actionIds = actionIds;
+		this.actionIndecies = actionIds;
 		this.sut = sut;
 	}
 
 	public int[] getActionIds() {
-		return actionIds;
+		return actionIndecies;
 	}
 
 	public void setActionIds(int[] actionIds) {
-		this.actionIds = actionIds;
+		this.actionIndecies = actionIds;
 	}
 
 	public void writeTest() 
 	{
 		parsePoolEntryMap();
 		parseJavaCodePiecesMap();
-		String[] lines = generateLocalVariables();
+		String[] initLines = generateLocalVariables();
+		String[] actionLines = genearateActionLines();
+		System.out.println(Arrays.toString(initLines));
+		System.out.println(Arrays.toString(actionLines));
+	}
+
+	private String[] genearateActionLines() 
+	{
+		String[] array = new String[actionIndecies.length];
+		for (int x = 0; x < actionIndecies.length; x++) 
+		{
+			String line = "";
+			Action action = sut.getActions()[actionIndecies[x]];
+			int wasInit = 0;
+			if(action.initId() != -1)
+			{
+				line += (makeLocalVariableName(action, action.initId(), action.repVals()[0]) + " = ");
+				wasInit = 1;
+			}
+			ArrayList<String> javaList = javaCodePiecesMap.get(new Integer(action.familyId()));
+			for(int y = 0; y < javaList.size(); y++)
+			{
+				int varIndex = y + wasInit;
+				line += javaList.get(y);
+				if(varIndex < action.repIds().length)
+					line += makeLocalVariableName(action, action.repIds()[varIndex], action.repVals()[varIndex]);
+			}
+			array[x] = line;
+		}
+		return array;
 	}
 
 	private void parseJavaCodePiecesMap()
 	{
 		ArrayList<Integer> familyIdsList = new ArrayList<Integer>();
-		for (int x = 0; x < sut.getActions().length; x++) 
+		for (int x = 0; x < actionIndecies.length; x++) 
 		{
-			int familyId = sut.getActions()[x].familyId();
+			int familyId = sut.getActions()[actionIndecies[x]].familyId();
 			if(!familyIdsList.contains(new Integer(familyId)))
 				familyIdsList.add(familyId);
 		}
@@ -89,13 +118,15 @@ public class JUnitTestCreator
 		finally
 		{
 			if(reader != null)
+			{
 				try
-			{
+				{
 					reader.close();
-			}
-			catch(Exception ex)
-			{
-				TstlConstants.log(Level.WARNING, "Failed to close poolwidemap reader.",ex);
+				}
+				catch(Exception ex)
+				{
+					TstlConstants.log(Level.WARNING, "Failed to close poolwidemap reader.",ex);
+				}
 			}
 		}
 	}
@@ -130,13 +161,15 @@ public class JUnitTestCreator
 		finally
 		{
 			if(reader != null)
+			{
 				try
-			{
+				{
 					reader.close();
-			}
-			catch(Exception ex)
-			{
-				TstlConstants.log(Level.WARNING, "Failed to close poolwidemap reader.",ex);
+				}
+				catch(Exception ex)
+				{
+					TstlConstants.log(Level.WARNING, "Failed to close poolwidemap reader.",ex);
+				}
 			}
 		}
 	}
@@ -147,9 +180,9 @@ public class JUnitTestCreator
 		if(poolwideMap == null)
 			return null;
 		ArrayList<Integer> varBeenInited = new ArrayList<Integer>();
-		for (int x = 0; x < actionIds.length; x++) 
+		for (int x = 0; x < actionIndecies.length; x++) 
 		{
-			Action action = sut.getActions()[actionIds[x]];
+			Action action = sut.getActions()[actionIndecies[x]];
 			int initId = action.initId();
 			if(initId != -1)
 			{
