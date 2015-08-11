@@ -253,9 +253,20 @@ public class JUnitTestCreator
 		System.out.println(TstlConstants.formatActionData(action)); //t
 		System.out.println(varNum); //t
 		System.out.println(); //t
-		String varName = poolwideMap.get(action.repIds()[varNum]).split(TstlConstants.SPLIT_SYNTAX_POOLVAL_CLASSNAME_WITH_VARNAME)[1].toLowerCase().trim();
+		String gotFromMap = poolwideMap.get(action.repIds()[varNum]);
+		String[] splitFromMap = gotFromMap.split(TstlConstants.SPLIT_SYNTAX_POOLVAL_CLASSNAME_WITH_VARNAME);
+		String varName = splitFromMap[1].toLowerCase().trim();
 		int num = action.repVals()[varNum];
-		return varName + num;
+		if(!(gotFromMap.startsWith(TstlConstants.POOLWIDEMAP_IDENTIFIER_NUMRANGE_CONSTANT)))
+		{
+			return varName + num;
+		}
+		else
+		{
+			int low = Integer.parseInt(varName);
+			return (low + num) + "";
+		}
+
 	}
 
 }
