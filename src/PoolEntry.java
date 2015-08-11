@@ -1,4 +1,3 @@
-
 public class PoolEntry extends Repeatable
 {
 	
@@ -11,7 +10,9 @@ public class PoolEntry extends Repeatable
 		this.className = className.trim();
 		this.varName = varName.trim();
 		this.listSize = listSize;
+		poolwideMap.put(getId(), className+TstlConstants.SPLIT_SYNTAX_POOLVAL_CLASSNAME_WITH_VARNAME+varName.substring(TstlConstants.PREFIX_JAVA_VARIABLES.length()+1).toLowerCase());
 	}
+	
 	public String getClassName() 
 	{
 		return className;
@@ -72,7 +73,7 @@ public class PoolEntry extends Repeatable
 	}
 	public String getAsFormattedTstl(int i)
 	{
-		return TstlConstants.IDENTIFIER_TSTLVARIABLE + this.getVarName().substring(TstlConstants.PREFIX_JAVA_VARIABLES.length()) +","+i+ TstlConstants.IDENTIFIER_TSTLVARIABLE;
+		return TstlConstants.IDENTIFIER_TSTLVARIABLE + this.getVarName().substring(TstlConstants.PREFIX_JAVA_VARIABLES.length()) +i+ TstlConstants.IDENTIFIER_TSTLVARIABLE;
 	}	
 	@Override
 	public String getIsUsableExpression(int i) 

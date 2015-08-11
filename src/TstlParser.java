@@ -310,15 +310,25 @@ public class TstlParser implements Runnable
 	}
 	private void generateActionsInit() 
 	{
+		File javaCodePieceFile = new File(TstlConstants.fileInDir(TstlConstants.getTstlHomeDir(), TstlConstants.FILE_JAVA_CODE_PIECE_SAVE));
+		PrintWriter javaCodePieceWriter = null;
+		try 
+		{
+			javaCodePieceFile.createNewFile();
+			javaCodePieceWriter = new PrintWriter(javaCodePieceFile);
+		} catch (IOException e) 
+		{
+			TstlConstants.log(Level.SEVERE,"Failed to write to javaCodePieceFile.",e);
+		}
 		writer.println(TstlConstants.DECLARATION_ACTIONS_INIT_METHOD + " {");
-
 		ArrayList<String> actionLines = new ArrayList<String>();
 		int totalCount = 0;
+		//can be omitted in the future for more efficent code
 		for(int i = 0; i < tstl.size(); i++)
 		{
 			if(!tstl.get(i).equals(""))
 			{
-				ActionEntry entry = makeActionEntry(tstl.get(i));
+				ActionEntry entry = makeActionEntry(tstl.get(i),-1);
 				actionLines.add(tstl.get(i));
 				totalCount += entry.getActionCount();
 			}
@@ -327,30 +337,34 @@ public class TstlParser implements Runnable
 		writer.println(TstlConstants.DECLARATION_ACTION_LOCAL_VARIABLE);
 		for(int i = 0; i < actionLines.size(); i++)
 		{			
-			final int index = i;
-			ActionEntry entry = this.makeActionEntry(actionLines.get(i));
+			ActionEntry entry = this.makeActionEntry(actionLines.get(i),i);
 			RepeatablesAction action = new RepeatablesAction()
 			{
 				@Override
 				public void actOnRepValues(int[] vals, RepeatablesContainer cont)
 				{
 					ActionEntry aEntry = (ActionEntry) cont;
-
-					writer.println(aEntry.createActionClass(vals,index));		
-
+					writer.println(aEntry.createActionClass(vals));		
 					writer.println("actions[" + countActionsPrinted + "] = action;");
-					countActionsPrinted++;					
+					countActionsPrinted++;		
 				}
-				
+
 			};
 			entry.actOnValidCombinations(action);
+			if(javaCodePieceWriter != null)
+				javaCodePieceWriter.println(entry.getJavaCodePiecesAsSaveLine());
+		}
+		if(javaCodePieceFile != null)
+		{
+			javaCodePieceWriter.flush();
+			javaCodePieceWriter.close();
 		}
 		writer.println("}//close actionInit()");
 	}
-	private ActionEntry makeActionEntry(String tstlLine) 
+	private ActionEntry makeActionEntry(String tstlLine, int familyId) 
 	{
 		String[] parts = ActionEntry.splitActionLine(tstlLine);
-		ActionEntry entry = new ActionEntry(parts[0],parts[1],this.poolEntries);
+		ActionEntry entry = new ActionEntry(parts[0],parts[1],this.poolEntries,familyId);
 		return entry;
 	}
 	
@@ -379,6 +393,7 @@ public class TstlParser implements Runnable
 		writer.close();
 		TstlConstants.closeLogger();
 		TstlConstants.writeHomeFile(TstlConstants.FILE_WASHELP, false +"");
+		Repeatable.writePoolwideMapToFile();
 		System.out.println("finished");	
 	}	
 

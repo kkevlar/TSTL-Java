@@ -1,7 +1,6 @@
 
 public class NumRange extends Repeatable 
 {
-
 	private int low;
 	private int hi;
 
@@ -28,6 +27,7 @@ public class NumRange extends Repeatable
 		super();
 		this.low = low;
 		this.hi = hi;
+		poolwideMap.put(this.getId(), TstlConstants.POOLWIDEMAP_IDENTIFIER_NUMRANGE_CONSTANT + TstlConstants.SPLIT_SYNTAX_POOLVAL_CLASSNAME_WITH_VARNAME + low);
 	}
 
 	@Override
@@ -39,7 +39,7 @@ public class NumRange extends Repeatable
 	@Override
 	public String getAsJava(int i)
 	{
-		return low+i+"";
+		return (low+i)+"";
 	}
 	@Override
 	public String getIsUsableExpression(int i) 
