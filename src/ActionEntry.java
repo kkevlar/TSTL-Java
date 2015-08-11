@@ -154,7 +154,7 @@ public class ActionEntry extends RepeatablesContainer
 	{
 		String ret = TstlConstants.DECLARATION_ACTION_NAME_METHOD + "\n";
 		ret += "{\n";
-		ret += "return \"" + (this.getActMainLine(poolValues).replace(";", "")) + "\";\n";
+		ret += "return \"" + TstlConstants.escapeString(this.getActMainLine(poolValues).replace(";", "")) + "\";\n";
 		ret += "} //end name()\n";
 		return ret;
 	}
@@ -229,7 +229,7 @@ public class ActionEntry extends RepeatablesContainer
 		String ret = "public String getAllInfo()"+ "\n"
 				+"{"+ "\n"+ "\n"
 				+"LabelFormatter formatter = new LabelFormatter();"+ "\n"
-				+"formatter.addToStorage"+"(\"MainLine/Name\",\"" + (this.getActMainLine(vals)) + "\");"+ "\n"
+				+"formatter.addToStorage"+"(\"MainLine/Name\",\"" + TstlConstants.escapeString(this.getActMainLine(vals)) + "\");"+ "\n"
 				+"formatter.addToStorage"+"(\"enabled()\",enabled()+\"\");"+ "\n";
 		for(int i = 0; i < this.getRepeatables().length; i++)
 		{			
@@ -333,8 +333,11 @@ public class ActionEntry extends RepeatablesContainer
 	public String makeFormattedTstlMethod(int[] poolValues)
 	{
 		String[] jav = new String[getJavaPieces().length];
-		Repeatable[] reps = new Repeatable[getRepeatables().length]; 
 		//need to copy, escape quotes, and replace below
+		for (int i = 0; i < jav.length; i++) 
+		{
+			jav[i] = TstlConstants.escapeString(getJavaPieces()[i]);
+		}
 		String ret = "public String " + TstlConstants.DECLARTATION_ACTION_METHOD_TSTL_STYLE_OUTPUT + "(){\n";
 		String line = "return \"";
 		int plus = 0;
@@ -343,10 +346,10 @@ public class ActionEntry extends RepeatablesContainer
 			line += this.getRepeatables()[0].getAsFormattedTstl(poolValues[0]) + " =";
 			plus = 1;
 		}
-		for (int i = 0; i < (this.getJavaPieces().length*2)-1;i++) 
+		for (int i = 0; i < (jav.length*2)-1;i++) 
 		{
 			if(i%2==0)
-				line += this.getJavaPieces()[(i)/2];//was (i+1)/2 - if bug reimplement
+				line += jav[(i)/2];//was (i+1)/2 - if bug reimplement
 			else
 			{
 				int index = ((i-1)/2) + plus;
