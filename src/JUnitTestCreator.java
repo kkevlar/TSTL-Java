@@ -209,6 +209,8 @@ public class JUnitTestCreator
 
 	private String makeLocalVariableName(Action action,  int varNum)
 	{
+		
+		System.out.println(varNum);
 		String className = poolwideMap.get(action.repIds()[varNum]);
 		if(className == null)
 			className = "null";
