@@ -5,6 +5,7 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.logging.Level;
@@ -370,4 +371,16 @@ public class TstlConstants
 	public static final String SPLIT_SYNTAX_JAVA_CODE_PIECES = "~@;~@;";
 	public static final String FILE_JAVA_CODE_PIECE_SAVE = "javaCodePieces.jcp";
 	public static final String SPLIT_SYNTAX_POOLENTRY_ID_AND_CLASSNAME = ",";
+	public static String formatActionData(Action action)
+	{
+		LabelFormatter formatter = new LabelFormatter(" -> ");
+		formatter.addToStorage("enabled", action.enabled()+"");
+		formatter.addToStorage("name", action.name());
+		formatter.addToStorage("familyid", action.familyId() + "");
+		formatter.addToStorage("initId", action.initId()+"");
+		formatter.addToStorage("repIds", Arrays.toString(action.repIds()));
+		formatter.addToStorage("repVals", Arrays.toString(action.repVals()));
+		formatter.addToStorage("tstlStyleOutput", action.tstlStyleOutput());
+		return formatter.getAllFormatted();
+	}
 }

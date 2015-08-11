@@ -4,9 +4,16 @@ import java.util.HashMap;
 public class LabelFormatter 
 {
 	private HashMap<String,String> contents;
+	private String splitter;
 	public LabelFormatter()
 	{
 		contents = new HashMap<String, String>();
+		splitter = ":";
+	}
+	public LabelFormatter(String splitter) 
+	{
+		this();
+		this.setSplitter(splitter);
 	}
 	public void addToStorage(String key, String value)
 	{
@@ -31,7 +38,7 @@ public class LabelFormatter
 		{
 			String key = keys[i];
 			String value = contents.get(key);
-			ret += LabelFormatter.padRight(key, maxKeyLength) + ": " + LabelFormatter.padRight(value, maxValueLength);
+			ret += LabelFormatter.padRight(key, maxKeyLength) + splitter + value;
 			if(i != keys.length -1)
 				ret += "\n";
 		}
@@ -45,4 +52,13 @@ public class LabelFormatter
 	{
 	     return String.format("%-" + n + "s", s);  
 	}
+	public String getSplitter() 
+	{
+		return splitter;
+	}
+	public void setSplitter(String splitter) 
+	{
+		this.splitter = splitter;
+	}
+	
 }
