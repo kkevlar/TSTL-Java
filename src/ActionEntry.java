@@ -309,7 +309,10 @@ public class ActionEntry extends RepeatablesContainer
 		int poolStartIndex= 0;
 		if(this.hasInit())
 		{
+			if(this.getRepeatables()[0] instanceof NumRange)
+				System.out.println(this.toString());
 			PoolEntry poolEntry = (PoolEntry) this.getRepeatables()[0];
+	
 			mainLine += poolEntry.getVarName() + ".set(" + poolValues[0] + ", ";
 			endingCharacters = ")" + endingCharacters;
 			poolStartIndex = 1;
@@ -411,7 +414,6 @@ public class ActionEntry extends RepeatablesContainer
 	{
 		return "ActionEntry [explicitGuardUnparsed=" + explicitGuardUnparsed
 				+ ", actionLine=" + actionLine + ", entirePoolEntries="
-				+ Arrays.toString(entirePoolEntries) + ", repeatables="
 				+ Arrays.toString(repeatables) + ", javaCodePieces="
 				+ Arrays.toString(javaCodePieces) + "]";
 	}
