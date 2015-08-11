@@ -152,7 +152,7 @@ public class ActionEntry extends RepeatablesContainer
 	{
 		String ret = TstlConstants.DECLARATION_ACTION_NAME_METHOD + "\n";
 		ret += "{\n";
-		ret += "return \"" + (this.getActMainLine(poolValues).replace(";", "")) + "\";\n";
+		ret += "return \"" + TstlConstants.escapeString(this.getActMainLine(poolValues).replace(";", "")) + "\";\n";
 		ret += "} //end name()\n";
 		return ret;
 	}
@@ -227,7 +227,7 @@ public class ActionEntry extends RepeatablesContainer
 		String ret = "public String getAllInfo()"+ "\n"
 				+"{"+ "\n"+ "\n"
 				+"LabelFormatter formatter = new LabelFormatter();"+ "\n"
-				+"formatter.addToStorage"+"(\"MainLine/Name\",\"" + (this.getActMainLine(vals)) + "\");"+ "\n"
+				+"formatter.addToStorage"+"(\"MainLine/Name\",\"" + TstlConstants.escapeString(this.getActMainLine(vals)) + "\");"+ "\n"
 				+"formatter.addToStorage"+"(\"enabled()\",enabled()+\"\");"+ "\n";
 		for(int i = 0; i < this.getRepeatables().length; i++)
 		{			
