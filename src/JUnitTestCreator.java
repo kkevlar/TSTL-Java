@@ -12,7 +12,7 @@ public class JUnitTestCreator
 	private SUTInterface sut;
 	private HashMap<Integer, String> poolwideMap;
 	private HashMap<Integer, ArrayList<String>> javaCodePiecesMap;
-	
+
 
 	public JUnitTestCreator(int[] actionIds, SUTInterface sut) 
 	{
@@ -179,5 +179,5 @@ public class JUnitTestCreator
 		String className = poolwideMap.get(new Integer(initId));
 		return className.substring(0, 1).toLowerCase() + className.substring(1) + action.repVals()[varNum];
 	}
-		
+
 }
