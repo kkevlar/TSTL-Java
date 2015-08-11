@@ -266,7 +266,5 @@ public class JUnitTestCreator
 			int low = Integer.parseInt(varName);
 			return (low + num) + "";
 		}
-
 	}
-
 }
