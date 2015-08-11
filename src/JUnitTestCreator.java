@@ -35,8 +35,7 @@ public class JUnitTestCreator
 		parseJavaCodePiecesMap();
 		String[] initLines = generateLocalVariables();
 		String[] actionLines = genearateActionLines();
-		System.out.println(Arrays.toString(initLines));
-		System.out.println(Arrays.toString(actionLines));
+		//print
 	}
 
 	private String[] genearateActionLines() 
@@ -49,9 +48,10 @@ public class JUnitTestCreator
 			int wasInit = 0;
 			if(action.initId() != -1)
 			{
-				line += (makeLocalVariableName(action, action.initId()) + " = ");
+				line += (makeLocalVariableName(action, 0) + " = ");
 				wasInit = 1;
 			}
+			System.out.println("building line " + line); //t
 			ArrayList<String> javaList = javaCodePiecesMap.get(new Integer(action.familyId()));
 			for(int y = 0; y < javaList.size(); y++)
 			{
@@ -59,6 +59,7 @@ public class JUnitTestCreator
 				line += javaList.get(y);
 				if(varIndex < action.repIds().length)
 					line += makeLocalVariableName(action, varIndex);
+				System.out.println("building line " + line); //t
 			}
 			array[x] = line;
 		}
@@ -204,16 +205,18 @@ public class JUnitTestCreator
 				}
 			}
 		}
+		System.out.println(">>>>>>>>>>>"); //t
+		System.out.println(lines.toString()); //t
+		System.out.println(">>>>>>>>>>>>"); //t
 		return lines.toArray(new String[lines.size()]);
 	}
 
 	private String makeLocalVariableName(Action action,  int varNum)
 	{
-		System.out.println(TstlConstants.formatActionData(action));
-		System.out.println();
-		String className = poolwideMap.get(action.repIds()[varNum]);
-		if(className == null)
-			className = "null";
+		System.out.println(TstlConstants.formatActionData(action)); //t
+		System.out.println(varNum); //t
+		System.out.println(); //t
+		String className = poolwideMap.get(varNum);
 		String firstChar = className.substring(0, 1).toLowerCase();
 		String nextString = className.substring(1);
 		int num = action.repVals()[varNum];
