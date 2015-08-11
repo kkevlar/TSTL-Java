@@ -1,6 +1,8 @@
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
+import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -35,7 +37,30 @@ public class JUnitTestCreator
 		parseJavaCodePiecesMap();
 		String[] initLines = generateLocalVariables();
 		String[] actionLines = genearateActionLines();
-		//print
+		File failureClassFile = new File(TstlConstants.fileInDir(TstlConstants.getPath(TstlConstants.PATHKEY_WORKINGDIR), TstlConstants.FILE_FAILING_TEST_OUTPUT_SOURCE));
+		PrintWriter writer = null;
+		try
+		{
+			failureClassFile.createNewFile();
+			writer = new PrintWriter(failureClassFile);
+		}
+		catch(IOException ex)
+		{
+			TstlConstants.log(Level.WARNING, "Failed to create failing test source file.", ex);
+		}	
+		if(writer == null)
+			return;
+		for (int i = 0; i < initLines.length; i++) 
+		{
+			writer.println(initLines[i]);
+		}
+		writer.println();
+		for (int i = 0; i < actionLines.length; i++) 
+		{
+			writer.println(actionLines[i]);
+		}
+		writer.flush();
+		writer.close();
 	}
 
 	private String[] genearateActionLines() 

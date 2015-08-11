@@ -4,7 +4,6 @@ import java.util.HashMap;
 
 public class LabelFormatter 
 {
-	private static final String LABEL_FORMATTER_SPLIT = "~!~!@!~";
 	private HashMap<String,String> contents;
 	private String splitter;
 	public LabelFormatter()
@@ -19,7 +18,7 @@ public class LabelFormatter
 	}
 	public void addToStorage(String key, String value)
 	{
-		contents.put(((contents.size()+1)+LABEL_FORMATTER_SPLIT + key), value);
+		contents.put(((contents.size()+1)+TstlConstants.LABEL_FORMATTER_SPLIT + key), value);
 	}
 	public String getAllFormatted()
 	{
@@ -41,7 +40,7 @@ public class LabelFormatter
 		{
 			String key = keys[i];
 			String value = contents.get(key);
-			ret += (LabelFormatter.padRight(key.split(LABEL_FORMATTER_SPLIT)[1], maxKeyLength) + splitter + value);
+			ret += (LabelFormatter.padRight(key.split(TstlConstants.LABEL_FORMATTER_SPLIT)[1], maxKeyLength) + splitter + value);
 			if(i != keys.length -1)
 				ret += "\n";
 		}

@@ -383,4 +383,6 @@ public class TstlConstants
 		formatter.addToStorage("tstlStyleOutput", action.tstlStyleOutput());
 		return formatter.getAllFormatted();
 	}
+	public static final String LABEL_FORMATTER_SPLIT = "~!~!@!~";
+	public static final String FILE_FAILING_TEST_OUTPUT_SOURCE = "Failure.java";
 }
