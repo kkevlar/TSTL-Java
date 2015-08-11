@@ -27,7 +27,7 @@ public class ActionEntry extends RepeatablesContainer
 	private HashMap<Repeatable, int[]> repeatingPoolValues;
 	private String[] javaExpressionPieces;
 	private String[] expressionVarInformation;
-	private boolean reInitEnabled = false;
+	private boolean reInitEnabled[];
 
 	public ActionEntry(String explicitGuardUnparsed, String actionLine, PoolEntry[] entirePoolEntries) 
 	{
@@ -90,6 +90,7 @@ public class ActionEntry extends RepeatablesContainer
 	{
 		String newActionLine = actionLine;
 		boolean hasInit;
+		boolean reInit = false;
 		if(newActionLine.contains(TstlConstants.IDENTIFIER_INITIALIZATION))
 			hasInit = true;
 		else
@@ -104,7 +105,7 @@ public class ActionEntry extends RepeatablesContainer
 			String name =  pieces[0].replace(TstlConstants.IDENTIFIER_TSTLVARIABLE, " ").trim();
 			if(name.startsWith("~"))
 			{
-				this.enableReInit();
+				reInit = true;
 				name = name.substring(1).trim();
 			}
 			initVar = (PoolEntry) TstlConstants.getRepeatableFromVariable(name,true, entirePoolEntries, actionLine);
@@ -116,14 +117,22 @@ public class ActionEntry extends RepeatablesContainer
 		{
 			entries.add(packet.getRepeatables()[i]);
 		}
+		
 		this.javaCodePieces = packet.getJavaCodePieces();
 		this.repeatables = entries.toArray(new Repeatable[entries.size()]);
+		int bonus = 0;
+		if(hasInit())
+			bonus = 1;
+		reInitEnabled = new boolean[packet.getTreatAsUnused().length + bonus];
+		if(hasInit())
+			reInitEnabled[0] = reInit;
+		for(int i = bonus; i<reInitEnabled.length; i++)
+		{
+			reInitEnabled[i] = packet.getTreatAsUnused()[i-bonus];
+		}
 	}
 
-	private void enableReInit() 
-	{
-		reInitEnabled  = true;		
-	}
+	
 	protected String[] getJavaPieces() 
 	{
 		return this.javaCodePieces;
@@ -354,7 +363,7 @@ public class ActionEntry extends RepeatablesContainer
 			{
 				PoolEntry pEntry = (PoolEntry) this.getRepeatables()[i];
 				int valToSet;
-				if(reInitEnabled)
+				if(reInitEnabled[i])
 					valToSet = 1;
 				else
 					valToSet = 0;
@@ -362,7 +371,7 @@ public class ActionEntry extends RepeatablesContainer
 			}
 			else
 			{
-				if(this.getRepeatables()[i] instanceof PoolEntry)
+				if(this.getRepeatables()[i] instanceof PoolEntry && !reInitEnabled[i])
 				{
 					PoolEntry pEntry = (PoolEntry) this.getRepeatables()[i];
 					ret += pEntry.getUsedVarName() + "[" + poolValues[i] + "] = 2;\n";
