@@ -103,6 +103,7 @@ public class TstlConstants
 	public static final int TESTER_CONFIG_DEFAULT_TIMEOUT = 60000;
 	public static final String TSTL_JAVA = "TSTL-Java";
 	public static final String VISIBILITY_LEVEL_POOL_VAR = "private";
+	public static final String FILE_IMPORTS_SAVE = "imports.imp";
 	public static void closeLogger()
 	{
 		if(logFileWriter != null)

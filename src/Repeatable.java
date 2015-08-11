@@ -20,11 +20,11 @@ public abstract class Repeatable
 	public static void writePoolwideMapToFile()
 	{
 		File mapFile = new File(TstlConstants.fileInDir(TstlConstants.getTstlHomeDir(), TstlConstants.FILE_POOLWIDE_MAP));			
-		PrintWriter writer = null;
+		PrintWriter mapWriter = null;
 		try 
 		{
 			mapFile.createNewFile();
-			writer = new PrintWriter(mapFile);
+			mapWriter = new PrintWriter(mapFile);
 		} 
 		catch (IOException e) 
 		{
@@ -33,17 +33,17 @@ public abstract class Repeatable
 		}
 		finally
 		{
-			if(writer == null)
+			if(mapWriter == null)
 				return;
 		}
 		
 		Integer[] integerPoolIds = poolwideMap.keySet().toArray(new Integer[poolwideMap.size()]);
 		for (int i = 0; i < integerPoolIds.length; i++) 
 		{
-			writer.println(integerPoolIds[i] + TstlConstants.SPLIT_SYNTAX_POOLENTRY_ID_AND_CLASSNAME +poolwideMap.get(integerPoolIds[i]));
+			mapWriter.println(integerPoolIds[i] + TstlConstants.SPLIT_SYNTAX_POOLENTRY_ID_AND_CLASSNAME +poolwideMap.get(integerPoolIds[i]));
 		}	
-		writer.flush();
-		writer.close();	
+		mapWriter.flush();
+		mapWriter.close();	
 	}
 	public int getId() 
 	{

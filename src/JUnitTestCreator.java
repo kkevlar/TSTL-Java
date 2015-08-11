@@ -14,6 +14,7 @@ public class JUnitTestCreator
 	private HashMap<Integer, ArrayList<String>> javaCodePiecesMap;
 	private HashMap<Integer, String> poolwideMap;
 	private SUTInterface sut;
+	private ArrayList<String> importLines;
 
 
 	public JUnitTestCreator(int[] actionIds, SUTInterface sut) 
@@ -216,6 +217,46 @@ public class JUnitTestCreator
 			}
 		}
 	}
+	
+	private void parseImportLines() 
+	{
+		BufferedReader reader = null;
+		File importLineFile = new File(TstlConstants.fileInDir(TstlConstants.getTstlHomeDir(), TstlConstants.FILE_IMPORTS_SAVE));
+		importLines = new ArrayList<String>();
+		try
+		{
+			reader = new BufferedReader(new FileReader(importLineFile));
+			while(true)
+			{
+				String line = null;
+				line = reader.readLine();
+				if(line != null)
+				{
+					importLines.add(line);
+				}
+				else
+					break;
+			}
+		}
+		catch(Exception ex)
+		{
+			TstlConstants.log(Level.SEVERE,"Failed to read importlines from file!",ex);
+		}
+		finally
+		{
+			if(reader != null)
+			{
+				try
+				{
+					reader.close();
+				}
+				catch(Exception ex)
+				{
+					TstlConstants.log(Level.WARNING, "Failed to close importlines reader.",ex);
+				}
+			}
+		}
+	}
 
 	public void setActionIds(int[] actionIds) 
 	{
@@ -226,6 +267,7 @@ public class JUnitTestCreator
 	{
 		parsePoolEntryMap();
 		parseJavaCodePiecesMap();
+		parseImportLines();
 		String[] initLines = generateLocalVariables();
 		String[] actionLines = genearateActionLines();
 		File failureClassFile = new File(TstlConstants.fileInDir(TstlConstants.getPath(TstlConstants.PATHKEY_WORKINGDIR), TstlConstants.FILE_FAILING_TEST_OUTPUT_SOURCE));
@@ -241,6 +283,10 @@ public class JUnitTestCreator
 		}
 		if(writer == null)
 			return;
+		for (int i = 0; i < importLines.size(); i++) 
+		{
+			writer.println(importLines.get(i));
+		}
 		writer.println("public class " + TstlConstants.FILE_FAILING_TEST_OUTPUT_SOURCE.split(".")[0]);
 		writer.println("{");
 		writer.println("public static void main(String[] args0)");
