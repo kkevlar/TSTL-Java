@@ -27,8 +27,8 @@ public class ActionEntry extends RepeatablesContainer
 	private HashMap<Repeatable, int[]> repeatingPoolValues;
 	private String[] javaExpressionPieces;
 	private String[] expressionVarInformation;
-	private boolean[] treatAsUnused;
 	private int familyId;
+	private boolean reInitEnabled[];
 
 	public ActionEntry(String explicitGuardUnparsed, String actionLine, PoolEntry[] entirePoolEntries, int familyId) 
 	{
@@ -92,11 +92,12 @@ public class ActionEntry extends RepeatablesContainer
 	{
 		String newActionLine = actionLine;
 		boolean hasInit;
+		boolean reInit = false;
 		if(newActionLine.contains(TstlConstants.IDENTIFIER_INITIALIZATION))
 			hasInit = true;
 		else
 			hasInit = false;
-		HashMap<Repeatable, Boolean> reps = new HashMap<Repeatable, Boolean>();
+		ArrayList<Repeatable> entries = new ArrayList<Repeatable>();
 
 		if(hasInit)
 		{
@@ -104,32 +105,36 @@ public class ActionEntry extends RepeatablesContainer
 			String[] pieces = newActionLine.split(TstlConstants.IDENTIFIER_INITIALIZATION);
 			newActionLine = pieces[1];
 			String name =  pieces[0].replace(TstlConstants.IDENTIFIER_TSTLVARIABLE, " ").trim();
-			boolean doReinit = false;
-			if(name.startsWith(TstlConstants.IDENTIFIER_USED_ACTS_SPECIAL))
+			if(name.startsWith("~"))
 			{
-				doReinit = true;
+				reInit = true;
 				name = name.substring(1).trim();
 			}
 			initVar = (PoolEntry) TstlConstants.getRepeatableFromVariable(name,true, entirePoolEntries, actionLine);
-			reps.put(initVar,doReinit);
+			entries.add(initVar);
 		}
 		newActionLine = " " + newActionLine + " ";
 		LineParsePacket packet = TstlConstants.parseVarLine(newActionLine, entirePoolEntries);
 		for(int i = 0; i < packet.getRepeatables().length; i++)
 		{
-			reps.put(packet.getRepeatables()[i],packet.getTreatAsUnused()[i]);
+			entries.add(packet.getRepeatables()[i]);
 		}
+		
 		this.javaCodePieces = packet.getJavaCodePieces();
-		this.repeatables = reps.keySet().toArray(new Repeatable[reps.size()]);
-		boolean[] treats = new boolean[getRepeatables().length];
-		for (int i = 0; i < getRepeatables().length; i++) 
+		this.repeatables = entries.toArray(new Repeatable[entries.size()]);
+		int bonus = 0;
+		if(hasInit())
+			bonus = 1;
+		reInitEnabled = new boolean[packet.getTreatAsUnused().length + bonus];
+		if(hasInit())
+			reInitEnabled[0] = reInit;
+		for(int i = bonus; i<reInitEnabled.length; i++)
 		{
-			treats[i] = reps.get(getRepeatables()[i]);
+			reInitEnabled[i] = packet.getTreatAsUnused()[i-bonus];
 		}
-		this.treatAsUnused = treats;
 	}
 
-
+	
 	protected String[] getJavaPieces() 
 	{
 		return this.javaCodePieces;
@@ -149,7 +154,7 @@ public class ActionEntry extends RepeatablesContainer
 	{
 		String ret = TstlConstants.DECLARATION_ACTION_NAME_METHOD + "\n";
 		ret += "{\n";
-		ret += "return \"" + TstlConstants.escapeString(this.getActMainLine(poolValues).replace(";", "")) + "\";\n";
+		ret += "return \"" + (this.getActMainLine(poolValues).replace(";", "")) + "\";\n";
 		ret += "} //end name()\n";
 		return ret;
 	}
@@ -224,7 +229,7 @@ public class ActionEntry extends RepeatablesContainer
 		String ret = "public String getAllInfo()"+ "\n"
 				+"{"+ "\n"+ "\n"
 				+"LabelFormatter formatter = new LabelFormatter();"+ "\n"
-				+"formatter.addToStorage"+"(\"MainLine/Name\",\"" + TstlConstants.escapeString(this.getActMainLine(vals)) + "\");"+ "\n"
+				+"formatter.addToStorage"+"(\"MainLine/Name\",\"" + (this.getActMainLine(vals)) + "\");"+ "\n"
 				+"formatter.addToStorage"+"(\"enabled()\",enabled()+\"\");"+ "\n";
 		for(int i = 0; i < this.getRepeatables().length; i++)
 		{			
@@ -325,11 +330,8 @@ public class ActionEntry extends RepeatablesContainer
 	public String makeFormattedTstlMethod(int[] poolValues)
 	{
 		String[] jav = new String[getJavaPieces().length];
+		Repeatable[] reps = new Repeatable[getRepeatables().length]; 
 		//need to copy, escape quotes, and replace below
-		for (int i = 0; i < jav.length; i++) 
-		{
-			jav[i] = TstlConstants.escapeString(getJavaPieces()[i]);
-		}
 		String ret = "public String " + TstlConstants.DECLARTATION_ACTION_METHOD_TSTL_STYLE_OUTPUT + "(){\n";
 		String line = "return \"";
 		int plus = 0;
@@ -338,10 +340,10 @@ public class ActionEntry extends RepeatablesContainer
 			line += this.getRepeatables()[0].getAsFormattedTstl(poolValues[0]) + " =";
 			plus = 1;
 		}
-		for (int i = 0; i < (jav.length*2)-1;i++) 
+		for (int i = 0; i < (this.getJavaPieces().length*2)-1;i++) 
 		{
 			if(i%2==0)
-				line += jav[(i)/2];//was (i+1)/2 - if bug reimplement
+				line += this.getJavaPieces()[(i)/2];//was (i+1)/2 - if bug reimplement
 			else
 			{
 				int index = ((i-1)/2) + plus;
@@ -363,7 +365,7 @@ public class ActionEntry extends RepeatablesContainer
 			{
 				PoolEntry pEntry = (PoolEntry) this.getRepeatables()[i];
 				int valToSet;
-				if(getTreatAsUnused()[i])
+				if(reInitEnabled[i])
 					valToSet = 1;
 				else
 					valToSet = 0;
@@ -371,11 +373,10 @@ public class ActionEntry extends RepeatablesContainer
 			}
 			else
 			{
-				if(this.getRepeatables()[i] instanceof PoolEntry)
+				if(this.getRepeatables()[i] instanceof PoolEntry && !reInitEnabled[i])
 				{
 					PoolEntry pEntry = (PoolEntry) this.getRepeatables()[i];
-					if(!getTreatAsUnused()[i])
-						ret += pEntry.getUsedVarName() + "[" + poolValues[i] + "] = 2;\n";
+					ret += pEntry.getUsedVarName() + "[" + poolValues[i] + "] = 2;\n";
 				}
 			}
 		}
@@ -414,10 +415,7 @@ public class ActionEntry extends RepeatablesContainer
 				+ Arrays.toString(repeatables) + ", javaCodePieces="
 				+ Arrays.toString(javaCodePieces) + "]";
 	}
-	public boolean[] getTreatAsUnused() 
-	{
-		return treatAsUnused;
-	}
+
 	public String getJavaCodePiecesAsSaveLine()
 	{
 		String javaCodePieceLine = "";
