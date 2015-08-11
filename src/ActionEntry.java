@@ -309,8 +309,6 @@ public class ActionEntry extends RepeatablesContainer
 		int poolStartIndex= 0;
 		if(this.hasInit())
 		{
-			if(this.getRepeatables()[0] instanceof NumRange)
-				System.out.println(this.toString());
 			PoolEntry poolEntry = (PoolEntry) this.getRepeatables()[0];
 	
 			mainLine += poolEntry.getVarName() + ".set(" + poolValues[0] + ", ";
