@@ -150,7 +150,6 @@ public class ActionEntry extends RepeatablesContainer
 		String javaCodePieceLine = "";
 		for (int i = 0; i < getJavaPieces().length; i++) 
 		{
-			System.out.println("Java Code Piece " + i + ": " + getJavaPieces()[i]); //t
 			String append;				
 			if(getJavaPieces()[i].length() > 0)
 				append = getJavaPieces()[i];
