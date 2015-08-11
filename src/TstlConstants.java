@@ -387,4 +387,5 @@ public class TstlConstants
 	public static final String SPLIT_SYNTAX_LABEL_FORMATTER = "~_@" + TstlConstants.SPLIT_SYNTAX_SUFFIX;
 	public static final String FILE_FAILING_TEST_OUTPUT_SOURCE = "Failure.java";
 	public static final String SPLIT_SYNTAX_POOLVAL_CLASSNAME_WITH_VARNAME = "_@~" + TstlConstants.SPLIT_SYNTAX_SUFFIX;
+	public static final String POOLWIDEMAP_IDENTIFIER_NUMRANGE_CONSTANT = "NUMRANGE-CONSTANT~~";
 }

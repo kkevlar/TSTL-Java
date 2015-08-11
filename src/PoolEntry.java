@@ -6,7 +6,7 @@ import java.util.logging.Level;
 
 public class PoolEntry extends Repeatable
 {
-	private static HashMap<Integer,String> poolwideMap;
+	
 	private String className;
 	private String varName;
 	private int listSize;
@@ -16,8 +16,6 @@ public class PoolEntry extends Repeatable
 		this.className = className.trim();
 		this.varName = varName.trim();
 		this.listSize = listSize;
-		if(poolwideMap == null)
-			poolwideMap = new HashMap<Integer,String>();
 		poolwideMap.put(getId(), className+TstlConstants.SPLIT_SYNTAX_POOLVAL_CLASSNAME_WITH_VARNAME+varName.substring(TstlConstants.PREFIX_JAVA_VARIABLES.length()+1).toLowerCase());
 	}
 	public static void writePoolwideMapToFile()

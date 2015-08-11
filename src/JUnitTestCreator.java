@@ -35,6 +35,7 @@ public class JUnitTestCreator
 	{
 		parsePoolEntryMap();
 		parseJavaCodePiecesMap();
+		String[] constantLines = generateConstantLines();
 		String[] initLines = generateLocalVariables();
 		String[] actionLines = genearateActionLines();
 		File failureClassFile = new File(TstlConstants.fileInDir(TstlConstants.getPath(TstlConstants.PATHKEY_WORKINGDIR), TstlConstants.FILE_FAILING_TEST_OUTPUT_SOURCE));
@@ -50,6 +51,10 @@ public class JUnitTestCreator
 		}	
 		if(writer == null)
 			return;
+		for(int i = 0; i < constantLines.length; i++)
+		{
+			writer.println();
+		}
 		for (int i = 0; i < initLines.length; i++) 
 		{
 			writer.println(initLines[i]);
@@ -61,6 +66,12 @@ public class JUnitTestCreator
 		}
 		writer.flush();
 		writer.close();
+	}
+
+	private String[] generateConstantLines() 
+	{
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 	private String[] genearateActionLines() 
