@@ -107,7 +107,8 @@ public abstract class Tester
 		try
 		{
 			action.act();
-
+			if(doCheck)
+				return true;
 			String check = sut.check();
 			if(check != null)
 			{
