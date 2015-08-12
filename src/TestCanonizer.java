@@ -19,6 +19,7 @@ public class TestCanonizer extends TestManipulator {
 	{
 		int largestId = 0;
 		int largestValue = 0;
+		int largestIdForLargestValue = -1;
 		for(int x = 0; x < getOriginalTestIds().length; x++)
 		{
 			Action action = getSut().getActions()[getOriginalTestIds()[x]];
@@ -30,7 +31,10 @@ public class TestCanonizer extends TestManipulator {
 			for (int y = 0; y < action.repVals().length; y++) 
 			{
 				if(action.repVals()[y] > largestValue)
+				{
 					largestValue = action.repVals()[y];
+					largestIdForLargestValue = action.repIds()[y];
+				}
 			}
 		}
 		boolean[][] valuesUsed = new boolean[largestId][largestValue];
@@ -45,6 +49,16 @@ public class TestCanonizer extends TestManipulator {
 			}
 		}
 		
+		int targetValue = -1;
+		for(int i = 0; i < valuesUsed[largestIdForLargestValue].length -1; i++)
+		{
+			if(!valuesUsed[largestIdForLargestValue][i])
+			{
+				targetValue = i;
+				break;
+			}
+		}
+		
+		
 	}
-
 }
