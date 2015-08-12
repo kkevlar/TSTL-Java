@@ -1,7 +1,7 @@
 import java.util.ArrayList;
 
 
-public class BinaryTestReducer extends TestReducer
+public class BinaryTestReducer extends TestManipulator
 {
 	
 	public BinaryTestReducer(SUTInterface sut, ArrayList<Integer> actTrace, Tester tester)

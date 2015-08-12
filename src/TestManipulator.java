@@ -1,19 +1,19 @@
 import java.util.ArrayList;
 
 
-public abstract class TestReducer 
+public abstract class TestManipulator 
 {
 	private SUTInterface sut;
 	private int[] originalTestIds;	
 	private Tester tester;
 	private ArrayList<Integer> reducedTest;
 	private boolean shouldAppendFailingTest;
-	public TestReducer(SUTInterface sut, int[] actTraceArray, Tester tester2)
+	public TestManipulator(SUTInterface sut, int[] actTraceArray, Tester tester2)
 	{
 		super();
 		setUp(sut, actTraceArray, tester2);
 	}
-	public TestReducer(SUTInterface sut, ArrayList<Integer> actTrace, Tester tester)
+	public TestManipulator(SUTInterface sut, ArrayList<Integer> actTrace, Tester tester)
 	{
 		super();
 		int[] actTraceArray = new int[actTrace.size()];

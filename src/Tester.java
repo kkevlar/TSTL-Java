@@ -48,7 +48,7 @@ public abstract class Tester
 		}
 		*/
 		rprintln("test failed. Reducing....");
-		TestReducer reducer = new BinaryTestReducer(sut, actTrace, this);
+		BinaryTestReducer reducer = new BinaryTestReducer(sut, actTrace, this);
 		int[] actionIds = reducer.getReducedTestIds();
 		rprintln("Test reduced. Heres main line of each step.");
 		for (int i = 0; i < actionIds.length; i++) 

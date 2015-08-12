@@ -1,6 +1,6 @@
 import java.util.ArrayList;
 
-public class SmartTestReducer extends TestReducer
+public class SmartTestReducer extends TestManipulator
 {
 
 	private TstlLogger logger;
