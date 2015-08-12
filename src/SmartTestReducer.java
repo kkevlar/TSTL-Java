@@ -98,7 +98,7 @@ public class SmartTestReducer extends TestManipulator
 			}
 			else if(didReplace)
 			{
-				logger.append("Problably should hava failed...");
+				logger.append("Problably should have failed...");
 					for (int i = 0; i < newTestIds.length; i++) 
 					{
 						String name = getSut().getActions()[newTestIds[i]].name();
@@ -108,16 +108,6 @@ public class SmartTestReducer extends TestManipulator
 		}
 		if(this.getReducedTest() == null)
 			this.setReducedTest(this.getOriginalTestIds());
-	}
-
-	private void removeReInitializations(ArrayList<Integer> reducedTest)
-	{
-		int[] actionIndicies = new int[reducedTest.size()];
-		for (int i = 0; i < actionIndicies.length; i++) 
-		{
-			actionIndicies[i] = reducedTest.get(i);
-		}
-		removeReInitializations(actionIndicies);		
 	}
 
 	protected boolean runTest(int[] actionIds, int removedInitActionIndex, int replacedInitActionIndex)
