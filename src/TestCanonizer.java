@@ -59,6 +59,16 @@ public class TestCanonizer extends TestManipulator {
 			}
 		}
 		
-		
+		for(int x = 0; x < getSut().getActions().length; x++)
+		{
+			Action action = getSut().getActions()[x];
+			for (int y = 0; y < Math.min(action.repIds().length,action.repVals().length); y++)
+			{
+				int repId = action.repIds()[y];
+				int repVal = action.repVals()[y];
+				if(largestIdForLargestValue == repId || repVal == largestValue)
+					
+			}
+		}
 	}
 }
