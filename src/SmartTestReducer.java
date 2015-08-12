@@ -16,7 +16,7 @@ public class SmartTestReducer extends TestManipulator
 	}
 
 	@Override
-	public void reduceTest() 
+	public void manipulateTest() 
 	{		
 		logger = new TstlLogger("smartTestReduce");
 		removeReInitializations(this.getOriginalTestIds());

@@ -13,7 +13,7 @@ public class BinaryTestReducer extends TestManipulator
 		super(sut, actTraceArray, tester2);
 	}
 	@Override
-	public void reduceTest()
+	public void manipulateTest()
 	{ 
 		if(getReducedTest() == null)
 		{

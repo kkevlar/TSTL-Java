@@ -38,15 +38,6 @@ public abstract class Tester
 
 	protected void testFailed()
 	{
-		//why is this delay here.....??? commenting.. if issues should uncomment
-		/*
-		try 
-		{
-			Thread.sleep(300);
-		} catch (InterruptedException e) {
-			e.printStackTrace();
-		}
-		*/
 		rprintln("test failed. Reducing....");
 		BinaryTestReducer reducer = new BinaryTestReducer(sut, actTrace, this);
 		int[] actionIds = reducer.getReducedTestIds();

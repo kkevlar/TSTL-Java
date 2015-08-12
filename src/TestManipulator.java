@@ -33,7 +33,7 @@ public abstract class TestManipulator
 	public int[] getReducedTestIds()
 	{
 		if(reducedTest == null)
-			reduceTest();
+			manipulateTest();
 		int[] ids = new int[reducedTest.size()];
 		for (int i = 0; i < ids.length; i++) 
 		{
@@ -42,7 +42,7 @@ public abstract class TestManipulator
 		return ids;
 	}
 	
-	public abstract void reduceTest();
+	public abstract void manipulateTest();
 
 
 	protected boolean runTest(ArrayList<Integer> actionIds)
