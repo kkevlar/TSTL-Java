@@ -178,6 +178,23 @@ public class TstlParser implements Runnable
 	}
 	private void readImports() 
 	{
+		File importFile = new File(TstlConstants.fileInDir(TstlConstants.getTstlHomeDir(), TstlConstants.FILE_IMPORTS_SAVE));			
+		PrintWriter importWriter = null;
+		try 
+		{
+			importFile.createNewFile();
+			importWriter = new PrintWriter(importFile);
+		} 
+		catch (IOException e) 
+		{
+			TstlConstants.log(Level.SEVERE, "Failed to write import file!", e);
+			return;
+		}
+		finally
+		{
+			if(importWriter == null)
+				return;
+		}		
 		for (int i = 0; i < tstl.size(); i++)
 		{
 			String line = tstl.get(i);
@@ -186,7 +203,9 @@ public class TstlParser implements Runnable
 				String importObject = line.substring(TstlConstants.IDENTIFIER_IMPORT.length());
 				if(!(importObject.trim().equals(TstlConstants.IMPORT_ARRAY_LIST) || importObject.trim().equals(TstlConstants.IMPORT_LIST)))
 				{
-					writer.println("import " + importObject + ";"+TstlConstants.COMMENT_TSTL_SOURCE_IMPORT);
+					String importLine = "import " + importObject + ";"+TstlConstants.COMMENT_TSTL_SOURCE_IMPORT;
+					importWriter.println(importLine);
+					writer.println(importLine);
 				}
 				tstl.remove(i);
 				i--;
@@ -194,6 +213,8 @@ public class TstlParser implements Runnable
 		}
 		writer.println("import " + TstlConstants.IMPORT_LIST + ";"+TstlConstants.COMMENT_CORE_FUNCTIONALITY_IMPORT);
 		writer.println("import " + TstlConstants.IMPORT_ARRAY_LIST + ";"+TstlConstants.COMMENT_CORE_FUNCTIONALITY_IMPORT);
+		importWriter.flush();
+		importWriter.close();
 	}
 	private void generateClassDeclaration()
 	{
