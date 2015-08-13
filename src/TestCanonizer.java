@@ -30,7 +30,7 @@ public class TestCanonizer extends TestManipulator
 			}
 		}
 		Action targetAction = getSut().getActions()[testToManipulate[indexOfActionToBeReplaced]];
-		System.out.println("-Target action: " + targetAction.tstlStyleOutput() + " " + replaceValue); //t
+		
 		boolean[] valuesInUse = new boolean[replaceValue]; //stores whether repVal of index is in use for the targetId
 		boolean[] actionNeedsReplacement = new boolean[testToManipulate.length]; //stores whether action whose index is conained in the originalTestIds needs to be replaced
 		for(int x = 0 ; x < testToManipulate.length; x++)
@@ -45,7 +45,7 @@ public class TestCanonizer extends TestManipulator
 					if(currVal == replaceValue)
 					{
 						actionNeedsReplacement[x] = true;
-						System.out.println(">Needs Replacement: " + getSut().getActions()[testToManipulate[x]].tstlStyleOutput()); //t
+						
 					}
 					else if(currVal < valuesInUse.length)
 						valuesInUse[currVal] = true;
@@ -64,7 +64,8 @@ public class TestCanonizer extends TestManipulator
 		}
 		if(targetValue == -1 || targetValue >= replaceValue)
 		{
-			System.out.println("No more replacements can be made!"); //t
+			
+			
 			return null;
 		}
 		int[] replacedActionIndices = new int[testToManipulate.length];
@@ -115,7 +116,7 @@ public class TestCanonizer extends TestManipulator
 				{
 					replacedActionIndices[x] = s;
 					actionNeedsReplacement[x] = false;
-					System.out.println("IS OK!");//t
+					
 				}
 			}
 		}
