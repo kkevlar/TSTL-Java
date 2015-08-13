@@ -17,18 +17,12 @@ public class TestCanonizer extends TestManipulator {
 	@Override
 	public void manipulateTest() 
 	{
-		int largestId = 0;
-		int largestValue = 0;
+		int largestValue = -1;
 		int idOfLargestValue = -1;
 		int indexOfActionToBeReplaced = -1;
 		for(int x = 0; x < getOriginalTestIds().length; x++)
 		{
 			Action action = getSut().getActions()[getOriginalTestIds()[x]];
-			for (int y = 0; y < action.repIds().length; y++) 
-			{
-				if(action.repIds()[y] > largestId)
-					largestId = action.repIds()[y];
-			}
 			for (int y = 0; y < action.repVals().length; y++) 
 			{
 				if(action.repVals()[y] > largestValue)
@@ -39,6 +33,7 @@ public class TestCanonizer extends TestManipulator {
 				}
 			}
 		}
+		/*
 		boolean[][] valuesUsed = new boolean[largestId][largestValue];
 		for(int x = 0; x < getOriginalTestIds().length; x++)
 		{
@@ -51,20 +46,9 @@ public class TestCanonizer extends TestManipulator {
 				valuesUsed[repId][repVal] = true;
 			}
 		}
-		
-		int targetValue = -1;
-		for(int i = 0; i < valuesUsed[idOfLargestValue].length -1; i++)
-		{
-			if(!valuesUsed[idOfLargestValue][i])
-			{
-				targetValue = i;
-				break;
-			}
-		}
-		
-		
-			Action actionToBeReplaced = getSut().getActions()[indexOfActionToBeReplaced];
-			int min = Math.min(actionToBeReplaced.repIds().length,actionToBeReplaced.repVals().length);
+		*/
+		int replacementValue = 0;
+		Action actionToBeReplaced = getSut().getActions()[indexOfActionToBeReplaced];
 			
 		
 	}
