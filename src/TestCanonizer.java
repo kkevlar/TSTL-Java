@@ -156,13 +156,13 @@ public class TestCanonizer extends TestManipulator
 			int firstNonInitIndex = -1;
 			for (int y = 0; y < copied.length; y++)
 			{
-				Action action = getSut().getActions()[prevCanonizedTest[x]];
+				Action action = getSut().getActions()[prevCanonizedTest[y]];
 				if(firstNonInitIndex == -1 && action.initId() == -1)
-					firstNonInitIndex = x;
+					firstNonInitIndex = y;
 				copied[y] = prevCanonizedTest[y];
 			}
 			Action action = getSut().getActions()[copied[x]];
-			if(x <= firstNonInitIndex || action.initId() == -1)
+			if(x <= firstNonInitIndex || action.initId() == -1 || firstNonInitIndex == -1)
 				continue;
 			int temp = copied[firstNonInitIndex];
 			copied[firstNonInitIndex] = copied[x];
