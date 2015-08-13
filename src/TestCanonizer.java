@@ -19,7 +19,8 @@ public class TestCanonizer extends TestManipulator {
 	{
 		int largestId = 0;
 		int largestValue = 0;
-		int largestIdForLargestValue = -1;
+		int idOfLargestValue = -1;
+		int indexOfActionToBeReplaced = -1;
 		for(int x = 0; x < getOriginalTestIds().length; x++)
 		{
 			Action action = getSut().getActions()[getOriginalTestIds()[x]];
@@ -33,7 +34,8 @@ public class TestCanonizer extends TestManipulator {
 				if(action.repVals()[y] > largestValue)
 				{
 					largestValue = action.repVals()[y];
-					largestIdForLargestValue = action.repIds()[y];
+					idOfLargestValue = action.repIds()[y];
+					indexOfActionToBeReplaced = x;
 				}
 			}
 		}
@@ -41,7 +43,8 @@ public class TestCanonizer extends TestManipulator {
 		for(int x = 0; x < getOriginalTestIds().length; x++)
 		{
 			Action action = getSut().getActions()[getOriginalTestIds()[x]];
-			for (int y = 0; y < Math.min(action.repIds().length,action.repVals().length); y++)
+			int min = Math.min(action.repIds().length,action.repVals().length);
+			for (int y = 0; y < min; y++)
 			{
 				int repId = action.repIds()[y];
 				int repVal = action.repVals()[y];
@@ -50,25 +53,19 @@ public class TestCanonizer extends TestManipulator {
 		}
 		
 		int targetValue = -1;
-		for(int i = 0; i < valuesUsed[largestIdForLargestValue].length -1; i++)
+		for(int i = 0; i < valuesUsed[idOfLargestValue].length -1; i++)
 		{
-			if(!valuesUsed[largestIdForLargestValue][i])
+			if(!valuesUsed[idOfLargestValue][i])
 			{
 				targetValue = i;
 				break;
 			}
 		}
 		
-		for(int x = 0; x < getSut().getActions().length; x++)
-		{
-			Action action = getSut().getActions()[x];
-			for (int y = 0; y < Math.min(action.repIds().length,action.repVals().length); y++)
-			{
-				int repId = action.repIds()[y];
-				int repVal = action.repVals()[y];
-				if(largestIdForLargestValue == repId || repVal == largestValue)
-					
-			}
-		}
+		
+			Action actionToBeReplaced = getSut().getActions()[indexOfActionToBeReplaced];
+			int min = Math.min(actionToBeReplaced.repIds().length,actionToBeReplaced.repVals().length);
+			
+		
 	}
 }
