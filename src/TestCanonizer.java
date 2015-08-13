@@ -64,6 +64,11 @@ public class TestCanonizer extends TestManipulator
 				break;
 			}
 		}
+		if(targetValue == -1 || targetValue >= replaceValue)
+		{
+			System.out.println("No more replacements can be made!"); //t
+			return;
+		}
 		int[] replacedActionIndices = new int[getOriginalTestIds().length];
 		for (int x = 0; x < replacedActionIndices.length; x++)
 		{
