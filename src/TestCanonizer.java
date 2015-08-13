@@ -74,10 +74,11 @@ public class TestCanonizer extends TestManipulator
 			for(int x = 0; x < getOriginalTestIds().length; x++)
 			{
 				Action currOrigAction = getSut().getActions()[getOriginalTestIds()[x]];
-				if(actionNeedsReplacement[x] && currOrigAction.familyId() == currSutAction.familyId())
+				if(actionNeedsReplacement[x] == true && currOrigAction.familyId() == currSutAction.familyId())
 				{
 					int ySize = currSutAction.repIds().length; /*how many iterations the "y" loop will go. currSutAction.(repIds/repVals).length 
 					and origAction.(repIds/repVals).length should all be equivalent */
+					boolean isOk = true;
 					for (int y = 0; y < ySize; y++) 
 					{
 						int sutId = currSutAction.repIds()[y];
@@ -88,11 +89,27 @@ public class TestCanonizer extends TestManipulator
 						{
 							TstlConstants.log("TestCanonizer is flawed!");
 						}
-						if(sutVal == targetValue && origVal == replaceValue)
+						if(sutId == targetId)
 						{
-							replacedActionIndices[x] = s;
-							actionNeedsReplacement[x] = false;
+							if(sutVal != targetValue || origVal != replaceValue)
+							{
+								isOk = false;
+								break;
+							}
+							else
+							{
+								if(sutVal != origVal)
+								{
+									isOk = false;
+									break;
+								}
+							}
 						}
+					}
+					if(isOk)
+					{
+						replacedActionIndices[x] = s;
+						actionNeedsReplacement[x] = false;
 					}
 				}
 			}
