@@ -24,17 +24,15 @@ public class TestCanonizer extends TestManipulator
 		for(int x = 0; x < getOriginalTestIds().length; x++)
 		{
 			Action action = getSut().getActions()[getOriginalTestIds()[x]];
-			for (int y = 0; y < action.repVals().length; y++) 
+			if(action.repVals()[0] > replaceValue)
 			{
-				if(action.repVals()[y] > replaceValue)
-				{
-					replaceValue = action.repVals()[y];
-					targetId = action.repIds()[y];
-					indexOfActionToBeReplaced = x;
-				}
+				replaceValue = action.repVals()[0];
+				targetId = action.repIds()[0];
+				indexOfActionToBeReplaced = x;
 			}
 		}
-
+		Action targetAction = getSut().getActions()[getOriginalTestIds()[indexOfActionToBeReplaced]];
+		System.out.println("-Target action: " + targetAction.tstlStyleOutput() + " " + replaceValue); //t
 		boolean[] valuesInUse = new boolean[replaceValue]; //stores whether repVal of index is in use for the targetId
 		boolean[] actionNeedsReplacement = new boolean[getOriginalTestIds().length]; //stores whether action whose index is conained in the originalTestIds needs to be replaced
 		for(int x = 0 ; x < getOriginalTestIds().length; x++)
@@ -47,7 +45,10 @@ public class TestCanonizer extends TestManipulator
 				if(currId == targetId)
 				{
 					if(currVal == replaceValue)
+					{
 						actionNeedsReplacement[x] = true;
+						System.out.println(">Needs Replacement: " + getSut().getActions()[getOriginalTestIds()[x]].tstlStyleOutput()); //t
+					}
 					else if(currVal < valuesInUse.length)
 						valuesInUse[currVal] = true;
 				}
@@ -74,43 +75,44 @@ public class TestCanonizer extends TestManipulator
 			for(int x = 0; x < getOriginalTestIds().length; x++)
 			{
 				Action currOrigAction = getSut().getActions()[getOriginalTestIds()[x]];
-				if(actionNeedsReplacement[x] == true && currOrigAction.familyId() == currSutAction.familyId())
-				{
-					int ySize = currSutAction.repIds().length; /*how many iterations the "y" loop will go. currSutAction.(repIds/repVals).length 
+				if(actionNeedsReplacement[x] != true || currOrigAction.familyId() != currSutAction.familyId())
+					continue;
+				int ySize = currSutAction.repIds().length; /*how many iterations the "y" loop will go. currSutAction.(repIds/repVals).length 
 					and origAction.(repIds/repVals).length should all be equivalent */
-					boolean isOk = true;
-					for (int y = 0; y < ySize; y++) 
+				boolean isOk = true;
+				for (int y = 0; y < ySize; y++) 
+				{
+					int sutId = currSutAction.repIds()[y];
+					int sutVal = currSutAction.repVals()[y];
+					int origId = currOrigAction.repIds()[y];
+					int origVal = currOrigAction.repVals()[y];
+					if(sutId != origId)
 					{
-						int sutId = currSutAction.repIds()[y];
-						int sutVal = currSutAction.repVals()[y];
-						int origId = currOrigAction.repIds()[y];
-						int origVal = currOrigAction.repVals()[y];
-						if(sutId != origId)
+						TstlConstants.log("TestCanonizer is flawed!");
+					}
+					if(sutId == targetId)
+					{
+						if(sutVal != targetValue || origVal != replaceValue)
 						{
-							TstlConstants.log("TestCanonizer is flawed!");
-						}
-						if(sutId == targetId)
-						{
-							if(sutVal != targetValue || origVal != replaceValue)
-							{
-								isOk = false;
-								break;
-							}
-							else
-							{
-								if(sutVal != origVal)
-								{
-									isOk = false;
-									break;
-								}
-							}
+							isOk = false;
+							break;
 						}
 					}
-					if(isOk)
+					else
 					{
-						replacedActionIndices[x] = s;
-						actionNeedsReplacement[x] = false;
+						if(sutVal != origVal)
+						{
+							isOk = false;
+							break;
+						}
 					}
+
+				}
+				if(isOk)
+				{
+					replacedActionIndices[x] = s;
+					actionNeedsReplacement[x] = false;
+					System.out.println("IS OK!");//t
 				}
 			}
 		}
