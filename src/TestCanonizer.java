@@ -150,7 +150,27 @@ public class TestCanonizer extends TestManipulator
 
 	private int[] moveInitializations(int[] prevCanonizedTest) 
 	{
-		// TODO Auto-generated method stub
+		for (int x = 0; x < prevCanonizedTest.length; x++) 
+		{
+			int[] copied = new int[prevCanonizedTest.length];
+			int firstNonInitIndex = -1;
+			for (int y = 0; y < copied.length; y++)
+			{
+				Action action = getSut().getActions()[prevCanonizedTest[x]];
+				if(firstNonInitIndex == -1 && action.initId() == -1)
+					firstNonInitIndex = x;
+				copied[y] = prevCanonizedTest[y];
+			}
+			Action action = getSut().getActions()[copied[x]];
+			if(x <= firstNonInitIndex || action.initId() == -1)
+				continue;
+			int temp = copied[firstNonInitIndex];
+			copied[firstNonInitIndex] = copied[x];
+			copied[x] = temp;
+			boolean testFailed = runTest(copied);
+			if(testFailed)
+				return copied;
+		}
 		return null;
 	}
 }
