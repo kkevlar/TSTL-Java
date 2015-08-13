@@ -71,6 +71,15 @@ public abstract class Tester
 		rprintln("--" + "Original: " + actTrace.size());
 		rprintln("--" + "Reduced : " + actionIds.length);		
 		rprintln("--" + "S-Reduce: " + smartActionIds.length);
+		
+		TestCanonizer canonizer = new TestCanonizer(sut, smartActionIds, this);
+		int[] canonizedTest = canonizer.getReducedTestIds();
+		rprintln("Test canonized. Heres main line of each step.");
+		for (int i = 0; i < canonizedTest.length; i++) 
+		{
+			String print = sut.getActions()[canonizedTest[i]].tstlStyleOutput();
+			rprintln(print.trim());
+		}
 	}
 	
 	private void rprintln(String string)
