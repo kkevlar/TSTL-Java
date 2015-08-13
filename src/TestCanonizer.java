@@ -139,6 +139,7 @@ public class TestCanonizer extends TestManipulator
 			prevCanonizedTest = canonizedTest;
 			canonizedTest = this.decreaseRepValues(prevCanonizedTest);
 		}
-		this.setReducedTest(prevCanonizedTest);
+		
+		this.setManipulatedTest(prevCanonizedTest);
 	}
 }

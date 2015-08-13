@@ -40,7 +40,7 @@ public abstract class Tester
 	{
 		rprintln("test failed. Reducing....");
 		BinaryTestReducer reducer = new BinaryTestReducer(sut, actTrace, this);
-		int[] actionIds = reducer.getReducedTestIds();
+		int[] actionIds = reducer.getManipulatedTestIds();
 		rprintln("Test reduced. Heres main line of each step.");
 		for (int i = 0; i < actionIds.length; i++) 
 		{
@@ -48,7 +48,7 @@ public abstract class Tester
 			rprintln(print.trim());
 		}
 		SmartTestReducer smartReduce = new SmartTestReducer(sut, actionIds, this);
-		int[] smartActionIds = smartReduce.getReducedTestIds();
+		int[] smartActionIds = smartReduce.getManipulatedTestIds();
 
 		int prevSize = actionIds.length;
 		int smartSize = smartActionIds.length;
@@ -56,7 +56,7 @@ public abstract class Tester
 		{
 			prevSize = smartSize;
 			smartReduce = new SmartTestReducer(sut, smartActionIds, this);
-			smartActionIds = smartReduce.getReducedTestIds();
+			smartActionIds = smartReduce.getManipulatedTestIds();
 			smartSize = smartActionIds.length;
 		}
 		rprintln("Test smart reduced. Heres main line of each step.");
@@ -73,7 +73,7 @@ public abstract class Tester
 		rprintln("--" + "S-Reduce: " + smartActionIds.length);
 		
 		TestCanonizer canonizer = new TestCanonizer(sut, smartActionIds, this);
-		int[] canonizedTest = canonizer.getReducedTestIds();
+		int[] canonizedTest = canonizer.getManipulatedTestIds();
 		rprintln("Test canonized. Heres main line of each step.");
 		for (int i = 0; i < canonizedTest.length; i++) 
 		{

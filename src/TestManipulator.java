@@ -6,7 +6,7 @@ public abstract class TestManipulator
 	private SUTInterface sut;
 	private int[] originalTestIds;	
 	private Tester tester;
-	private ArrayList<Integer> reducedTest;
+	private ArrayList<Integer> manipulatedTest;
 	private boolean shouldAppendFailingTest;
 	public TestManipulator(SUTInterface sut, int[] actTraceArray, Tester tester2)
 	{
@@ -30,16 +30,16 @@ public abstract class TestManipulator
 		this.tester = tester;	
 		this.shouldAppendFailingTest = tester.shouldAppendFailingTest();
 	}
-	public int[] getReducedTestIds()
+	public int[] getManipulatedTestIds()
 	{
-		if(reducedTest == null)
+		if(manipulatedTest == null)
 			manipulateTest();
-		if(reducedTest == null)
+		if(manipulatedTest == null)
 			return null;
-		int[] ids = new int[reducedTest.size()];
+		int[] ids = new int[manipulatedTest.size()];
 		for (int i = 0; i < ids.length; i++) 
 		{
-			ids[i] = reducedTest.get(i);
+			ids[i] = manipulatedTest.get(i);
 		}
 		return ids;
 	}
@@ -67,7 +67,7 @@ public abstract class TestManipulator
 			}
 		}
 		if(testFailed)
-			reducedTest = newTest;		
+			manipulatedTest = newTest;		
 		return testFailed;
 
 	}
@@ -104,22 +104,22 @@ public abstract class TestManipulator
 	{
 		return tester;
 	}
-	protected ArrayList<Integer> getReducedTest()
+	protected ArrayList<Integer> getManipulatedTest()
 	{
-		return reducedTest;
+		return manipulatedTest;
 	}
-	public void setReducedTest(ArrayList<Integer> reducedTest)
+	public void setManipulatedTest(ArrayList<Integer> manipulatedTest)
 	{
-		this.reducedTest = reducedTest;
+		this.manipulatedTest = manipulatedTest;
 	}
-	public void setReducedTest(int[] reducedTestIds) 
+	public void setManipulatedTest(int[] manipulatedTestIds) 
 	{
 		ArrayList<Integer> reducedTestArrList = new ArrayList<Integer>();
-		for (int i = 0; i < reducedTestIds.length; i++) 
+		for (int i = 0; i < manipulatedTestIds.length; i++) 
 		{
-			reducedTestArrList.add(reducedTestIds[i]);
+			reducedTestArrList.add(manipulatedTestIds[i]);
 		}
-		setReducedTest(reducedTestArrList);
+		setManipulatedTest(reducedTestArrList);
 	}
 	
 }

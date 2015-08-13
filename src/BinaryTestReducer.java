@@ -15,14 +15,14 @@ public class BinaryTestReducer extends TestManipulator
 	@Override
 	public void manipulateTest()
 	{ 
-		if(getReducedTest() == null)
+		if(getManipulatedTest() == null)
 		{
 			ArrayList<Integer> tempTest = new ArrayList<Integer>();
 			for (int i = 0; i < getOriginalTestIds().length; i++) 
 			{
 				tempTest.add(getOriginalTestIds()[i]);
 			}
-			setReducedTest(tempTest);
+			setManipulatedTest(tempTest);
 		}
 		boolean fullyReduced = false;
 		while(!fullyReduced)
@@ -32,10 +32,10 @@ public class BinaryTestReducer extends TestManipulator
 			while(!reduced)
 			{
 				pieceCount *= 2;
-				if(pieceCount > getReducedTest().size())
-					pieceCount = getReducedTest().size();
-				reduced = reduceUsingPieces(pieceCount, getReducedTest());
-				if(pieceCount == getReducedTest().size() && !reduced)
+				if(pieceCount > getManipulatedTest().size())
+					pieceCount = getManipulatedTest().size();
+				reduced = reduceUsingPieces(pieceCount, getManipulatedTest());
+				if(pieceCount == getManipulatedTest().size() && !reduced)
 				{
 					fullyReduced = true;
 					break;

@@ -69,23 +69,23 @@ public class SmartTestReducer extends TestManipulator
 				if(didReplace)
 				{
 					logger.append("A TEST FAILED");
-					for (int i = 0; i < getReducedTest().size(); i++) 
+					for (int i = 0; i < getManipulatedTest().size(); i++) 
 					{
-						String name = getSut().getActions()[getReducedTest().get(i)].name();
+						String name = getSut().getActions()[getManipulatedTest().get(i)].name();
 						logger.append("--"+name.trim());
 					}
 				}
-				BinaryTestReducer reducer = new BinaryTestReducer(getSut(), this.getReducedTest(), getTester());
-				int[] binReducedTest = reducer.getReducedTestIds();
+				BinaryTestReducer reducer = new BinaryTestReducer(getSut(), this.getManipulatedTest(), getTester());
+				int[] binReducedTest = reducer.getManipulatedTestIds();
 
-				if(binReducedTest != null && (this.getReducedTest() == null || newTestIds.length > binReducedTest.length))
+				if(binReducedTest != null && (this.getManipulatedTest() == null || newTestIds.length > binReducedTest.length))
 				{
 					int[] newArray = new int[binReducedTest.length];
 					for (int i = 0; i < newArray.length; i++)
 					{
 						newArray[i] = binReducedTest[i];					
 					}
-					this.setReducedTest(newArray);
+					this.setManipulatedTest(newArray);
 					logger.append("RESET REDUCED TEST");
 
 					for (int i = 0; i < binReducedTest.length; i++) 
@@ -106,8 +106,8 @@ public class SmartTestReducer extends TestManipulator
 					}
 			}
 		}
-		if(this.getReducedTest() == null)
-			this.setReducedTest(this.getOriginalTestIds());
+		if(this.getManipulatedTest() == null)
+			this.setManipulatedTest(this.getOriginalTestIds());
 	}
 
 	protected boolean runTest(int[] actionIds, int removedInitActionIndex, int replacedInitActionIndex)
@@ -145,7 +145,7 @@ public class SmartTestReducer extends TestManipulator
 			}
 		}
 		if(testFailed)
-			setReducedTest(smallerTest);		
+			setManipulatedTest(smallerTest);		
 		return testFailed;
 
 	}
