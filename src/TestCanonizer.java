@@ -139,7 +139,18 @@ public class TestCanonizer extends TestManipulator
 			prevCanonizedTest = canonizedTest;
 			canonizedTest = this.decreaseRepValues(prevCanonizedTest);
 		}
-		
+		canonizedTest = this.moveInitializations(prevCanonizedTest);
+		while(canonizedTest != null)
+		{
+			prevCanonizedTest = canonizedTest;
+			canonizedTest = this.moveInitializations(prevCanonizedTest);
+		}
 		this.setManipulatedTest(prevCanonizedTest);
+	}
+
+	private int[] moveInitializations(int[] prevCanonizedTest) 
+	{
+		// TODO Auto-generated method stub
+		return null;
 	}
 }
