@@ -34,6 +34,8 @@ public abstract class TestManipulator
 	{
 		if(reducedTest == null)
 			manipulateTest();
+		if(reducedTest == null)
+			return null;
 		int[] ids = new int[reducedTest.size()];
 		for (int i = 0; i < ids.length; i++) 
 		{
