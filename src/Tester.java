@@ -74,17 +74,10 @@ public abstract class Tester
 		
 		TestCanonizer canonizer = new TestCanonizer(sut, smartActionIds, this);
 		int[] canonizedTest = canonizer.getReducedTestIds();
-		int[] prevCanonizedTest = null;
-		while(canonizedTest != null)
-		{
-			prevCanonizedTest = canonizedTest;
-			canonizer = new TestCanonizer(sut, prevCanonizedTest, this);
-			canonizedTest = canonizer.getReducedTestIds();
-		}
 		rprintln("Test canonized. Heres main line of each step.");
-		for (int i = 0; i < prevCanonizedTest.length; i++) 
+		for (int i = 0; i < canonizedTest.length; i++) 
 		{
-			String print = sut.getActions()[prevCanonizedTest[i]].tstlStyleOutput();
+			String print = sut.getActions()[canonizedTest[i]].tstlStyleOutput();
 			rprintln(print.trim());
 		}
 	}

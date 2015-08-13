@@ -14,16 +14,14 @@ public class TestCanonizer extends TestManipulator
 		super(sut, actTrace, tester);
 
 	}
-
-	@Override
-	public void manipulateTest() 
+	public int[] decreaseRepValues(int[] testToManipulate) 
 	{
 		int replaceValue = -1; //repValue of all the actions in the original test
 		int targetId = -1; //the id of the above repvalue
 		int indexOfActionToBeReplaced = -1; //sut.getActions() index of the action which has the above large repValue
-		for(int x = 0; x < getOriginalTestIds().length; x++)
+		for(int x = 0; x < testToManipulate.length; x++)
 		{
-			Action action = getSut().getActions()[getOriginalTestIds()[x]];
+			Action action = getSut().getActions()[testToManipulate[x]];
 			if(action.repVals()[0] > replaceValue)
 			{
 				replaceValue = action.repVals()[0];
@@ -31,13 +29,13 @@ public class TestCanonizer extends TestManipulator
 				indexOfActionToBeReplaced = x;
 			}
 		}
-		Action targetAction = getSut().getActions()[getOriginalTestIds()[indexOfActionToBeReplaced]];
+		Action targetAction = getSut().getActions()[testToManipulate[indexOfActionToBeReplaced]];
 		System.out.println("-Target action: " + targetAction.tstlStyleOutput() + " " + replaceValue); //t
 		boolean[] valuesInUse = new boolean[replaceValue]; //stores whether repVal of index is in use for the targetId
-		boolean[] actionNeedsReplacement = new boolean[getOriginalTestIds().length]; //stores whether action whose index is conained in the originalTestIds needs to be replaced
-		for(int x = 0 ; x < getOriginalTestIds().length; x++)
+		boolean[] actionNeedsReplacement = new boolean[testToManipulate.length]; //stores whether action whose index is conained in the originalTestIds needs to be replaced
+		for(int x = 0 ; x < testToManipulate.length; x++)
 		{
-			Action currAction = getSut().getActions()[getOriginalTestIds()[x]];
+			Action currAction = getSut().getActions()[testToManipulate[x]];
 			for (int y = 0; y < currAction.repIds().length; y++) 
 			{
 				int currId = currAction.repIds()[y];
@@ -47,7 +45,7 @@ public class TestCanonizer extends TestManipulator
 					if(currVal == replaceValue)
 					{
 						actionNeedsReplacement[x] = true;
-						System.out.println(">Needs Replacement: " + getSut().getActions()[getOriginalTestIds()[x]].tstlStyleOutput()); //t
+						System.out.println(">Needs Replacement: " + getSut().getActions()[testToManipulate[x]].tstlStyleOutput()); //t
 					}
 					else if(currVal < valuesInUse.length)
 						valuesInUse[currVal] = true;
@@ -67,9 +65,9 @@ public class TestCanonizer extends TestManipulator
 		if(targetValue == -1 || targetValue >= replaceValue)
 		{
 			System.out.println("No more replacements can be made!"); //t
-			return;
+			return null;
 		}
-		int[] replacedActionIndices = new int[getOriginalTestIds().length];
+		int[] replacedActionIndices = new int[testToManipulate.length];
 		for (int x = 0; x < replacedActionIndices.length; x++)
 		{
 			replacedActionIndices[x] = -1;
@@ -77,9 +75,9 @@ public class TestCanonizer extends TestManipulator
 		for (int s = 0; s < getSut().getActions().length; s++) 
 		{
 			Action currSutAction = getSut().getActions()[s];
-			for(int x = 0; x < getOriginalTestIds().length; x++)
+			for(int x = 0; x < testToManipulate.length; x++)
 			{
-				Action currOrigAction = getSut().getActions()[getOriginalTestIds()[x]];
+				Action currOrigAction = getSut().getActions()[testToManipulate[x]];
 				if(actionNeedsReplacement[x] != true || currOrigAction.familyId() != currSutAction.familyId())
 					continue;
 				int ySize = currSutAction.repIds().length; /*how many iterations the "y" loop will go. currSutAction.(repIds/repVals).length 
@@ -125,9 +123,22 @@ public class TestCanonizer extends TestManipulator
 		{
 			if(replacedActionIndices[x] == -1)
 			{
-				replacedActionIndices[x] = getOriginalTestIds()[x];
+				replacedActionIndices[x] = testToManipulate[x];
 			}
 		}
-		this.setReducedTest(replacedActionIndices);		
+		return replacedActionIndices;
+	}
+
+	@Override
+	public void manipulateTest()
+	{
+		int[] canonizedTest = this.decreaseRepValues(getOriginalTestIds());
+		int[] prevCanonizedTest = canonizedTest;
+		while(canonizedTest != null)
+		{
+			prevCanonizedTest = canonizedTest;
+			canonizedTest = this.decreaseRepValues(prevCanonizedTest);
+		}
+		this.setReducedTest(prevCanonizedTest);
 	}
 }
