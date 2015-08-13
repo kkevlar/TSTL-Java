@@ -65,12 +65,7 @@ public abstract class Tester
 			String print = sut.getActions()[smartActionIds[i]].tstlStyleOutput();
 			rprintln(print.trim());
 		}
-		JUnitTestCreator junit = new JUnitTestCreator(smartActionIds, sut);
-		junit.writeTest();
-		rprintln("Stepcounts:");
-		rprintln("--" + "Original: " + actTrace.size());
-		rprintln("--" + "Reduced : " + actionIds.length);		
-		rprintln("--" + "S-Reduce: " + smartActionIds.length);
+		
 		
 		TestCanonizer canonizer = new TestCanonizer(sut, smartActionIds, this);
 		int[] canonizedTest = canonizer.getManipulatedTestIds();
@@ -80,6 +75,14 @@ public abstract class Tester
 			String print = sut.getActions()[canonizedTest[i]].tstlStyleOutput();
 			rprintln(print.trim());
 		}
+		JUnitTestCreator junit = new JUnitTestCreator(canonizedTest, sut);
+		junit.writeTest();
+		rprintln("");
+		rprintln("Stepcounts:");
+		rprintln("--" + "Original : " + actTrace.size());
+		rprintln("--" + "Reduced  : " + actionIds.length);		
+		rprintln("--" + "S-Reduce : " + smartActionIds.length);
+		rprintln("--" + "Canonized: " + canonizedTest.length);
 	}
 	
 	private void rprintln(String string)
