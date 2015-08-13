@@ -287,7 +287,7 @@ public class JUnitTestCreator
 		{
 			writer.println(importLines.get(i));
 		}
-		writer.println("public class " + TstlConstants.FILE_FAILING_TEST_OUTPUT_SOURCE.split(".")[0]);
+		writer.println("public class " + "Failure");
 		writer.println("{");
 		writer.println("public static void main(String[] args0)");
 		writer.println("{");
