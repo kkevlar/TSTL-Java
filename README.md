@@ -5,4 +5,4 @@ This tool provides the automated testing capabilites described in [TSTL](http://
 
 Please note that TSTL-Java is not the only implementation of TSTL.  To see the original Python implementation, please visit [this project](https://github.com/agroce/tstl).  
 
-To get started, please visit the [quick start guide](https://github.com/flipturnapps/TSTL-Java/wiki/Getting-Started-with-TSTL-Java).
+To get started, please see the [quick start guide](https://github.com/flipturnapps/TSTL-Java/wiki/Getting-Started-with-TSTL-Java).
