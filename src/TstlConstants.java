@@ -91,19 +91,19 @@ public class TstlConstants
 	public static final String SPLIT_SYNTAX_JAVA_CODE_PIECES = "@~_" + TstlConstants.SPLIT_SYNTAX_SUFFIX;
 	public static final String SPLIT_SYNTAX_LABEL_FORMATTER = "~_@" + TstlConstants.SPLIT_SYNTAX_SUFFIX;
 	public static final String SPLIT_SYNTAX_POOLENTRY_ID_AND_CLASSNAME = "~@_" + TstlConstants.SPLIT_SYNTAX_SUFFIX;
-
 	public static final String SPLIT_SYNTAX_POOLVAL_CLASSNAME_WITH_VARNAME = "_@~" + TstlConstants.SPLIT_SYNTAX_SUFFIX;
+	public static final String SPLIT_SYNTAX_PROPENTRY_INTERNAL_SPLIT = "_~@" + TstlConstants.SPLIT_SYNTAX_SUFFIX;
 	private static final String SPLIT_SYNTAX_SUFFIX = "split!";
 	public static final String SUFFIX_VAR_USED = "_used";
 	public static final boolean TESTER_CONFIG_DEFAULT_APPEND_FAILING_TEST = true;
 	public static final int TESTER_CONFIG_DEFAULT_IGNORE_CHECK_VALUE = 0;
 	public static final int TESTER_CONFIG_DEFAULT_TEST_PRINT_DELAY = 10000;
-
 	public static final int TESTER_CONFIG_DEFAULT_TESTS_PER_CYCLE = 1000;
 	public static final int TESTER_CONFIG_DEFAULT_TIMEOUT = 60000;
 	public static final String TSTL_JAVA = "TSTL-Java";
 	public static final String VISIBILITY_LEVEL_POOL_VAR = "private";
 	public static final String FILE_IMPORTS_SAVE = "imports.imp";
+	public static final String FILE_PROPENTRY_SAVE = "properties.sav";
 	public static void closeLogger()
 	{
 		if(logFileWriter != null)

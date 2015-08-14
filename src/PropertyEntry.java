@@ -1,5 +1,8 @@
+import java.io.File;
+import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.logging.Level;
 
 
 
@@ -57,41 +60,56 @@ public class PropertyEntry extends RepeatablesContainer implements RepeatablesAc
 
 	@Override
 	public void actOnRepValues(int[] vals, RepeatablesContainer cont)
-	{
-		HashMap<Repeatable,Integer> pairs = new HashMap<Repeatable,Integer>();
+	{		
 		String add = "";
+		String saveToFile = "";
 		for(int i = 0; i < ((this.getRepeatables().length*2)+1); i++)
 		{
 			if(i % 2 == 0)
+			{
 				add += javaCodeSplit[i/2];
+				saveToFile += javaCodeSplit[i/2];
+			}
 			else
 			{
 				Repeatable r = this.getRepeatables()[(i-1)/2];
-				if(pairs.containsKey(r))
-					add += r.getAsJava(pairs.get(r));
-				else
-				{
-					int num = vals[(i-1)/2];
-					add+=r.getAsJava(num);
-					pairs.put(r, num);
-				}
+				int num = vals[(i-1)/2];
+				add+=r.getAsJava(num);
+				saveToFile += "%" + r.getId() + "," + num + "%";
 			}
 		}
 		String check = "";
 		check += "if(!(" + add + "))\n";
 		check += "fail =\"" + add + "\";\n";
 		if(!(this.checks.contains(check)))
-			checks.add(check);
-		
+			checks.add(check+TstlConstants.SPLIT_SYNTAX_PROPENTRY_INTERNAL_SPLIT + saveToFile);	
 	}
 
 	private String getMyCheck()
 	{
+		File propFile = new File(TstlConstants.fileInDir(TstlConstants.getTstlHomeDir(), TstlConstants.FILE_PROPENTRY_SAVE));			
+		PrintWriter propSaveWriter = null;
+		try 
+		{
+			propFile.createNewFile();
+			propSaveWriter = new PrintWriter(propFile);
+		} 
+		catch (IOException e) 
+		{
+			TstlConstants.log(Level.SEVERE, "Failed to write propentrysave file!", e);
+		}
+		
+		
+		
 		String checkString = "";
 		for(int i = 0; i < this.checks.size(); i++)
 		{
-			checkString += this.checks.get(i);
+			String[] check = this.checks.get(i).split(TstlConstants.SPLIT_SYNTAX_PROPENTRY_INTERNAL_SPLIT);
+			checkString += check[0];
+			propSaveWriter.println(check[1]);
 		}
+		propSaveWriter.flush();
+		propSaveWriter.close();	
 		return checkString;
 	}
 
